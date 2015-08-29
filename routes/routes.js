@@ -48,20 +48,53 @@ module.exports = function(app) {
 			console.log("delete");
 			res.redirect('/profiles');
 		});
+	});
+
+	app.get('/profile/:id/update', function (req, res) {
+		return Profile.findById(req.params.id, function(err, profile){
+			if(err){ return console.log("err: " + err) }
+			console.log(profile);
+			res.render('profile_update', {profile : profile});
+		})
+	});
+
+	app.post('/profile/:id/update', function (req, res) {
+
+		// return Profile.findById(req.params.id, function(err, profile){
+		// 	if(err){ return console.log("err: " + err) }
+
+				console.log(req.body);
+				// if (req.body.first_name != null) { profile.first_name = req.body.first_name; }
+				// if (req.body.last_name != null) { profile.last_name = req.body.last_name; }
+				// if (req.body.description != null) { profile.description = req.body.description; }
+				// if (req.body.email != null) { profile.email = req.body.email; }
+				// profile._id = req.params.id
+				// Profile.update(req.params.id, { $set: { first_name: profile.first_name   }}, options, function(){
+				//   if (err) return console.error(err);
+				//   res.redirect('profile/:id');
+				// })
+
+				Profile.findById(req.params.id, function (err, profile) {
+					console.log(profile)
+				  if (err) return handleError(err);
+				  profile._id = req.params.id
+				  profile.first_name = req.body.first_name;
+				  profile.save(function (err) {
+				    if (err) return handleError(err);
+				    res.redirect('/profile/'+req.params.id );
+				  });
+				});
 
 
-		// .findById(req.params.id).exec(function(err, profile){
-		// 	// profile.remove()
-		// 	console.log("err: " + err);
-		// 	console.log(profile);
-		// 	res.redirect('/profiles');
-		// })
-		// return Profile.findOne({_id: req.params.id}, null, function(err, profile){
-		// 	console.log("err: " + err);
-		// 	console.log("delete");
-		// 	res.render('profile', {profile : profile});
+				// profile.save(function (err, profile) {
+				//   if (err) return console.error(err);
+				//   res.redirect('profile/:id');
+				// });		
+			// console.log(profile);
+			// res.render('profile_update', {profile : profile});
 		// })
 	});
+
 
 
 	// // app.get('/profiles', function (req, res) {
