@@ -5,9 +5,17 @@ var app = express();
 var mongoose = require('mongoose');
 var route = require('./routes/routes.js');
 
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+
+
 var db = require('./config/db');
 
 app.set('view engine', 'ejs');
+// app.use(bodyParser.urlencoded({ extended: false }))
+app.use(methodOverride());
+app.use(bodyParser());
+
 
 mongoose.connect(db.url);
 

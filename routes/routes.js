@@ -3,47 +3,66 @@
 var mongoose = require('mongoose');
 var Profile = require('../models/profile.js');
 
-var profile = new Profile({ first_name: 'fluffy_b', 
-							last_name: 'cat_b', 
-							description: 'This is a stupid fluffy cat.'
-						});
-
-profile.save(function (err, profile) {
-  if (err) return console.error(err);
-});
-
-
 
 module.exports = function(app) {
 
 	app.get('/', function (req, res) {
-		return Profile.find({}, null, function(err, profiles){
-			console.log("err: " + err);
-			console.log(profiles);
-			res.send(profiles)
+			res.render('index');
 		})
 
-		
-	// 	// Profile.find({}).exec(function(err, profile){
-	// 	// 	console.log(profile)
-	// 	// })
-	// // 	// return Profile.find({},null,function(err, profiles) {
-	// //  //      if(!err) {
-	// //  //      	console.log('profiles: ' + profiles);
-	// //  //        return res.send(profiles);
+	app.post('/', function (req, res) {
+			console.log(req.body);
+			var profile = new Profile(req.body);
 
-	// //  //        // return res.render('index', {
-	// //  //        //   title:('Lots of T-Shirts'),
-	// //  //        //   tshirts: tshirts
-	// //  //        // })
-	// //  //      } else {
-	// //  //        res.statusCode = 500;
-	// //  //        console.log('Internal error(%d): %s',res.statusCode,err.message);
-	// //  //        return res.send({ error: 'Server error' });
-	// //  //      }
-	// //  //    });
- // //  		// res.send('one two three');
+			profile.save(function (err, profile) {
+			  if (err) return console.error(err);
+			  res.redirect('profiles');
+			});		
+		})
+
+
+
+
+	app.get('/profiles', function (req, res) {
+		return Profile.find({}, null, function(err, profiles){
+			if(err){ return console.log("err: " + err) }
+			console.log(profiles);
+			res.render('profiles', {profiles : profiles});
+			// res.send(profiles)
+		})
 	});
+
+	app.get('/profile/:id', function (req, res) {
+		return Profile.findById(req.params.id, function(err, profile){
+			if(err){ return console.log("err: " + err) }
+			console.log(profile);
+			res.render('profile', {profile : profile});
+		})
+	});
+
+	app.get('/profile/:id/delete', function (req, res) {
+		console.log("delete");
+		return Profile.remove({_id: req.params.id}, function(err){
+			// console.log("err: " + err);
+			if(err){ return console.log("err: " + err) }
+			console.log("delete");
+			res.redirect('/profiles');
+		});
+
+
+		// .findById(req.params.id).exec(function(err, profile){
+		// 	// profile.remove()
+		// 	console.log("err: " + err);
+		// 	console.log(profile);
+		// 	res.redirect('/profiles');
+		// })
+		// return Profile.findOne({_id: req.params.id}, null, function(err, profile){
+		// 	console.log("err: " + err);
+		// 	console.log("delete");
+		// 	res.render('profile', {profile : profile});
+		// })
+	});
+
 
 	// // app.get('/profiles', function (req, res) {
  // //  		// res.send('this is');
