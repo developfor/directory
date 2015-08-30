@@ -2,12 +2,13 @@
 
 var mongoose = require('mongoose');
 var Org = require('../../models/org.js');
-
+var Profile = require('../../models/profile.js');
 
 module.exports = function(app) {
 	// app.get('/', function (req, res) {
 	//   res.send('Hello World!');
 	// });
+
 
 	app.get('/add_org', function (req, res) {
 		// console.log("rout") 
@@ -21,7 +22,7 @@ module.exports = function(app) {
 			org.save(function (err, org) {
 				 console.log("message");
 			  if (err) return console.error(err);
-			  res.redirect('org/orgs');
+			  res.redirect('/orgs');
 
 			});		
 		})
@@ -78,11 +79,32 @@ module.exports = function(app) {
 				res.redirect('/org/'+req.params.id );
 			});
 		});
-
-
-			
+		
 	});
 
+
+	//**************** ADD PROFILES **********************
+	app.get('/org/:id/add_profiles', function (req, res) {
+			
+
+		Org.findById(req.params.id, function (err, org) {	
+
+
+			return Profile.find({}, null, function(err, profiles){
+			  if(err){ return console.log("err: " + err) }
+				console.log(profiles);
+			   res.render('org/add_profiles', {org : org, profiles : profiles});
+				// res.send(profiles)
+			})
+
+
+			console.log(org)
+			
+
+		});
+
+
+	})
 
 }
 
