@@ -69,7 +69,7 @@ module.exports = function(app) {
 			console.log(org)
 			if (err) return handleError(err);
 
-			org._id = req.params.id
+			org._id = req.params.id;
 			org.name = req.body.name;
 			org.description = req.body.description;
 		
@@ -95,16 +95,64 @@ module.exports = function(app) {
 				console.log(profiles);
 			   res.render('org/add_profiles', {org : org, profiles : profiles});
 				// res.send(profiles)
-			})
+			});
 
 
-			console.log(org)
+			console.log(org);
 			
 
 		});
 
 
-	})
+	});
+
+
+
+
+
+	app.post('/org/:id/add_profiles', function (req, res) {
+		// console.log(res.body)
+		// var temp = res.body;
+
+		// for(var i = 0; i < temp; i++){
+		// 	Org.findByIdAndUpdate(req.params.id, {$push: {temp[i]}}, 
+
+		// 	    // info._id,
+		// 	    // {$push: {"messages": {title: title, msg: msg}}},
+		// 	    {safe: true, upsert: true},
+		// 	    function(err, model) {
+		// 	        console.log(err);
+		// 	    }
+		// 	);
+
+
+		// }
+
+		
+
+		
+		// Org.findById(req.params.id, function (err, org) {
+		// 	console.log(org)
+		// 	if (err) return handleError(err);
+
+		// 	org._id = req.params.id;
+		// 	org.name = req.body.name;
+		// 	org.description = req.body.description;
+		
+
+		// 	org.save(function (err) {
+		// 		if (err) return handleError(err);
+		// 		res.redirect('/org/'+req.params.id );
+		// 	});
+		// });
+
+
+
+		console.log(req.body)
+		res.redirect('/org/'+req.params.id+'/add_profiles' );
+	});
+
+
 
 }
 

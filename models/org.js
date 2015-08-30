@@ -11,6 +11,9 @@ var Org = new Schema({
 	description: {
 		type: String
 	},
+	profiles: {
+		type: Array
+	},
 	creation_date: {
 		type: Date,
 		default: Date.now

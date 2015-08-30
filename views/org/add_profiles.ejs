@@ -1,7 +1,19 @@
 <% include ../_partials/header %>
 <%= org %>
 <hr>
-<%= profiles %>
+
+
+<form action="/org/<%= org._id %>/add_profiles" method="post">
+	<% profiles.forEach(function(name){ %>
+	 <input type="checkbox" name="profile" value="<%= name._id %>"><%= name.first_name %> <%= name.last_name %> <br>
+		
+	<% }) %>
+ 
+  <input type="submit" value="Submit">
+</form>
+
+
+
 <!-- <form action="/add_org" method="post" accept-charset="utf-8">
 		name: <input type "text" name="name" /> <br>	
 		description: <input type "text" name="description" /><br>
