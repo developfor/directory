@@ -111,69 +111,15 @@ module.exports = function(app) {
 
 
 	app.post('/org/:id/add_profiles', function (req, res) {
-
-		// var temp = req.body.profile;
-
-		// profileHub.Org.update(
-		// 	{profiles: [] }
-		// )
-
-		// Org.update(req.params.id, { $unset: { profiles: "" }});
-
-
-		// Org.update(req.params.id, {profiles : undefined}, function(){
-		// 	console.log('undefined');
-		// });
-
-		// Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: [] }}, function(err, affected){
-  //   		Org.findByIdAndUpdate(req.params.id, {$set: {"profiles": req.body.profile}},
-		// 	    {safe: true, upsert: true},
-		// 	    function(err, model) {
-		// 	        console.log(err);
-		// 	        res.redirect('/org/'+req.params.id+'/add_profiles' );
-		// 	    }
-		// 	);
-		// });
-
-
-		Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: req.body.profile }}, function(err, affected){
+		var profile = req.body.profile;
+		
+		if(profile === undefined){
+			profile = [];
+		}
+		
+		Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: profile }}, function(err, affected){
     		res.redirect('/org/'+req.params.id+'/add_profiles' );
 		});
-
-
-
-			// Org.findByIdAndUpdate(req.params.id, {$push: {"profiles": req.body.profile}},
-			//     {safe: true, upsert: true},
-			//     function(err, model) {
-			//         console.log(err);
-			//     }
-			// );
-
-		
-
-		
-		// Org.findById(req.params.id, function (err, org) {
-		// 	console.log(org)
-		// 	if (err) return handleError(err);
-
-		// 	org._id = req.params.id;
-		// 	org.name = req.body.name;
-		// 	org.description = req.body.description;
-		
-
-		// 	org.save(function (err) {
-		// 		if (err) return handleError(err);
-		// 		res.redirect('/org/'+req.params.id );
-		// 	});
-		// });
-
-
-
-		console.log(req.body)
-		// res.redirect('/org/'+req.params.id+'/add_profiles' );
 	});
-
-
-
 }
 
