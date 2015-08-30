@@ -20,12 +20,7 @@ app.use(bodyParser());
 
 mongoose.connect(db.url);
 
-
-// route.profile(app);
-// route.org(app);
-
 route(app);
-
 
 // Handle 404
 app.use(function(req, res) {
