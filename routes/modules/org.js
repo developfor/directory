@@ -114,12 +114,40 @@ module.exports = function(app) {
 
 		// var temp = req.body.profile;
 
-			Org.findByIdAndUpdate(req.params.id, {$push: {"profiles": [req.body.profile]}},
-			    {safe: true, upsert: true},
-			    function(err, model) {
-			        console.log(err);
-			    }
-			);
+		// profileHub.Org.update(
+		// 	{profiles: [] }
+		// )
+
+		// Org.update(req.params.id, { $unset: { profiles: "" }});
+
+
+		// Org.update(req.params.id, {profiles : undefined}, function(){
+		// 	console.log('undefined');
+		// });
+
+		// Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: [] }}, function(err, affected){
+  //   		Org.findByIdAndUpdate(req.params.id, {$set: {"profiles": req.body.profile}},
+		// 	    {safe: true, upsert: true},
+		// 	    function(err, model) {
+		// 	        console.log(err);
+		// 	        res.redirect('/org/'+req.params.id+'/add_profiles' );
+		// 	    }
+		// 	);
+		// });
+
+
+		Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: req.body.profile }}, function(err, affected){
+    		res.redirect('/org/'+req.params.id+'/add_profiles' );
+		});
+
+
+
+			// Org.findByIdAndUpdate(req.params.id, {$push: {"profiles": req.body.profile}},
+			//     {safe: true, upsert: true},
+			//     function(err, model) {
+			//         console.log(err);
+			//     }
+			// );
 
 		
 
@@ -142,7 +170,7 @@ module.exports = function(app) {
 
 
 		console.log(req.body)
-		res.redirect('/org/'+req.params.id+'/add_profiles' );
+		// res.redirect('/org/'+req.params.id+'/add_profiles' );
 	});
 
 
