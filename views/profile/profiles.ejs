@@ -1,3 +1,4 @@
+<% include ../_partials/header %>
 <% profiles.forEach(function(name){ %>
 	<%= name.first_name %> <%= name.last_name %>  <a href="/profile/<%= name._id %>">view profile</a><br>
 <% }) %>

@@ -1,6 +1,8 @@
 "use strict";
 
 var express = require('express');
+// var http = require('http');
+var path = require('path');
 var app = express();
 var mongoose = require('mongoose');
 var route = require('./routes/index.js');
@@ -13,6 +15,7 @@ var methodOverride = require('method-override');
 var db = require('./config/db');
 
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 // app.use(bodyParser.urlencoded({ extended: false }))
 app.use(methodOverride('_method'))
 app.use(bodyParser());
