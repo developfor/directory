@@ -16,11 +16,11 @@ module.exports = function(app) {
 		})
 
 	app.post('/add_org', function (req, res) {
-			console.log(req.body);
+			// console.log(req.body);
 			var org = new Org(req.body);
 
 			org.save(function (err, org) {
-				 console.log("message");
+				 // console.log("message");
 			  if (err) return console.error(err);
 			  res.redirect('/orgs');
 
@@ -30,7 +30,7 @@ module.exports = function(app) {
 	app.get('/orgs', function (req, res) {
 		return Org.find({}, null, function(err, orgs){
 			if(err){ return console.log("err: " + err) }
-			console.log(orgs);
+			// console.log(orgs);
 			res.render('org/orgs', {orgs : orgs});
 		})
 	});
@@ -38,17 +38,17 @@ module.exports = function(app) {
 	app.get('/org/:id', function (req, res) {
 		return Org.findById(req.params.id, function(err, org){
 			if(err){ return console.log("err: " + err) }
-			console.log(org);
+			// console.log(org);
 			res.render('org/org', {org : org});
 		})
 	});
 
 	app.delete('/org/:id', function (req, res) {
-		console.log("deleted");
+		// console.log("deleted");
 		return Org.remove({_id: req.params.id}, function(err){
 			
 			if(err){ return console.log("err: " + err) }
-			console.log("delete");
+			// console.log("delete");
 			res.redirect('/orgs');
 		});
 	});
@@ -58,7 +58,7 @@ module.exports = function(app) {
 	app.get('/org/:id/update', function (req, res) {
 		return Org.findById(req.params.id, function(err, org){
 			if(err){ return console.log("err: " + err) }
-			console.log(org);
+			// console.log(org);
 			res.render('org/org_update', {org : org});
 		})
 	});
@@ -66,7 +66,7 @@ module.exports = function(app) {
 	app.post('/org/:id/update', function (req, res) {
 			
 		Org.findById(req.params.id, function (err, org) {
-			console.log(org)
+			// console.log(org)
 			if (err) return handleError(err);
 
 			org._id = req.params.id;
@@ -92,7 +92,7 @@ module.exports = function(app) {
 
 			return Profile.find({}, null, function(err, profiles){
 			  if(err){ return console.log("err: " + err) }
-				console.log(profiles);
+				// console.log(profiles);
 			   res.render('org/add_profiles', {org : org, profiles : profiles});
 				// res.send(profiles)
 			});
@@ -108,9 +108,13 @@ module.exports = function(app) {
 
 	app.post('/org/:id/add_profiles', function (req, res) {
 		var profile = req.body.profile;
-		
+
 		if(profile === undefined){
 			profile = [];
+		}
+
+		if(profile.constructor !== Array && profile.constructor !== undefined){
+			profile = [req.body.profile];
 		}
 
 		Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: profile }}, function(err, affected){
