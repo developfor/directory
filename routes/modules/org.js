@@ -98,7 +98,7 @@ module.exports = function(app) {
 			});
 
 
-			console.log(org);
+			// console.log(org);
 			
 
 		});
@@ -111,22 +111,15 @@ module.exports = function(app) {
 
 
 	app.post('/org/:id/add_profiles', function (req, res) {
-		// console.log(res.body)
-		// var temp = res.body;
 
-		// for(var i = 0; i < temp; i++){
-		// 	Org.findByIdAndUpdate(req.params.id, {$push: {temp[i]}}, 
+		// var temp = req.body.profile;
 
-		// 	    // info._id,
-		// 	    // {$push: {"messages": {title: title, msg: msg}}},
-		// 	    {safe: true, upsert: true},
-		// 	    function(err, model) {
-		// 	        console.log(err);
-		// 	    }
-		// 	);
-
-
-		// }
+			Org.findByIdAndUpdate(req.params.id, {$push: {"profiles": [req.body.profile]}},
+			    {safe: true, upsert: true},
+			    function(err, model) {
+			        console.log(err);
+			    }
+			);
 
 		
 
