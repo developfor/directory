@@ -20,6 +20,10 @@ var Profile = new Schema({
 		type: String,
 		validate: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/
 	},
+	org: {
+		type: Array,
+		default: []
+	},
 	creation_date: {
 		type: Date,
 		default: Date.now

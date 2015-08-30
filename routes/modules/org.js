@@ -106,7 +106,7 @@ module.exports = function(app) {
 
 	});
 
-	app.post('/org/:id/add_profiles', function (req, res) {
+	function profileAdd(req,res, next){
 		var profile = req.body.profile;
 
 		if(profile === undefined){
@@ -118,8 +118,42 @@ module.exports = function(app) {
 		}
 
 		Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: profile }}, function(err, affected){
-    		res.redirect('/org/'+req.params.id+'/add_profiles' );
-		});
+
+			profile.forEach(function(entry){
+				Profile.findByIdAndUpdate(entry, { $push: {org: req.params.id}}, function(err, entry){
+					
+				})
+			});//end of for each
+    		// res.redirect('/org/'+req.params.id+'/add_profiles' );
+		});	
+		next();
+	}
+
+	app.post('/org/:id/add_profiles',[profileAdd], function (req, res) {
+
+		res.redirect('/org/'+req.params.id+'/add_profiles' );
+
+		// var profile = req.body.profile;
+
+		// if(profile === undefined){
+		// 	profile = [];
+		// }
+
+		// if(profile.constructor !== Array && profile.constructor !== undefined){
+		// 	profile = [req.body.profile];
+		// }
+
+		// Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: profile }}, function(err, affected){
+
+		// 	profile.forEach(function(entry){
+		// 		Profile.findByIdAndUpdate(entry, { $push: {org: req.params.id}}, function(err, entry){
+					
+		// 		})
+		// 	});//end of for each
+  //   		// res.redirect('/org/'+req.params.id+'/add_profiles' );
+		// });
 	});
+
+
 }
 
