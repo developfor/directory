@@ -5,8 +5,15 @@
 
 <form action="/org/<%= org._id %>/add_profiles" method="post">
 	<% profiles.forEach(function(name){ %>
-	 <input type="checkbox" name="profile" value="<%= name._id %>"><%= name.first_name %> <%= name.last_name %> <br>
 		
+	<% if(org.profiles.indexOf(name._id) > -1) { %>
+
+	 <input type="checkbox" name="profile" value="<%= name._id %>" checked><%= name.first_name %> <%= name.last_name %> <br>
+
+	<% } else { %>
+
+	<input type="checkbox" name="profile" value="<%= name._id %>"><%= name.first_name %> <%= name.last_name %> <br>
+		<% } %>
 	<% }) %>
  
   <input type="submit" value="Submit">

@@ -106,17 +106,13 @@ module.exports = function(app) {
 
 	});
 
-
-
-
-
 	app.post('/org/:id/add_profiles', function (req, res) {
 		var profile = req.body.profile;
 		
 		if(profile === undefined){
 			profile = [];
 		}
-		
+
 		Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: profile }}, function(err, affected){
     		res.redirect('/org/'+req.params.id+'/add_profiles' );
 		});
