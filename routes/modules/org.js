@@ -106,7 +106,7 @@ module.exports = function(app) {
 
 	});
 
-	function profileAdd(req,res, next){
+	function profileAdd(req,res,next){
 		var profile = req.body.profile;
 
 		if(profile === undefined){
@@ -120,9 +120,24 @@ module.exports = function(app) {
 		Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: profile }}, function(err, affected){
 
 			profile.forEach(function(entry){
-				Profile.findByIdAndUpdate(entry, { $push: {org: req.params.id}}, function(err, entry){
-					
+
+				Profile.findById(entry, function(err, profileEntry){
+				
+					if(profileEntry.org.indexOf(req.params.id) > -1){
+						console.log("this is already in there");
+					} else {
+						
+						Profile.update(profileEntry._id, {$push: { org: "req.params.id"}}, function(){
+							console.log("needed adding");
+						});
+						
+					}
 				})
+
+
+				// Profile.findByIdAndUpdate(entry, { $push: {org: req.params.id}}, function(err, entry){
+					
+				// })
 			});//end of for each
     		// res.redirect('/org/'+req.params.id+'/add_profiles' );
 		});	
