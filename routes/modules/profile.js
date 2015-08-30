@@ -24,11 +24,26 @@ module.exports = function(app) {
 			});		
 		})
 
+	app.get('/add_profile', function (req, res) {
+		console.log("rout")
+			res.render('profile/add_profile');
+		})
+
+	app.post('/add_profile', function (req, res) {
+			console.log(req.body);
+			var profile = new Profile(req.body);
+
+			profile.save(function (err, profile) {
+			  if (err) return console.error(err);
+			  res.redirect('profiles');
+			});		
+		})
+
 	app.get('/profiles', function (req, res) {
 		return Profile.find({}, null, function(err, profiles){
 			if(err){ return console.log("err: " + err) }
 			console.log(profiles);
-			res.render('profiles', {profiles : profiles});
+			res.render('profile/profiles', {profiles : profiles});
 			// res.send(profiles)
 		})
 	});
@@ -37,7 +52,7 @@ module.exports = function(app) {
 		return Profile.findById(req.params.id, function(err, profile){
 			if(err){ return console.log("err: " + err) }
 			console.log(profile);
-			res.render('profile', {profile : profile});
+			res.render('profile/profile', {profile : profile});
 		})
 	});
 
@@ -57,7 +72,7 @@ module.exports = function(app) {
 		return Profile.findById(req.params.id, function(err, profile){
 			if(err){ return console.log("err: " + err) }
 			console.log(profile);
-			res.render('profile_update', {profile : profile});
+			res.render('profile/profile_update', {profile : profile});
 		})
 	});
 

@@ -11,7 +11,7 @@ module.exports = function(app) {
 
 	app.get('/add_org', function (req, res) {
 		// console.log("rout") 
-			res.render('add_org');
+			res.render('org/add_org');
 		})
 
 	app.post('/add_org', function (req, res) {
@@ -21,7 +21,7 @@ module.exports = function(app) {
 			org.save(function (err, org) {
 				 console.log("message");
 			  if (err) return console.error(err);
-			  res.redirect('orgs');
+			  res.redirect('org/orgs');
 
 			});		
 		})
@@ -30,7 +30,7 @@ module.exports = function(app) {
 		return Org.find({}, null, function(err, orgs){
 			if(err){ return console.log("err: " + err) }
 			console.log(orgs);
-			res.render('orgs', {orgs : orgs});
+			res.render('org/orgs', {orgs : orgs});
 		})
 	});
 
@@ -38,7 +38,7 @@ module.exports = function(app) {
 		return Org.findById(req.params.id, function(err, org){
 			if(err){ return console.log("err: " + err) }
 			console.log(org);
-			res.render('org', {org : org});
+			res.render('org/org', {org : org});
 		})
 	});
 
@@ -58,7 +58,7 @@ module.exports = function(app) {
 		return Org.findById(req.params.id, function(err, org){
 			if(err){ return console.log("err: " + err) }
 			console.log(org);
-			res.render('org_update', {org : org});
+			res.render('org/org_update', {org : org});
 		})
 	});
 
