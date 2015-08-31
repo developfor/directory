@@ -117,30 +117,34 @@ module.exports = function(app) {
 			profile = [req.body.profile];
 		}
 
-		Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: profile }}, function(err, affected){
 
-			profile.forEach(function(entry){
 
-				Profile.findById(entry, function(err, profileEntry){
-				
-					if(profileEntry.org.indexOf(req.params.id) > -1){
-						console.log("this is already in there");
-					} else {
-						
-						Profile.update(profileEntry._id, {$push: { org: "req.params.id"}}, function(){
-							console.log("needed adding");
-						});
-						
-					}
+		Org.findById(req.params.id, function(err, originA){
+		    if(err){ return console.log("err: " + err) }
+
+			var originA = originA;
+			console.log("originA " + originA.profiles);
+			
+			Org.findByIdAndUpdate(req.params.id,{ $set: { profiles: profile }}, function(err, affected){
+				if(err){ return console.log("err: " + err) }
+
+					var affected = affected;
+
+				Org.findById(req.params.id, function(err, originB){
+					console.log("originB " + originB.profiles);
 				})
-
-
-				// Profile.findByIdAndUpdate(entry, { $push: {org: req.params.id}}, function(err, entry){
+				profile.forEach(function(entry){
 					
-				// })
-			});//end of for each
-    		// res.redirect('/org/'+req.params.id+'/add_profiles' );
-		});	
+
+
+					Profile.findByIdAndUpdate(entry, { $addToSet: {org: req.params.id}}, function(err, entry){
+						
+					})
+				});//end of for each
+	    		// res.redirect('/org/'+req.params.id+'/add_profiles' );
+			});	
+
+		})
 		next();
 	}
 
