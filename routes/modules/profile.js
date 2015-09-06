@@ -50,7 +50,7 @@ module.exports = function(app) {
 
 	app.get('/profile/:id', function (req, res) {
 		return Profile.findById(req.params.id, function(err, profile){
-			if(err){ return console.log("err: " + err) }
+			if(err){ return console.log("err++: " + err) }
 			console.log(profile);
 			res.render('profile/profile', {profile : profile});
 		})

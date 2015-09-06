@@ -176,7 +176,6 @@ module.exports = function(app) {
 
 					})
 
-					// console.log(originA._id);
 					
 				})
 
@@ -189,7 +188,7 @@ module.exports = function(app) {
 						
 					})
 				});//end of for each
-	    		// res.redirect('/org/'+req.params.id+'/add_profiles' );
+	    		res.redirect('/org/'+req.params.id+'/add_profiles' );
 			});	
 
 		})
@@ -198,7 +197,7 @@ module.exports = function(app) {
 
 	app.post('/org/:id/add_profiles',[profileAdd], function (req, res) {
 
-		res.redirect('/org/'+req.params.id+'/add_profiles' );
+		// res.redirect('/org/'+req.params.id+'/add_profiles' );
 
 		// var profile = req.body.profile;
 
