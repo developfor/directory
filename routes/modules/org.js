@@ -1,6 +1,8 @@
 "use strict";
 
 var mongoose = require('mongoose');
+var _ = require('underscore');
+
 var Org = require('../../models/org.js');
 var Profile = require('../../models/profile.js');
 
@@ -44,13 +46,30 @@ module.exports = function(app) {
 	});
 
 	app.delete('/org/:id', function (req, res) {
-		// console.log("deleted");
-		return Org.remove({_id: req.params.id}, function(err){
-			
-			if(err){ return console.log("err: " + err) }
-			// console.log("delete");
+
+		Org.findById( req.params.id , function(err, org){
+			console.log(org);
+			var profiles = org.profiles
+			profiles.forEach(function(element){
+				Profile.findById(element, function(err, entry){
+					
+				    var result = _.without(entry.org, req.params.id);
+				    console.log("---------> " + result );
+				    Profile.findByIdAndUpdate(element, { $set: {org: result}}, function(err, entryNext){
+						
+					})
+				})
+			})
+
+
+			Org.remove({_id: req.params.id}, function(err){	
+			// 	if(err){ return console.log("err: " + err) }
+
 			res.redirect('/orgs');
-		});
+			});
+
+		})
+	
 	});
 
 
@@ -132,7 +151,36 @@ module.exports = function(app) {
 
 				Org.findById(req.params.id, function(err, originB){
 					console.log("originB " + originB.profiles);
+
+					var removeArray = _.difference(originA.profiles, originB.profiles);
+					// console.log(removeArray);
+					removeArray.forEach(function(element){
+						// console.log("element: " +element)
+						Profile.findById(element, function(err, entry){
+							console.log(entry.org)
+							var result = _.without(entry.org, req.params.id);
+							console.log(result)
+
+							if(result === undefined){
+								result = [];
+							}
+							if(result.constructor !== Array && result.constructor !== undefined){
+								result = [result];
+							}
+
+							Profile.findByIdAndUpdate(element, { $set: {org: result}}, function(err, entryNext){
+						
+							})
+
+						})
+
+					})
+
+					// console.log(originA._id);
+					
 				})
+
+
 				profile.forEach(function(entry){
 					
 
