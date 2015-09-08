@@ -1,0 +1,29 @@
+<% include ../_partials/header %>
+<%= group %>
+<hr>
+
+
+<form action="/group/<%= group._id %>/add_persons" method="post">
+	<% persons.forEach(function(name){ %>
+		
+	<% if(group.persons.indexOf(name._id) > -1) { %>
+
+	 <input type="checkbox" name="person" value="<%= name._id %>" checked><%= name.first_name %> <%= name.last_name %> <br>
+
+	<% } else { %>
+
+	<input type="checkbox" name="person" value="<%= name._id %>"><%= name.first_name %> <%= name.last_name %> <br>
+		<% } %>
+	<% }) %>
+ 
+  <input type="submit" value="Submit">
+</form>
+
+
+
+<!-- <form action="/add_group" method="post" accept-charset="utf-8">
+		name: <input type "text" name="name" /> <br>	
+		description: <input type "text" name="description" /><br>
+
+		<input type ="submit" value="Save">
+	</form> -->

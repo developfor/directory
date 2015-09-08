@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Profile = new Schema({
+var Person = new Schema({
 	first_name: {
 		type: String,
 		require: true,
@@ -20,7 +20,7 @@ var Profile = new Schema({
 		type: String,
 		validate: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/
 	},
-	org: {
+	group: {
 		type: Array,
 		default: []
 	},
@@ -30,4 +30,4 @@ var Profile = new Schema({
 	},
 });
 
-module.exports = mongoose.model('Profile', Profile);
+module.exports = mongoose.model('Person', Person);

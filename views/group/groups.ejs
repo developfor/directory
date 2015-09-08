@@ -1,0 +1,4 @@
+<% include ../_partials/header %>
+<% groups.forEach(function(name){ %>
+	<%= name.name %>  <a href="/group/<%= name._id %>">view  group</a><br>
+<% }) %>

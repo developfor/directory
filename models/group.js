@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Org = new Schema({
+var Group = new Schema({
 	name: {
 		type: String,
 		require: true,
@@ -11,7 +11,7 @@ var Org = new Schema({
 	description: {
 		type: String
 	},
-	profiles: {
+	persons: {
 		type: Array
 	},
 	creation_date: {
@@ -20,4 +20,4 @@ var Org = new Schema({
 	},
 });
 
-module.exports = mongoose.model('Org', Org);
+module.exports = mongoose.model('Group', Group);

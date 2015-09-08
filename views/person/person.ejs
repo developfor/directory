@@ -1,0 +1,11 @@
+<% include ../_partials/header %>
+
+<%= person %>
+
+<a href="/person/<%= person._id %>/update/">update</a>
+
+<!-- <a href="/person/<%= person._id %>/delete/">delete</a> -->
+
+<form method="POST" action="/person/<%= person._id %>?_method=DELETE">
+  <button type="submit">Delete resource</button>
+</form>

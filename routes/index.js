@@ -1,5 +1,5 @@
 "use strict";
 module.exports = function(app) {
-	require('./modules/profile.js')(app);
-	require('./modules/org.js')(app);
+	require('./modules/person.js')(app);
+	require('./modules/group.js')(app);
 }
