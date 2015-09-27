@@ -2,7 +2,7 @@
 <%= group %>
 
 <form action="/group/<%= group._id %>/update" method="post" accept-charset="utf-8">
-		name: <input type "text" name="name" value="<%= group.name %>"/> <br>	
+		title: <input type "text" name="title" value="<%= group.title %>"/> <br>	
 		description: <input type "text" name="description" value="<%= group.description %>"/><br>
 
 		<input type ="submit" value="Save">

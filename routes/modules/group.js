@@ -89,7 +89,7 @@ module.exports = function(app) {
 			if (err) return handleError(err);
 
 			group._id = req.params.id;
-			group.name = req.body.name;
+			group.title = req.body.title;
 			group.description = req.body.description;
 		
 

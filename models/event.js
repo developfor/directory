@@ -2,11 +2,17 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Group = new Schema({
+var Event = new Schema({
 	title: {
 		type: String,
 		require: true,
 		validate: /\S+/
+	},
+	start_date:{
+		type: Date
+	},
+	end_date:{
+		type: Date
 	},
 	description: {
 		type: String
@@ -20,4 +26,4 @@ var Group = new Schema({
 	}
 });
 
-module.exports = mongoose.model('Group', Group);
+module.exports = mongoose.model('Event', Event);
