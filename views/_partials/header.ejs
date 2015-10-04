@@ -1,27 +1,39 @@
 <style type="text/css">
+	body{
+		/*font-family:arial,sans-serif;*/
+		font-family:  "Courier", monospace;
+		font-size: 16px;
+		/*font-weight: bold;*/
+	}
 	button,a {
 	    background:none!important;
 	     border:none; 
 	     padding:0!important;
+	     font-family:  "Courier", monospace;
+		font-size: 16px;
+
 	    
 	    /*optional*/
-	    font-family:arial,sans-serif; /*input has OS specific font-family*/
 	     color:#069;
-	     text-decoration:underline;
+	     text-decoration:none;
 	     cursor:pointer;
-	     font-size: 16px;
 	}
-	p {
-		font-family:arial,sans-serif;
-		 font-size: 16px;
+	p {/*
+		font-family: "Courier New", Courier, monospace;
+		font-size: 16px;*/
 	}
 </style>
-
-
 <a href="/">home</a> |
+<% if (login){ %>
+<a href="/hubs">show hubs</a> | 
 <a href="/persons">show persons</a> | 
 <a href="/add_person">add person</a> |
 <a href="/groups">show groups</a> |
 <a href="/add_group">add group</a>
+<a href="/logout">logout</a>
+<% } else { %>
+<a href="/login">login</a>
+
+<% } %>
 <hr>
 <br>

@@ -1,0 +1,6 @@
+<% include ../_partials/header %>
+<% hubs.forEach(function(hub){ %>
+	<%= hub.title %>  <a href="/hub/<%= hub.short_id %>"><%= hub.title %></a><br>
+<% }) %>
+
+<a href="/hub/create">create hub</a>

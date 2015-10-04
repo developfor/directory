@@ -1,4 +1,10 @@
 "use strict";
+var secret_key = require('../../config/secret.js');
+var passport = require('../../config/passport.js');
+var  ensureAuthenticated = function(req, res, next) {
+	  if (req.isAuthenticated()) { return next(); }
+	 res.redirect('/login')
+  	}
 
 var mongoose = require('mongoose');
 var _ = require('underscore');
@@ -10,6 +16,11 @@ module.exports = function(app) {
 	// app.get('/', function (req, res) {
 	//   res.send('Hello World!');
 	// });
+
+	app.all('/add_group', ensureAuthenticated);
+	app.all('/groups', ensureAuthenticated);
+	// app.all('/group', ensureAuthenticated);
+	app.all('/group/*', ensureAuthenticated);
 
 
 	app.get('/add_group', function (req, res) {
@@ -23,13 +34,18 @@ module.exports = function(app) {
 
 			group.save(function (err, group) {
 				 // console.log("message");
-			  if (err) return console.error(err);
+				if(err || group === null){ 	
+					req.flash('info', "Did not save group.")
+					res.redirect('/groups');
+					return console.log("err++: " + err) 	
+				}	
+			 
 			  res.redirect('/groups');
 
 			});		
 		})
 
-	app.get('/groups', function (req, res) {
+	app.get('/groups', ensureAuthenticated, function (req, res) {
 		return Group.find({}, null, function(err, groups){
 			if(err){ return console.log("err: " + err) }
 			// console.log(groups);
@@ -39,7 +55,11 @@ module.exports = function(app) {
 
 	app.get('/group/:id', function (req, res) {
 		return Group.findById(req.params.id, function(err, group){
-			if(err){ return console.log("err: " + err) }
+			if(err || group === null){ 	
+				req.flash('info', "Group not found.")
+				res.redirect('/groups');
+				return console.log("err++: " + err) 	
+			}	
 			// console.log(group);
 			res.render('group/group', {group : group});
 		})
@@ -49,9 +69,19 @@ module.exports = function(app) {
 
 		Group.findById( req.params.id , function(err, group){
 			console.log(group);
+			if(err || group === null){ 	
+				req.flash('info', "Group not found.")
+				res.redirect('/groups');
+				return console.log("err++: " + err) 	
+			}	
 			var persons = group.persons
 			persons.forEach(function(element){
 				Person.findById(element, function(err, entry){
+					if(err || entry === null){ 	
+						req.flash('info', "Entry not found.")
+						res.redirect('/groups');
+						return console.log("err++: " + err) 	
+					}	
 					
 				    var result = _.without(entry.group, req.params.id);
 				    console.log("---------> " + result );

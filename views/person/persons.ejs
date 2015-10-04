@@ -1,4 +1,7 @@
 <% include ../_partials/header %>
+<% if ( messages.info) { %>
+	<p><%= messages.info %></p>
+<% } %>
 <% persons.forEach(function(name){ %>
 	<%= name.first_name %> <%= name.last_name %>  <a href="/person/<%= name._id %>">view person</a><br>
 <% }) %>
