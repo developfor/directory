@@ -40,6 +40,11 @@ var Person = new Schema({
 		type: Array,
 		default: []
 	},
+	hub_id: {
+		type: String,
+		require: true,
+		validate: /\S+$/
+	},
 	creation_date: {
 		type: Date,
 		default: Date.now

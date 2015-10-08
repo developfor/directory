@@ -22,6 +22,7 @@ module.exports = function(app) {
 
 	passport.use(new LocalStrategy({usernameField: 'email'},function(email, password, done) {
 	  console.log("email")
+	 var email = email.toLowerCase();
 	  User.findOne({ email: email }, function(err, user) {
 	    if (err) { return done(err); }
 	    if (!user) { return done(null, false, { message: 'Unknown user ' + email }); }

@@ -2,6 +2,8 @@
 
 var mongoose = require('mongoose');
 var Person = require('../../models/person.js');
+var Hub = require('../../models/hub.js');
+
 var secret_key = require('../../config/secret.js');
 
 
@@ -24,26 +26,86 @@ module.exports = function(app) {
 	// 	console.log("rout")
 	// 		res.render('index');
 	// 	})
+	app.all('/hub', ensureAuthenticated);
+	app.all('/hub/*', ensureAuthenticated);
 	app.all('/add_person', ensureAuthenticated);
 	app.all('/persons',ensureAuthenticated);
 	app.all('/person',ensureAuthenticated);
 	app.all('/person/*',ensureAuthenticated);
 
-	app.post('/', function (req, res) {
-			// console.log(req.body);
+
+	app.get('/hub/:id/add_person', function (req, res) {
+		// console.log("rout")
+
+		return Hub.findById(req.params.id, function(err, hub){
+			if(err){ 
+				res.redirect('/hubs');
+				return console.log("err: " + err) 
+			}
+
+			res.render('person/add_person');
+
+		});
+	})
+
+	app.post('/hub/:id/add_person', function (req, res) {
+		// console.log(req.body);
+		console.log(req.params.id);
+
+		
+		return Hub.find(req.params.id, function(err, hub){
+			if(err || hub === null){ 	
+				req.flash('info', "Hub not found.")
+				res.redirect('/hubs');
+				return console.log("err++: " + err) 	
+			}
 			var person = new Person(req.body);
+			console.log(req.params.id)
+			person.hub_id = req.params.id;
 
 			person.save(function (err, person) {
-			  if (err) return console.error(err);
-			  res.redirect('persons');
+				if(err){ 	
+					req.flash('info', "Did not save person.")
+					// res.redirect('/hub/:id/add_person');
+					// res.render('person/add_person');
+						res.redirect('/hub/' + req.params.id + '/add_person');
+					return console.log("err++: " + err) 	
+				}	
+				res.redirect('/hub/' + req.params.id);
 			});		
+
+
 		})
+
+
+		// var person = new Person(req.body);
+
+		// person.save(function (err, person) {
+		// 	if(err || person === null){ 	
+		// 		req.flash('info', "Did not save person.")
+		// 		res.redirect('/persons');
+		// 		return console.log("err++: " + err) 	
+		// 	}	
+		//   res.redirect('persons');
+		// });		
+	})
+	// app.post('/', function (req, res) {
+	// 		// console.log(req.body);
+	// 		var person = new Person(req.body);
+
+	// 		person.save(function (err, person) {
+	// 		  if (err) return console.error(err);
+	// 		  res.redirect('persons');
+	// 		});		
+	// 	})
 
 
 	app.get('/add_person', function (req, res) {
 		console.log("rout")
 			res.render('person/add_person');
 		})
+
+	
 
 	app.post('/add_person', function (req, res) {
 			console.log(req.body);
@@ -84,7 +146,7 @@ module.exports = function(app) {
 		console.log("deleted");
 		return Person.remove({_id: req.params.id}, function(err){
 			// console.log("err: " + err);
-			if(err || person === null){ 	
+			if(err){ 	
 				req.flash('info', "Person not found.")
 				res.redirect('/persons');
 				return console.log("err++: " + err) 	
