@@ -1,5 +1,7 @@
 <% include ../_partials/header %>
-a hub
+<p>Title: <%= hub.title %></p>
+<p>Description: <%= hub.description %></p><br>
+<a href="/hub/<%= hub.id %>/update">Edit Profile Hub Information</a><br>
 <%= hub %>
 <hr>
 people
@@ -9,4 +11,5 @@ people
 groups
 <hr>
 <%= groups %>
+<a href="/hub/<%= hub.id %>/persons">view people</a><br>
 <a href="/hub/<%= hub.id %>/add_person">add person</a>

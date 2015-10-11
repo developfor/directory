@@ -7,10 +7,15 @@ var Hub = new Schema({
 	title: {
 		type: String,
 		require: true,
-		validate: /\S+/
+		validate: /\S+/,
+		minlength: 5, 
+		maxlength: 500
 	},
 	description: {
-		type: String
+		type: String,
+		validate: /\S+/,
+		minlength: 0, 
+		maxlength: 500
 	},
 	short_id:  {
 		type: String,

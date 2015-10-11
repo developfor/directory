@@ -1,6 +1,8 @@
 <% include ../_partials/header %>
 <% hubs.forEach(function(hub){ %>
-	<%= hub.title %>  <a href="/hub/<%= hub.id %>"><%= hub.title %></a><br>
+	<%= hub.title %>  <a href="/hub/<%= hub.id %>">View <%= hub.title %></a> <br>
+	
 <% }) %>
+
 
 <a href="/hub/create">create hub</a>

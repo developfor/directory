@@ -1,11 +1,49 @@
-<% include ../_partials/header %>
+ <% include ../_partials/header %>
 
+<%= hub %><br>
 <%= person %>
+<%= person.hub_id %>
 
-<a href="/person/<%= person._id %>/update/">update</a>
+
+<a href="/hub/<%= hub._id %>/person/<%= person._id %>/update/">update</a>
 
 <!-- <a href="/person/<%= person._id %>/delete/">delete</a> -->
 
-<form method="POST" action="/person/<%= person._id %>?_method=DELETE">
-  <button type="submit">Delete resource</button>
+<form id="delete-entry" method="POST" action="?_method=DELETE">
+<!-- <form id="delete-entry"> -->
+  <button  id="delete-button" type="submit">Delete resource</button>
 </form>
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script>
+	// function myFunction() {
+	//     var x;
+	//     if (confirm("Press a button!") == true) {
+	//         x = "You pressed OK!";
+	//     } else {
+	//         x = "You pressed Cancel!";
+	//     }
+	//     document.getElementById("demo").innerHTML = x;
+	// }
+	// $("#delete-entry").submit(function(e){
+	//     return false;
+	// });
+
+	//  $("#uguu").submit(function() {
+	//     if ($("input[type='submit']").val() == "text 1") {
+	//         alert("Please confirm if everything is correct");
+	//         $("input[type='submit']").val("text 2");
+	//         return false;
+	//     }
+	// });
+
+	$("#delete-entry").on("submit", function(){
+	    if (confirm("Are you sure you want to delete this entry?") == true) {
+	        return console.log("You pressed OK!");
+	    } else {
+	        console.log("You pressed Cancel!");
+	        return false;
+	    }
+
+	})
+</script>

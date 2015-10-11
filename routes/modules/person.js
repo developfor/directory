@@ -1,14 +1,22 @@
 "use strict";
 
 var mongoose = require('mongoose');
+var _ = require('underscore');
+var multer  = require('multer')
+
 var Person = require('../../models/person.js');
 var Hub = require('../../models/hub.js');
+var csrf = require('csurf')
 
 var secret_key = require('../../config/secret.js');
 
 
 var passport = require('../../config/passport.js');
 var flash = require('express-flash');
+
+var bodyParser = require('body-parser');
+var csrfProtection = csrf({ cookie: true })
+var parseForm = bodyParser.urlencoded({ extended: false })
 
 var  ensureAuthenticated = function(req, res, next) {
 	  if (req.isAuthenticated()) { return next(); }
@@ -33,8 +41,8 @@ module.exports = function(app) {
 	app.all('/person',ensureAuthenticated);
 	app.all('/person/*',ensureAuthenticated);
 
-
-	app.get('/hub/:id/add_person', function (req, res) {
+	// CREATE 
+	app.get('/hub/:id/add_person', csrfProtection, function (req, res) {
 		// console.log("rout")
 
 		return Hub.findById(req.params.id, function(err, hub){
@@ -47,18 +55,22 @@ module.exports = function(app) {
 
 		});
 	})
-
-	app.post('/hub/:id/add_person', function (req, res) {
+	// CREATE
+	app.post('/hub/:id/add_person', csrfProtection, function (req, res) {
 		// console.log(req.body);
-		console.log(req.params.id);
+		// console.log(req.params.id);
+		console.dir(req)
 
 		
-		return Hub.find(req.params.id, function(err, hub){
+		return Hub.find(req.params.id, csrfProtection, function(err, hub){
 			if(err || hub === null){ 	
 				req.flash('info', "Hub not found.")
 				res.redirect('/hubs');
 				return console.log("err++: " + err) 	
 			}
+
+
+
 			var person = new Person(req.body);
 			console.log(req.params.id)
 			person.hub_id = req.params.id;
@@ -89,6 +101,245 @@ module.exports = function(app) {
 		//   res.redirect('persons');
 		// });		
 	})
+
+	// READ
+	app.get('/hub/:id/persons', csrfProtection, function (req, res) {
+		return Hub.findById(req.params.id, function(err, hub){
+			if(err){ 
+				res.redirect('/hubs');
+				return console.log("err: " + err) 
+			}
+
+			// console.log(hub)
+			var hubOwner = hub.user_owner_id
+			var user = req.user._id
+			// console.log(hub.user_owner_id)
+			// console.log(req.user._id)
+			// console.log(_.isEqual(hub.user_owner_id, req.user._id));
+
+			
+			if(_.isEqual(user, hubOwner)){
+
+				Person.find({hub_id: hub.id}, function(err, persons){					
+						return res.render('person/persons', {hub: hub, persons: persons});
+					  	console.log("equals")		
+				});
+
+	  
+			} else {
+				console.log("not equals");
+				// console.log(req);
+			  return res.redirect('/hubs');
+			}
+			
+		});
+	})
+	// READ
+	app.get('/hub/:id/person/:person_id', function (req, res) {
+		return Hub.findById(req.params.id, function(err, hub){
+					if(err){ 
+						res.redirect('/hubs');
+						return console.log("err: " + err) 
+					}
+
+					var hubOwner = hub.user_owner_id
+					var user = req.user._id
+
+					if(_.isEqual(user, hubOwner)){
+
+						return Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
+							if(err || person === null){ 	
+								req.flash('info', "Person not found.")
+								res.redirect('/hub/:id');
+								return console.log("err++: " + err) 	
+							}
+							console.log(person);
+							res.render('person/person', {person : person, hub: hub });
+						})
+
+			  
+					} else {
+						console.log("not equals");
+						// console.log(req);
+					  return res.redirect('/hubs');
+					}
+
+			
+		});
+	});
+
+
+
+	// UPDATE
+	app.get('/hub/:id/person/:person_id/update', csrfProtection, function (req, res) {
+		return Person.findById(req.params.person_id, function(err, person){
+			if(err || person === null){ 	
+				req.flash('info', "Person not found.")
+				res.redirect('/hub/:id');
+				return console.log("err++: " + err) 	
+			}	
+			console.log(person);
+			res.render('person/person_update', {person : person, csrfToken: req.csrfToken()});
+		})
+	});
+
+	app.post('/hub/:id/person/:person_id/update', parseForm, csrfProtection, function (req, res) {
+		console.log("update")
+		return Hub.findById(req.params.id, function(err, hub){
+					if(err){ 
+						res.redirect('/hubs');
+						return console.log("err: " + err) 
+					}
+
+					var hubOwner = hub.user_owner_id
+					var user = req.user._id
+
+					if(_.isEqual(user, hubOwner)){
+
+
+						var person = new Person(req.body);
+						console.log(req.params.id)
+						person.hub_id = req.params.id;
+
+						// Person.findById(req.params.person_id, function (err, person) {
+
+						Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function (err, person) {
+							console.log(person)
+							if(err || person === null){ 	
+								req.flash('info', "Person not found.")
+								res.redirect('/hub/:id/persons');
+								return console.log("err++: " + err) 	
+							}	
+							person._id = req.params.person_id
+							person.first_name = req.body.first_name;
+							person.last_name = req.body.last_name;
+							person.description = req.body.description;
+							person.email = req.body.email;
+
+							person.save(function (err) {
+								if (err) return console.log(err);
+								res.redirect('/hub/' + req.params.id + "/person/" +  req.params.person_id);
+							});
+						});
+						// Person.update({_id: req.params.person_id, hub_id: hub.id}, { first_name: req.body.first_name, last_name: req.body.last_name, description: req.body.description, email: req.body.email }, options, callback)
+
+
+
+
+
+
+
+
+						// person.save(function (err, person) {
+						// 	if(err){ 	
+						// 		req.flash('info', "Did not save person.")
+						// 		// res.redirect('/hub/:id/add_person');
+						// 		// res.render('person/add_person');
+						// 			res.redirect('/hub/' + req.params.id + '/add_person');
+						// 		return console.log("err++: " + err) 	
+						// 	}	
+						// 	res.redirect('/hub/' + req.params.id);
+						// });		
+
+
+
+
+						// return Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
+						// 	if(err || person === null){ 	
+						// 		req.flash('info', "Person not found.")
+						// 		res.redirect('/hub/:id');
+						// 		return console.log("err++: " + err) 	
+						// 	}
+						// 	console.log(person);
+						// 	res.render('person/person', {person : person, hub: hub });
+						// })
+
+			  
+					} else {
+						console.log("not equals");
+						// console.log(req);
+					  return res.redirect('/hubs');
+					}
+
+			
+		});
+
+			
+		console.log("update person")
+
+		// Person.findById(req.params.id, function (err, person) {
+		// 	console.log(person)
+		// 	if(err || person === null){ 	
+		// 		req.flash('info', "Person not found.")
+		// 		res.redirect('/persons');
+		// 		return console.log("err++: " + err) 	
+		// 	}	
+		// 	person._id = req.params.id
+		// 	person.first_name = req.body.first_name;
+		// 	person.last_name = req.body.last_name;
+		// 	person.description = req.body.description;
+		// 	person.email = req.body.email;
+
+		// 	person.save(function (err) {
+		// 		if (err) return handleError(err);
+		// 		res.redirect('/person/'+req.params.id );
+		// 	});
+		// });
+			
+	});
+
+	app.delete('/hub/:id/person/:person_id',  function (req, res) {
+		return Hub.findById(req.params.id, function(err, hub){
+			if(err){ 
+				res.redirect('/hubs');
+				return console.log("err: " + err) 
+			}
+
+			var hubOwner = hub.user_owner_id
+			var user = req.user._id
+
+			if(_.isEqual(user, hubOwner)){
+
+				// return Person.remove({_id: req.params.id}, function(err){
+				// 	// console.log("err: " + err);
+				// 	if(err){ 	
+				// 		req.flash('info', "Person not found.")
+				// 		res.redirect('/persons');
+				// 		return console.log("err++: " + err) 	
+				// 	}			
+				// 	console.log("delete");
+				// 	res.redirect('/persons');
+				// });
+
+
+
+				return Person.remove({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
+					if(err || person === null){ 	
+						req.flash('info', "Person not found.")
+						res.redirect('/hub/:id');
+						return console.log("err++: " + err) 	
+					}
+					console.log(person);
+					return res.redirect('/hub/'+ hub.id + '/persons' );
+
+					// res.render('person/person', {person : person});
+				})
+
+	  
+			} else {
+				console.log("not equals");
+				// console.log(req);
+			  return res.redirect('/hubs');
+			}
+			
+		});
+
+
+
+		
+	});
+
+
 	// app.post('/', function (req, res) {
 	// 		// console.log(req.body);
 	// 		var person = new Person(req.body);
@@ -100,100 +351,98 @@ module.exports = function(app) {
 	// 	})
 
 
-	app.get('/add_person', function (req, res) {
-		console.log("rout")
-			res.render('person/add_person');
-		})
+	// app.get('/add_person', function (req, res) {
+	// 	console.log("rout")
+	// 		res.render('person/add_person');
+	// 	})
 
 	
 
-	app.post('/add_person', function (req, res) {
-			console.log(req.body);
-			var person = new Person(req.body);
+	// app.post('/add_person', function (req, res) {
+	// 		console.log(req.body);
+	// 		var person = new Person(req.body);
 
-			person.save(function (err, person) {
-				if(err || person === null){ 	
-					req.flash('info', "Did not save person.")
-					res.redirect('/persons');
-					return console.log("err++: " + err) 	
-				}	
-			  res.redirect('persons');
-			});		
-		})
+	// 		person.save(function (err, person) {
+	// 			if(err || person === null){ 	
+	// 				req.flash('info', "Did not save person.")
+	// 				res.redirect('/persons');
+	// 				return console.log("err++: " + err) 	
+	// 			}	
+	// 		  res.redirect('persons');
+	// 		});		
+	// 	})
+	// ZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+	// app.get('/persons', function (req, res) {
+	// 	return Person.find({}, null, function(err, persons){
+	// 		if(err){ return console.log("err: " + err) }
+	// 		console.log(persons);
+	// 		res.render('person/persons', {persons : persons});
+	// 		// res.send(persons)
+	// 	})
+	// });
 
-	app.get('/persons', function (req, res) {
-		return Person.find({}, null, function(err, persons){
-			if(err){ return console.log("err: " + err) }
-			console.log(persons);
-			res.render('person/persons', {persons : persons});
-			// res.send(persons)
-		})
-	});
+	// app.get('/person/:id', function (req, res) {
+	// 	return Person.findById(req.params.id, function(err, person){
+	// 		if(err || person === null){ 	
+	// 			req.flash('info', "Person not found.")
+	// 			res.redirect('/persons');
+	// 			return console.log("err++: " + err) 	
+	// 		}
+	// 		console.log(person);
+	// 		res.render('person/person', {person : person});
+	// 	})
+	// });
 
-	app.get('/person/:id', function (req, res) {
-		return Person.findById(req.params.id, function(err, person){
-			if(err || person === null){ 	
-				req.flash('info', "Person not found.")
-				res.redirect('/persons');
-				return console.log("err++: " + err) 	
-			}
-			console.log(person);
-			res.render('person/person', {person : person});
-		})
-	});
-
-	app.delete('/person/:id', function (req, res) {
-		console.log("deleted");
-		return Person.remove({_id: req.params.id}, function(err){
-			// console.log("err: " + err);
-			if(err){ 	
-				req.flash('info', "Person not found.")
-				res.redirect('/persons');
-				return console.log("err++: " + err) 	
-			}			
-			console.log("delete");
-			res.redirect('/persons');
-		});
-	});
+	// app.delete('/person/:id', function (req, res) {
+	// 	console.log("deleted");
+	// 	return Person.remove({_id: req.params.id}, function(err){
+	// 		// console.log("err: " + err);
+	// 		if(err){ 	
+	// 			req.flash('info', "Person not found.")
+	// 			res.redirect('/persons');
+	// 			return console.log("err++: " + err) 	
+	// 		}			
+	// 		console.log("delete");
+	// 		res.redirect('/persons');
+	// 	});
+	// });
 
 
 
-	app.get('/person/:id/update', function (req, res) {
-		return Person.findById(req.params.id, function(err, person){
-			if(err || person === null){ 	
-				req.flash('info', "Person not found.")
-				res.redirect('/persons');
-				return console.log("err++: " + err) 	
-			}	
-			console.log(person);
-			res.render('person/person_update', {person : person});
-		})
-	});
+	// app.get('/person/:id/update', function (req, res) {
+	// 	return Person.findById(req.params.id, function(err, person){
+	// 		if(err || person === null){ 	
+	// 			req.flash('info', "Person not found.")
+	// 			res.redirect('/persons');
+	// 			return console.log("err++: " + err) 	
+	// 		}	
+	// 		console.log(person);
+	// 		res.render('person/person_update', {person : person});
+	// 	})
+	// });
 
-	app.post('/person/:id/update', function (req, res) {
+	// app.post('/person/:id/update', function (req, res) {
 			
-		Person.findById(req.params.id, function (err, person) {
-			console.log(person)
-			if(err || person === null){ 	
-				req.flash('info', "Person not found.")
-				res.redirect('/persons');
-				return console.log("err++: " + err) 	
-			}	
-			person._id = req.params.id
-			person.first_name = req.body.first_name;
-			person.last_name = req.body.last_name;
-			person.description = req.body.description;
-			person.email = req.body.email;
+	// 	Person.findById(req.params.id, function (err, person) {
+	// 		console.log(person)
+	// 		if(err || person === null){ 	
+	// 			req.flash('info', "Person not found.")
+	// 			res.redirect('/persons');
+	// 			return console.log("err++: " + err) 	
+	// 		}	
+	// 		person._id = req.params.id
+	// 		person.first_name = req.body.first_name;
+	// 		person.last_name = req.body.last_name;
+	// 		person.description = req.body.description;
+	// 		person.email = req.body.email;
 
-			person.save(function (err) {
-				if (err) return handleError(err);
-				res.redirect('/person/'+req.params.id );
-			});
-		});
-
-
+	// 		person.save(function (err) {
+	// 			if (err) return handleError(err);
+	// 			res.redirect('/person/'+req.params.id );
+	// 		});
+	// 	});
 			
-	});
+	// });
 
 
 }

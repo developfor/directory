@@ -13,6 +13,8 @@ var User = require('../../models/user.js');
 
 var nodemailer = require('nodemailer');
 var mg = require('nodemailer-mailgun-transport');
+var csrf = require('csurf')
+var bodyParser = require('body-parser')
   
 
 // var mailGunCred = require('../../config/mail.js');
@@ -25,6 +27,11 @@ var mailGunCred = {
 // passport crap begin
 var express = require('express')
 var app = express();
+
+// csrf
+var bodyParser = require('body-parser');
+var csrfProtection = csrf({ cookie: true })
+var parseForm = bodyParser.urlencoded({ extended: false })
 
 
 var passport = require('passport')
@@ -69,6 +76,9 @@ var flash = require('express-flash');
 
 
 module.exports = function(app) {
+
+
+  app.all('/login', csrfProtection, parseForm);
 
 
   app.use(passport.initialize());
@@ -258,7 +268,7 @@ module.exports = function(app) {
 
   app.get('/login',  function(req, res){
     if (res.locals.login){ return res.redirect('/')}
-    res.render('login', { user: req.user, message: req.flash('info') });
+    res.render('login', { user: req.user, message: req.flash('info'), csrfToken: req.csrfToken()  });
   });
 
   // POST /login
@@ -284,7 +294,9 @@ module.exports = function(app) {
                         
     passport.authenticate('local', function(err, user, info) {
       // console.log(user)
-      if (err) { return next(err) }
+      if (err) { return next(err) 
+         return res.redirect('/');
+      }
       if (!user) {
         // req.session.messages =  [info.message];
         req.flash('info', info.message)

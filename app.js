@@ -11,6 +11,8 @@ var cookieParser = require('cookie-parser')
 var flash = require('express-flash');
 var passport = require('passport')
 
+
+
 var mongoose = require('mongoose');
 var route = require('./routes/index.js');
 
@@ -44,7 +46,7 @@ app.use(methodOverride());
 app.use(session({ secret: secret_key.secret }));
 app.use(flash());
 
-app.use(express.static(__dirname + '/../../public'));
+app.use(express.static(__dirname + '/public'));
 
 
 
@@ -66,7 +68,8 @@ app.use(function(req, res) {
 
 // Handle 500
 // app.use(function(error, req, res, next) {
-//  res.send('500: Internal Server Error', 500);
+//  // res.send('500: Internal Server Error', 500);
+//  res.send('Uh-oh :(', 500);
 // });
 
 var server = app.listen(3000, function () {

@@ -35,7 +35,7 @@ module.exports = function(app) {
 	});
 
 	app.get('/hub/create', function (req, res) {
-			res.render('hub/create');
+			res.render('hub/hub_create');
 	});
 
 	app.post('/hub/create', function (req, res) {
@@ -55,6 +55,8 @@ module.exports = function(app) {
 	app.get('/hub', function (req, res) {
 		res.redirect('/hubs');		
 	});
+
+	
 
 	app.get('/hub/:id', function (req, res) {
 		// console.log(req.params.id)
@@ -91,6 +93,66 @@ module.exports = function(app) {
 				}
 			
 			});
+	});
+
+	// app.get('/hub/:id/update', function (req, res) {
+	// 		res.render('hub/hub_update');
+	// });
+
+
+	app.get('/hub/:id/update', function (req, res) {
+		return Hub.findById(req.params.id, function(err, hub){
+			if(err){ 
+				res.redirect('/hubs');
+				return console.log("err: " + err) 
+			}
+
+			console.log(hub)
+			var hubOnwer = hub.user_owner_id
+			var user = req.user._id
+
+			if(_.isEqual(user, hubOnwer)){
+				return res.render('hub/hub_update', {hub: hub});
+	  
+			} else {
+				console.log("not equals");
+
+			  return res.redirect('/hubs');
+			}
+		
+		});
+	});
+
+	app.post('/hub/:id/update', function (req, res) {
+
+		return Hub.findById(req.params.id, function(err, hub){
+					if(err){ 
+						res.redirect('/hubs');
+						return console.log("err: " + err) 
+					}
+
+					var hubOwner = hub.user_owner_id
+					var user = req.user._id
+
+					if(_.isEqual(user, hubOwner)){
+					
+						hub.title = req.body.title;
+						hub.description = req.body.description;
+
+						hub.save(function (err) {
+							if (err) {
+								res.redirect('/hub/'+ req.params.id +'/update' );
+								return console.log(err); 
+							}
+							res.redirect('/hub/' + req.params.id);
+						});
+	  
+					} else {
+						console.log("not equals");
+					  	return res.redirect('/hubs');
+					}	
+		});
+
 	});
 
 

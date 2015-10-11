@@ -3,5 +3,7 @@
 	<p><%= messages.info %></p>
 <% } %>
 <% persons.forEach(function(name){ %>
-	<%= name.first_name %> <%= name.last_name %>  <a href="/person/<%= name._id %>">view person</a><br>
+	<%= name.first_name %> <%= name.last_name %>  <a href="/hub/<%= hub._id %>/person/<%= name._id %>">view person</a><br>
 <% }) %>
+
+<a href="/hub/<%= hub.id %>/add_person">add person</a>
