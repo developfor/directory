@@ -3,6 +3,8 @@
 var mongoose = require('mongoose');
 var _ = require('underscore');
 var multer  = require('multer')
+var upload = multer()
+
 
 var Person = require('../../models/person.js');
 var Hub = require('../../models/hub.js');
@@ -22,10 +24,17 @@ var  ensureAuthenticated = function(req, res, next) {
 	  if (req.isAuthenticated()) { return next(); }
 	 res.redirect('/login')
   	}
-
+var nocache = function (req, res, next) {
+  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.header('Expires', '-1');
+  res.header('Pragma', 'no-cache');
+  next();
+}
 
 module.exports = function(app) {
-
+	app.use(bodyParser.urlencoded({
+	    extended: true
+	}));
 	// app.get('/', function (req, res) {
 	//   res.send('Hello World!');
 	// });
@@ -34,12 +43,12 @@ module.exports = function(app) {
 	// 	console.log("rout")
 	// 		res.render('index');
 	// 	})
-	app.all('/hub', ensureAuthenticated);
-	app.all('/hub/*', ensureAuthenticated);
-	app.all('/add_person', ensureAuthenticated);
-	app.all('/persons',ensureAuthenticated);
-	app.all('/person',ensureAuthenticated);
-	app.all('/person/*',ensureAuthenticated);
+	app.all('/hub', ensureAuthenticated, nocache);
+	app.all('/hub/*', ensureAuthenticated, nocache);
+	app.all('/hub/:id/add_person', ensureAuthenticated, nocache);
+	app.all('/hub/:id/persons',ensureAuthenticated, nocache);
+	app.all('/hub/:id/person',ensureAuthenticated, nocache);
+	app.all('/hub/:id/person/*',ensureAuthenticated, nocache);
 
 	// CREATE 
 	app.get('/hub/:id/add_person', csrfProtection, function (req, res) {
@@ -51,18 +60,20 @@ module.exports = function(app) {
 				return console.log("err: " + err) 
 			}
 
-			res.render('person/add_person');
+			res.render('person/add_person', {csrfToken: req.csrfToken()});
 
 		});
 	})
-	// CREATE
-	app.post('/hub/:id/add_person', csrfProtection, function (req, res) {
+	// CREATE parseForm, csrfProtection,
+	app.post('/hub/:id/add_person', parseForm, csrfProtection, upload.array(), function (req, res) {
+	// app.post('/hub/:id/add_person', parseForm, csrfProtection, function (req, res) {
+
 		// console.log(req.body);
 		// console.log(req.params.id);
 		console.dir(req)
 
 		
-		return Hub.find(req.params.id, csrfProtection, function(err, hub){
+		return Hub.find(req.params.id, function(err, hub){
 			if(err || hub === null){ 	
 				req.flash('info', "Hub not found.")
 				res.redirect('/hubs');
@@ -71,9 +82,14 @@ module.exports = function(app) {
 
 
 
-			var person = new Person(req.body);
-			console.log(req.params.id)
+			var person = new Person();
+			// console.log(req.params.id)
 			person.hub_id = req.params.id;
+			person.first_name = req.body.first_name;
+			person.last_name = req.body.last_name;
+			person.description = req.body.description;
+			// person.email = req.body.email;
+
 
 			person.save(function (err, person) {
 				if(err){ 	
@@ -103,7 +119,7 @@ module.exports = function(app) {
 	})
 
 	// READ
-	app.get('/hub/:id/persons', csrfProtection, function (req, res) {
+	app.get('/hub/:id/persons', function (req, res) {
 		return Hub.findById(req.params.id, function(err, hub){
 			if(err){ 
 				res.redirect('/hubs');
@@ -161,7 +177,8 @@ module.exports = function(app) {
 					} else {
 						console.log("not equals");
 						// console.log(req);
-					  return res.redirect('/hubs');
+					  // return res.redirect('/hubs');
+					  res.send('404: Page not Found', 404);
 					}
 
 			

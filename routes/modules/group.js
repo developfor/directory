@@ -9,6 +9,7 @@ var  ensureAuthenticated = function(req, res, next) {
 var mongoose = require('mongoose');
 var _ = require('underscore');
 
+var Hub = require('../../models/hub.js');
 var Group = require('../../models/group.js');
 var Person = require('../../models/person.js');
 
@@ -17,52 +18,125 @@ module.exports = function(app) {
 	//   res.send('Hello World!');
 	// });
 
-	app.all('/add_group', ensureAuthenticated);
-	app.all('/groups', ensureAuthenticated);
+	app.all('/hub/:id/add_group', ensureAuthenticated);
+	app.all('/hub/:id/groups', ensureAuthenticated);
 	// app.all('/group', ensureAuthenticated);
-	app.all('/group/*', ensureAuthenticated);
+	app.all('/hub/:id/group/*', ensureAuthenticated);
 
 
-	app.get('/add_group', function (req, res) {
-		// console.log("rout") 
+	app.get('/hub/:id/add_group', function (req, res) {
+		return Hub.findById(req.params.id, function(err, hub){
+			if(err){ 
+				res.redirect('/hubs');
+				return console.log("err: " + err) 
+			}
 			res.render('group/add_group');
 		})
+	})
 
-	app.post('/add_group', function (req, res) {
-			// console.log(req.body);
-			var group = new Group(req.body);
+	app.post('/hub/:id/add_group', function (req, res) {
+		
+
+		return Hub.find(req.params.id, function(err, hub){
+			if(err || hub === null){ 	
+				req.flash('info', "Hub not found.")
+				res.redirect('/hubs');
+				return console.log("err++: " + err) 	
+			}
+
+
+			var group = new Group();
+
+			group.hub_id = req.params.id;
+			group.title = req.body.title;
+			group.description = req.body.description;
 
 			group.save(function (err, group) {
-				 // console.log("message");
 				if(err || group === null){ 	
 					req.flash('info', "Did not save group.")
-					res.redirect('/groups');
+					res.redirect('/hub/' + req.params.id+ '/add_group');
 					return console.log("err++: " + err) 	
 				}	
-			 
-			  res.redirect('/groups');
+				res.redirect('/hub/' + req.params.id+ '/groups');
 
 			});		
-		})
+		})	
 
-	app.get('/groups', ensureAuthenticated, function (req, res) {
-		return Group.find({}, null, function(err, groups){
-			if(err){ return console.log("err: " + err) }
-			// console.log(groups);
-			res.render('group/groups', {groups : groups});
-		})
+
+	})
+
+	app.get('/hub/:id/groups', function (req, res) {
+		return Hub.findById(req.params.id, function(err, hub){
+			if(err){ 
+				res.redirect('/hubs');
+				return console.log("err: " + err) 
+			}
+
+			// console.log(hub)
+			var hubOwner = hub.user_owner_id
+			var user = req.user._id
+			// console.log(hub.user_owner_id)
+			// console.log(req.user._id)
+			// console.log(_.isEqual(hub.user_owner_id, req.user._id));
+
+			
+			if(_.isEqual(user, hubOwner)){
+
+				Group.find({hub_id: hub.id}, function(err, groups){
+					if(err){ return console.log("err: " + err) }
+					// console.log(groups);
+					res.render('group/groups', {hub: hub, groups : groups});
+				})
+
+			} else {
+				console.log("not equals");
+				// console.log(req);
+			  return res.redirect('/hubs');
+			}
+			
+		});
 	});
 
-	app.get('/group/:id', function (req, res) {
-		return Group.findById(req.params.id, function(err, group){
-			if(err || group === null){ 	
-				req.flash('info', "Group not found.")
-				res.redirect('/groups');
-				return console.log("err++: " + err) 	
-			}	
-			// console.log(group);
-			res.render('group/group', {group : group});
-		})
+	app.get('/hub/:id/group/:group_id', function (req, res) {
+		// return Group.findById(req.params.id, function(err, group){
+		// 	if(err || group === null){ 	
+		// 		req.flash('info', "Group not found.")
+		// 		res.redirect('/groups');
+		// 		return console.log("err++: " + err) 	
+		// 	}	
+		// 	// console.log(group);
+		// 	res.render('group/group', {group : group});
+		// })
+
+		return Hub.findById(req.params.id, function(err, hub){
+			if(err){ 
+				res.redirect('/hubs');
+				return console.log("err: " + err) 
+			}
+
+			var hubOwner = hub.user_owner_id
+			var user = req.user._id
+
+			if(_.isEqual(user, hubOwner)){
+
+				return Group.findOne({_id: req.params.group_id, hub_id: hub.id}, function(err, group){
+					if(err || group === null){ 	
+						req.flash('info', "Group not found.")
+						res.redirect('/hub/:id');
+						return console.log("err++: " + err) 	
+					}
+					res.render('group/group', {group : group, hub: hub});
+				})
+
+
+			} else {
+				console.log("not equals");
+				// console.log(req);
+			  // return res.redirect('/hubs');
+			  res.send('404: Page not Found', 404);
+			}
+
+		});
 	});
 
 	app.delete('/group/:id', function (req, res) {

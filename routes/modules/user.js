@@ -79,7 +79,7 @@ module.exports = function(app) {
 
 
   app.all('/login', csrfProtection, parseForm);
-
+  app.all('/', csrfProtection);
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -88,7 +88,7 @@ module.exports = function(app) {
     // console.log(req.isAuthenticated())
 
     // res.render('index', { user: req.user });
-    res.render('index')
+    res.render('index', { user: req.user, csrfToken: req.csrfToken() })
   });
 
   app.get('/signup', function(req, res){
@@ -304,7 +304,7 @@ module.exports = function(app) {
       }
       req.logIn(user, function(err) {
         if (err) { return next(err); }
-        return res.redirect('/');
+        return res.redirect('/hubs');
       });
     })(req, res, next);
   });

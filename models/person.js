@@ -26,7 +26,7 @@ var Person = new Schema({
 	},
 	gender: {
 		type: String,
-		require: true,
+		// require: true,
 		validate: /\S+/
 	},
 	description: {

@@ -11,5 +11,13 @@ people
 groups
 <hr>
 <%= groups %>
+<hr>
 <a href="/hub/<%= hub.id %>/persons">view people</a><br>
-<a href="/hub/<%= hub.id %>/add_person">add person</a>
+<a href="/hub/<%= hub.id %>/add_person">add person</a><br><br>
+<a href="/hub/<%= hub.id %>/groups">view groups</a><br>
+<a href="/hub/<%= hub.id %>/add_group">add group</a><br>
+<hr>
+<form id="delete-entry" method="POST" action="?_method=DELETE">
+<!-- <form id="delete-entry"> -->
+  <button  id="delete-button" type="submit">Delete resource</button>
+</form>

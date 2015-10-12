@@ -40,7 +40,9 @@ app.set('views', path.join(__dirname, 'views'));
 // app.use(logger('combined'));
 app.use(methodOverride('_method'))
 app.use(cookieParser());
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 app.use(methodOverride());
 app.use(session({ secret: secret_key.secret }));

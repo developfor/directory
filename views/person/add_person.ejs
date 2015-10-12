@@ -1,6 +1,7 @@
 <% include ../_partials/header %>
-<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
-		<input type='file' name='photo'>
+<form method="post" action="?_csrf=<%= csrfToken %>" accept-charset="utf-8" enctype="multipart/form-data">
+	   
+		<input type='file' name='photo'><br>
 		first_name: <input type "text" name="first_name" /> <br>
 
 		last_name: <input type "text" name="last_name" /><br>
@@ -9,3 +10,5 @@
 		email: <input type="email" name="email" /><br>
 		<input type ="submit" value="Save">
 	</form>
+
+	<input type="hidden" name="_csrf" value="<%= csrfToken %>">

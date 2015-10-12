@@ -8,8 +8,8 @@ var Hub = new Schema({
 		type: String,
 		require: true,
 		validate: /\S+/,
-		minlength: 5, 
-		maxlength: 500
+		minlength: 1, 
+		maxlength: 55
 	},
 	description: {
 		type: String,
