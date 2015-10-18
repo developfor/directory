@@ -2,8 +2,7 @@
 <%= group %>
 <hr>
 
-
-<form action="/group/<%= group._id %>/add_persons" method="post">
+<form>
 	<% persons.forEach(function(name){ %>
 		
 	<% if(group.persons.indexOf(name._id) > -1) { %>
@@ -15,10 +14,33 @@
 	<input type="checkbox" name="person" value="<%= name._id %>"><%= name.first_name %> <%= name.last_name %> <br>
 		<% } %>
 	<% }) %>
- 
-  <input type="submit" value="Submit">
 </form>
 
+<script>
+$('input:checkbox').change(
+    function(){
+       if ($(this).is(':checked')) {
+       		$.ajax({
+			  type: "POST",
+			  url: location.pathname,
+			  data: {'person_id': this.value},
+			  success: "success",
+			  dataType: "dataType"
+			});
+           return console.log("add " + this.value);
+        }
+       if ($(this).not(':checked')) {
+       		$.ajax({
+			  type: "DELETE",
+			  url: location.pathname,
+			  data: {'person_id': this.value},
+			  success: "success",
+			  dataType: "dataType"
+			});
+           return console.log("remove " + this.value);
+        }
+    });
+</script>
 
 
 <!-- <form action="/add_group" method="post" accept-charset="utf-8">

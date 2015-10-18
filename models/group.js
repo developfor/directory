@@ -11,7 +11,6 @@ var Group = new Schema({
 	description: {
 		type: String
 	},
-
 	persons: {
 		type: Array
 	},
@@ -20,10 +19,11 @@ var Group = new Schema({
 		default: Date.now
 	},
 	hub_id: {
-		type: String,
+		type: Schema.ObjectId,
 		require: true,
-		validate: /\S+$/
+		ref: "Hub"
 	},
 });
+
 
 module.exports = mongoose.model('Group', Group);

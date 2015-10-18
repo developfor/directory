@@ -1,9 +1,9 @@
 <% include ../_partials/header %>
 <%= group %>
-<a href="/group/<%= group._id %>/add_persons/">add persons</a>
-<a href="/group/<%= group._id %>/update/">update</a>
+<a href="/hub/<%= hub._id %>/group/<%= group._id %>/add_persons/">add persons</a>
+<a href="/hub/<%= hub._id %>/group/<%= group._id %>/update/">update</a>
 
 
-<form method="POST" action="/group/<%= group._id %>?_method=DELETE">
+<form method="POST" action="?_method=DELETE">
   <button type="submit">Delete resource</button>
 </form>

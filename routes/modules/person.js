@@ -84,7 +84,7 @@ module.exports = function(app) {
 
 			var person = new Person();
 			// console.log(req.params.id)
-			person.hub_id = req.params.id;
+			person.hub_id = mongoose.Types.ObjectId(req.params.id);
 			person.first_name = req.body.first_name;
 			person.last_name = req.body.last_name;
 			person.description = req.body.description;
@@ -121,9 +121,10 @@ module.exports = function(app) {
 	// READ
 	app.get('/hub/:id/persons', function (req, res) {
 		return Hub.findById(req.params.id, function(err, hub){
-			if(err){ 
+			if(err || hub === null){ 	
+				req.flash('info', "Hub not found.")
 				res.redirect('/hubs');
-				return console.log("err: " + err) 
+				return console.log("err++: " + err) 	
 			}
 
 			// console.log(hub)
@@ -153,9 +154,10 @@ module.exports = function(app) {
 	// READ
 	app.get('/hub/:id/person/:person_id', function (req, res) {
 		return Hub.findById(req.params.id, function(err, hub){
-					if(err){ 
+					if(err || hub === null){ 	
+						req.flash('info', "Hub not found.")
 						res.redirect('/hubs');
-						return console.log("err: " + err) 
+						return console.log("err++: " + err) 	
 					}
 
 					var hubOwner = hub.user_owner_id

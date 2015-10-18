@@ -36,14 +36,14 @@ var Person = new Schema({
 		type: String,
 		validate: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/
 	},
-	group: {
-		type: Array,
-		default: []
-	},
+	// group: {
+	// 	type: Array,
+	// 	default: []
+	// },
 	hub_id: {
-		type: String,
+		type: Schema.ObjectId,
 		require: true,
-		validate: /\S+$/
+		ref: "Hub"
 	},
 	creation_date: {
 		type: Date,
