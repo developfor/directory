@@ -12,12 +12,12 @@ module.exports = function(app) {
     app.use(passport.session());
 
 	// var loggedIn = function(req, res, next) {
-	// 	console.log(req.user)
+	// console.log(req.user)
 	//     // if (req.user) {
 	//     // 	console.log("logged in")     
 	//     // } else {
 	//     //     // res.redirect('/login');
-	//     //     console.log("not logged in")
+	//     //   console.log("not logged in")
 	//     // }
 	//     next();
 	// }
@@ -39,6 +39,7 @@ module.exports = function(app) {
 	
 
 	require('./modules/user.js')(app);
+	require('./modules/event.js')(app);
 	require('./modules/hub.js')(app);
 	require('./modules/person.js')(app);
 	require('./modules/group.js')(app);

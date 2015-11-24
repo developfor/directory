@@ -11,9 +11,9 @@ var Group = new Schema({
 	description: {
 		type: String
 	},
-	persons: {
-		type: Array
-	},
+	// persons: {
+	// 	type: Array
+	// },
 	creation_date: {
 		type: Date,
 		default: Date.now

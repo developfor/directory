@@ -29,41 +29,44 @@ module.exports = function(app) {
 
 	app.all('/hub', ensureAuthenticated, nocache);
 	app.all('/hub/*', ensureAuthenticated, nocache);
-	app.all('/hubs', ensureAuthenticated, nocache);
+	// app.all('/hubs', ensureAuthenticated, nocache);
 
-	app.get('/hubs', function (req, res) {
-			return Hub.find({user_owner_id: req.user._id}, null, function(err, hubs){
-				if(err){ return console.log("err: " + err) }
-				// console.log(hubs);
-				res.render('hub/hubs', {hubs: hubs});
-			});
-	});
+	// app.get('/hubs', function (req, res) {
+	// 		return Hub.find({user_owner_id: req.user._id}, null, function(err, hubs){
+	// 			if(err){ return console.log("err: " + err) }
+	// 			// console.log(hubs);
+	// 			res.render('hub/hubs', {hubs: hubs});
+	// 		});
+	// });
 
-	app.get('/hub/create', function (req, res) {
-		return Hub.find({user_owner_id: req.user._id}, null, function(err, hubs){
-			if(hubs.length > 2){
-				console.log("too many hubs")
-			}
-			res.render('hub/hub_create');
-		});
-	});
+	// app.get('/hub/create', function (req, res) {
+	// 	return Hub.find({user_owner_id: req.user._id}, null, function(err, hubs){
+	// 		if(hubs.length > 2){
+	// 			console.log("too many hubs")
+	// 		}
+	// 		res.render('hub/hub_create');
+	// 	});
+	// });
 
-	app.post('/hub/create', function (req, res) {
-		console.log( req.user);
-		console.log( req.body.title);
-		var hub = new Hub();
-		hub.title = req.body.title
-		hub.description = req.body.description
-		hub.user_owner_id = req.user._id
+	// app.post('/hub/create', function (req, res) {
+	// 	console.log( req.user);
+	// 	// console.log( req.body.title);
+	// 	var hub = new Hub();
+	// 	// hub.title = req.body.title
+	// 	hub.description = req.body.description
+	// 	hub.user_owner_id = req.user._id
 
-		hub.save(function (err, person) {
-		  if (err) return console.error(err);
-		  res.redirect('/hubs');
-		});	
-	});
+	// 	hub.save(function (err, person) {
+	// 	  if (err) return console.error(err);
+	// 	  res.redirect('/hubs');
+	// 	});	
+	// });
 
 	app.get('/hub', function (req, res) {
-		res.redirect('/hubs');		
+		res.redirect('/');		
+	});
+	app.get('/hubs', function (req, res) {
+		res.redirect('/');		
 	});
 
 	
@@ -90,7 +93,7 @@ module.exports = function(app) {
 
 					Person.find({hub_id: hub.id}, function(err, persons){
 						Group.find({hub_id: hub.id}, function(err, groups){	
-							return res.render('hub/hub', {hub: hub, persons: persons, groups: groups});
+							return res.render('hub/hub', {user: req.user, hub: hub, persons: persons, groups: groups});
 						  	console.log("equals")		
 					  	});
 					});
@@ -165,62 +168,62 @@ module.exports = function(app) {
 
 	});
 
-	app.delete('/hub/:id',  function (req, res) {
-		return Hub.findById(req.params.id, function(err, hub){
-			if(err){ 
-				res.redirect('/hubs');
-				return console.log("err: " + err) 
-			}
+	// app.delete('/hub/:id',  function (req, res) {
+	// 	return Hub.findById(req.params.id, function(err, hub){
+	// 		if(err){ 
+	// 			res.redirect('/hubs');
+	// 			return console.log("err: " + err) 
+	// 		}
 
-			var hubOwner = hub.user_owner_id
-			var user = req.user._id
+	// 		var hubOwner = hub.user_owner_id
+	// 		var user = req.user._id
 
-			if(_.isEqual(user, hubOwner)){
+	// 		if(_.isEqual(user, hubOwner)){
 
-				// return Person.remove({_id: req.params.id}, function(err){
-				// 	// console.log("err: " + err);
-				// 	if(err){ 	
-				// 		req.flash('info', "Person not found.")
-				// 		res.redirect('/persons');
-				// 		return console.log("err++: " + err) 	
-				// 	}			
-				// 	console.log("delete");
-				// 	res.redirect('/persons');
-				// });
+	// 			// return Person.remove({_id: req.params.id}, function(err){
+	// 			// 	// console.log("err: " + err);
+	// 			// 	if(err){ 	
+	// 			// 		req.flash('info', "Person not found.")
+	// 			// 		res.redirect('/persons');
+	// 			// 		return console.log("err++: " + err) 	
+	// 			// 	}			
+	// 			// 	console.log("delete");
+	// 			// 	res.redirect('/persons');
+	// 			// });
 
-				hub.remove(function (err) {
-					if (err) {
-						res.redirect('/hub/'+ req.params.id +'/update' );
-						return console.log(err); 
-					}
-					res.redirect('/hub/' + req.params.id);
-				});
+	// 			hub.remove(function (err) {
+	// 				if (err) {
+	// 					res.redirect('/hub/'+ req.params.id +'/update' );
+	// 					return console.log(err); 
+	// 				}
+	// 				res.redirect('/hub/' + req.params.id);
+	// 			});
 
-				// return Person.remove({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
-				// 	if(err || person === null){ 	
-				// 		req.flash('info', "Person not found.")
-				// 		res.redirect('/hub/:id');
-				// 		return console.log("err++: " + err) 	
-				// 	}
-				// 	console.log(person);
-				// 	return res.redirect('/hub/'+ hub.id + '/persons' );
+	// 			// return Person.remove({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
+	// 			// 	if(err || person === null){ 	
+	// 			// 		req.flash('info', "Person not found.")
+	// 			// 		res.redirect('/hub/:id');
+	// 			// 		return console.log("err++: " + err) 	
+	// 			// 	}
+	// 			// 	console.log(person);
+	// 			// 	return res.redirect('/hub/'+ hub.id + '/persons' );
 
-				// 	// res.render('person/person', {person : person});
-				// })
+	// 			// 	// res.render('person/person', {person : person});
+	// 			// })
 
 	  
-			} else {
-				console.log("not equals");
-				// console.log(req);
-			  return res.redirect('/hubs');
-			}
+	// 		} else {
+	// 			console.log("not equals");
+	// 			// console.log(req);
+	// 		  return res.redirect('/hubs');
+	// 		}
 			
-		});
+	// 	});
 
 
 
 		
-	});
+	// });
 
 
 }

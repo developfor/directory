@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Person_group_join = new Schema({
+var Person_event_join = new Schema({
 	hub_id: {
 		type: Schema.ObjectId,
 		require: true,
@@ -11,7 +11,7 @@ var Person_group_join = new Schema({
 	group_id: {
 		type: Schema.ObjectId,
 		require: true,
-		ref: "Event"
+		ref: "Group"
 	},
 	person_id: {
 		type: Schema.ObjectId,
@@ -19,6 +19,6 @@ var Person_group_join = new Schema({
 		ref: "Person"
 	}
 });
-Person_group_join.index({ hub_id: 1, group_id: 1, person_id: 1 }, { unique: true });
+Person_event_join.index({ hub_id: 1, event_id: 1, person_id: 1 }, { unique: true });
 
-module.exports = mongoose.model('Person_group_join', Person_group_join);
+module.exports = mongoose.model('Person_event_join', Person_event_join);

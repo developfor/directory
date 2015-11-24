@@ -10,6 +10,7 @@
 
 var mongoose = require('mongoose');
 var User = require('../../models/user.js');
+var Hub = require('../../models/hub.js');
 
 var nodemailer = require('nodemailer');
 var mg = require('nodemailer-mailgun-transport');
@@ -22,7 +23,6 @@ var mailGunCred = {
           api_key: 'key-14065a8c4ab3a3f5a259e979c8d7402e',
           domain: 'sandboxa2ac611e09064938a4ab79a8e722006f.mailgun.org'
         }
-
 
 // passport crap begin
 var express = require('express')
@@ -85,8 +85,16 @@ module.exports = function(app) {
   app.use(passport.session());
 
   app.get('/', function(req, res){
-    // console.log(req.isAuthenticated())
-
+    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    console.log(fullUrl)
+    if(req.isAuthenticated()){
+      Hub.find({user_owner_id: req.user.id}, function(err, hub){
+        console.log(hub)
+        return res.render('index', { hub: hub, user: req.user, csrfToken: req.csrfToken() })
+      })
+      return
+    }
+    // console.log(req.user.id)
     // res.render('index', { user: req.user });
     res.render('index', { user: req.user, csrfToken: req.csrfToken() })
   });
@@ -106,6 +114,9 @@ module.exports = function(app) {
     
     user.save(function(err) {
 
+      
+
+
       if(err) {
         console.log(err);
         req.session.messages =  "There was an error.";
@@ -119,7 +130,14 @@ module.exports = function(app) {
 
         // console.log('user: ' + user.email + " saved.");
         // return res.redirect('/account');
-       
+        // hub.save(function (err, person) {
+      //   if (err) return console.error(err);
+        
+      // });
+
+        
+
+
 
         passport.authenticate('local', function(err, user, info) {
            // console.log("this " +user)
@@ -132,8 +150,23 @@ module.exports = function(app) {
           }
           req.logIn(user, function(err) {
             if (err) { return next(err); }
-             console.log("logged in");
-            return res.redirect('/');
+               console.log("logged in");
+               console.log( req.user);
+              // console.log( req.body.title);
+              var hub = new Hub();
+              // hub.title = req.body.title
+              // hub.description = req.body.description
+              hub.user_owner_id = req.user._id
+
+              hub.save(function (err, person) {
+                if (err) return console.error(err);
+                res.redirect('/');
+              }); 
+
+        
+
+
+            // return res.redirect('/');
            
             
           });
@@ -304,7 +337,7 @@ module.exports = function(app) {
       }
       req.logIn(user, function(err) {
         if (err) { return next(err); }
-        return res.redirect('/hubs');
+        return res.redirect('/');
       });
     })(req, res, next);
   });
@@ -429,7 +462,7 @@ module.exports = function(app) {
        
         var mailOptions = {
           to: user.email,
-          from: 'passwordreset@demo.com',
+          from: 'passwordreset@describing.it',
           subject: 'Your password has been changed',
           text: 'Hello,\n\n' +
             'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'

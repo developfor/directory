@@ -1,7 +1,8 @@
 <% include ../_partials/header %>
-<p>Title: <%= hub.title %></p>
+
+<p>admin: <%= user.displayname %></p>
 <p>Description: <%= hub.description %></p><br>
-<a href="/hub/<%= hub.id %>/update">Edit Profile Hub Information</a><br>
+<a href="/hub/<%= hub.id %>/update">Edit hub information</a><br>
 <%= hub %>
 <hr>
 people
@@ -15,9 +16,11 @@ groups
 <a href="/hub/<%= hub.id %>/persons">view people</a><br>
 <a href="/hub/<%= hub.id %>/add_person">add person</a><br><br>
 <a href="/hub/<%= hub.id %>/groups">view groups</a><br>
-<a href="/hub/<%= hub.id %>/add_group">add group</a><br>
+<a href="/hub/<%= hub.id %>/add_group">add group</a><br><br>
+<a href="/hub/<%= hub.id %>/events">view events</a><br>
+<a href="/hub/<%= hub.id %>/add_event">add event</a><br>
 <hr>
 <form id="delete-entry" method="POST" action="?_method=DELETE">
 <!-- <form id="delete-entry"> -->
-  <button  id="delete-button" type="submit">Delete resource</button>
+<!--   <button  id="delete-button" type="submit">Delete resource</button> -->
 </form>

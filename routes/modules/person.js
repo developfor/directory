@@ -99,7 +99,7 @@ module.exports = function(app) {
 						res.redirect('/hub/' + req.params.id + '/add_person');
 					return console.log("err++: " + err) 	
 				}	
-				res.redirect('/hub/' + req.params.id);
+				res.redirect('/hub/' + req.params.id +"/person/" + person.id);
 			});		
 
 

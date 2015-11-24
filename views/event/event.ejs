@@ -1,0 +1,9 @@
+<% include ../_partials/header %>
+<%= event %>
+<a href="/hub/<%= hub._id %>/event/<%= event._id %>/add_persons/">add persons</a>
+<a href="/hub/<%= hub._id %>/event/<%= event._id %>/update/">update</a>
+
+
+<form method="POST" action="?_method=DELETE">
+  <button type="submit">Delete resource</button>
+</form>

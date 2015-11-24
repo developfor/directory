@@ -1,0 +1,4 @@
+<% include ../_partials/header %>
+<% events.forEach(function(event){ %>
+	<%= event.title %>  <a href="/hub/<%= hub._id %>/event/<%= event._id %>">view  event</a><br>
+<% }) %>

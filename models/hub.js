@@ -6,16 +6,17 @@ var Schema = mongoose.Schema;
 var Hub = new Schema({
 	title: {
 		type: String,
-		require: true,
-		validate: /\S+/,
-		minlength: 1, 
+		// require: true,
+		// validate: /\S+/,
+		minlength: 0, 
 		maxlength: 55
 	},
 	description: {
 		type: String,
-		validate: /\S+/,
+		// validate: /\S+/,
 		minlength: 0, 
-		maxlength: 500
+		maxlength: 500,
+		// require: true
 	},
 	short_id:  {
 		type: String,

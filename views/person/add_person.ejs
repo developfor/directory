@@ -2,13 +2,57 @@
 <form method="post" action="?_csrf=<%= csrfToken %>" accept-charset="utf-8" enctype="multipart/form-data">
 	   
 		<input type='file' name='photo'><br>
+		title: <input type "text" name="title" /> <br>
 		first_name: <input type "text" name="first_name" /> <br>
-
+		middle_name: <input type "text" name="middle_name" /> <br>
 		last_name: <input type "text" name="last_name" /><br>
-		
+		suffix: <input type "text" name="suffix" /><br>
+
+		short description: <input type "text" name="short_description" /><br>
 		description: <input type "text" name="description" /><br>
+	
+
 		email: <input type="email" name="email" /><br>
 		<input type ="submit" value="Save">
 	</form>
 
 	<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+
+
+
+
+
+
+
+
+
+<!-- toolbar with suitable buttons and dialogues -->
+<div id="toolbar">
+  <a data-wysihtml5-command="bold">bold</a>
+  <a data-wysihtml5-command="italic">italic</a>
+  <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1">H1</a>
+  <a data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="p">P</a>
+ </div>
+
+<!-- element to edit -->
+<div id="editor" data-placeholder="Go on, start editing..."></div>
+
+
+
+<script src="/js/wysihtml-toolbar.min.js"></script>
+<script src="/js/advanced_and_extended.js"></script>
+
+<!-- rules defining tags, attributes and classes that are allowed -->
+<script src="/js/wysihtml.min.js"></script>
+
+<script>
+  var editor = new wysihtml5.Editor('editor', {
+    toolbar: 'toolbar',
+    parserRules:  wysihtml5ParserRules // defined in file parser rules javascript
+  });
+</script>
+
+
+
+
