@@ -83,12 +83,30 @@ module.exports = function(app) {
 
 
 			var person = new Person();
-			// console.log(req.params.id)
+	
 			person.hub_id = mongoose.Types.ObjectId(req.params.id);
+
+			person.first_name = req.body.title;
 			person.first_name = req.body.first_name;
 			person.last_name = req.body.last_name;
+			person.suffix = req.body.suffix;
+
+			person.job_title = req.body.job_title;
+			person.gender = req.body.gender;
+			person.birthday = req.body.birthday;
+
+			person.short_description = req.body.short_description;
 			person.description = req.body.description;
-			// person.email = req.body.email;
+
+			person.email = req.body.email;
+			person.primary_phone = req.body.primary_phone;
+			person.mobile_phone = req.body.mobile_phone;
+			person.address = req.body.address;
+			person.web_address_a = req.body.web_address_a;
+			person.web_address_b = req.body.web_address_b;
+			person.web_address_c = req.body.web_address_c;
+
+
 
 
 			person.save(function (err, person) {

@@ -10,17 +10,17 @@ var Person = new Schema({
 	first_name: {
 		type: String,
 		require: true,
-		validate: /\S+$/
+		// validate: /\S+$/
 	},
 	middle_name: {
 		type: String,
-		require: true,
-		validate: /\S+/
+		
+		// validate: /\S+/
 	},
 	last_name: {
 		type: String,
 		require: true,
-		validate: /\S+$/
+		// validate: /\S+$/
 	},
 	suffix: {
 		type: String
@@ -30,12 +30,12 @@ var Person = new Schema({
 	job_title: {
 		type: String,
 		// require: true,
-		validate: /\S+/
+		// validate: /\S+/
 	},
 	gender: {
 		type: String,
 		// require: true,
-		validate: /\S+/
+		// validate: /\S+/
 	},
 	birthday: {
 		type: Date,

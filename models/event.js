@@ -17,9 +17,7 @@ var Event = new Schema({
 	description: {
 		type: String
 	},
-	// persons: {
-	// 	type: Array
-	// },
+	
 	hub_id: {
 		type: Schema.ObjectId,
 		require: true,

@@ -1,18 +1,46 @@
 <% include ../_partials/header %>
+
+<!-- text editor -->
+<link rel="stylesheet" type="text/css" href="vendor/css/froala_editor.css">
+<script type="text/javascript" src="vendor/js/froala_editor.min.js"></script>
+<!-- text editor  end -->
+
+
 <form method="post" action="?_csrf=<%= csrfToken %>" accept-charset="utf-8" enctype="multipart/form-data">
 	   
 		<input type='file' name='photo'><br>
+
+		<!-- name info -->
 		title: <input type "text" name="title" /> <br>
 		first_name: <input type "text" name="first_name" /> <br>
 		middle_name: <input type "text" name="middle_name" /> <br>
 		last_name: <input type "text" name="last_name" /><br>
 		suffix: <input type "text" name="suffix" /><br>
+		
+		<!-- general info -->
+		job title: <input type "text" name="job_title" /><br>
+		gender: <input type "text" name="gender" /><br>
+		birthday: <input type "text" name="birthday" /><br>
 
+		<!-- contact info  -->
+		email: <input type="email" name="email" /><br>
+		primary phone: <input type="text" name="primary_phone" /><br>
+		mobile phone: <input type="text" name="mobile_phone" /><br>
+		street address: <input type="text" name="address" /><br>
+		web address: <input type="text" name="web_address_a" /><br>
+					 <input type="text" name="web_address_b" /><br>
+					 <input type="text" name="web_address_c" /><br>
+
+
+
+		
+
+
+		<!-- description info -->
 		short description: <input type "text" name="short_description" /><br>
 		description: <input type "text" name="description" /><br>
-	
 
-		email: <input type="email" name="email" /><br>
+		<!-- submit button -->
 		<input type ="submit" value="Save">
 	</form>
 

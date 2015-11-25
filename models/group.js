@@ -8,12 +8,62 @@ var Group = new Schema({
 		require: true,
 		validate: /\S+/
 	},
+
+
+
+	group_type:{
+		type: String
+	},
+	industry:{
+		type: String
+	},
+
+
+
+	// ----- description info -------
+	short_description: {
+		type: String
+	},
 	description: {
 		type: String
 	},
-	// persons: {
-	// 	type: Array
-	// },
+
+
+
+	// ----- contact info -------
+	email: {
+		type: String,
+		validate: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/
+	},
+	primary_phone: {
+		type: String,
+	},
+	mobile_phone: {
+		type: String,
+	},
+	address: {
+		type: String,
+	},
+
+	// ----- online presence info -------
+	web_address_a: {
+		type: String,
+	},
+	web_address_b: {
+		type: String,
+	},
+	web_address_c: {
+		type: String,
+	},
+
+
+
+
+
+
+
+
+
 	creation_date: {
 		type: Date,
 		default: Date.now
