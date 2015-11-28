@@ -4,6 +4,10 @@ var Schema = mongoose.Schema;
 
 var Person = new Schema({
 	// ----- name info -------
+	obj_type: {
+		type: String,
+		default: "person"
+	},
 	title: {
 		type: String
 	},

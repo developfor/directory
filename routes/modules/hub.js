@@ -62,6 +62,14 @@ module.exports = function(app) {
 	// 	});	
 	// });
 
+	// app.get('/short/:id', function (req, res) {
+	// 	Hub.findOne({ 'short_id': req.params.id }, function(err, hub){
+	// 		console.log(hub)
+	// 	    res.redirect('/');
+	// 	})
+			
+	// });
+
 	app.get('/hub', function (req, res) {
 		res.redirect('/');		
 	});

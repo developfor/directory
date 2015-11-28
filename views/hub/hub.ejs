@@ -1,6 +1,7 @@
 <% include ../_partials/header %>
 
 <p>admin: <%= user.displayname %></p>
+<p>You are in: <%= hub.title %></p>
 <p>Description: <%= hub.description %></p><br>
 <a href="/hub/<%= hub.id %>/update">Edit hub information</a><br>
 <%= hub %>
