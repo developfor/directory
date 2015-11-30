@@ -36,7 +36,6 @@ var parseForm = bodyParser.urlencoded({ extended: false })
 
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy
-var bcrypt = require('bcrypt')
 var SALT_WORK_FACTOR = 10;
 var flash = require('express-flash');
 
@@ -301,7 +300,7 @@ module.exports = function(app) {
 
   app.get('/login',  function(req, res){
     if (res.locals.login){ return res.redirect('/')}
-    res.render('login', { user: req.user, message: req.flash('info'), csrfToken: req.csrfToken()  });
+    res.render('login', { user: req.user, message: req.flash('info'), email: req.flash('email'), csrfToken: req.csrfToken()  });
   });
 
   // POST /login
@@ -333,6 +332,7 @@ module.exports = function(app) {
       if (!user) {
         // req.session.messages =  [info.message];
         req.flash('info', info.message)
+        req.flash('email', info.email)
         return res.redirect('/login')
       }
       req.logIn(user, function(err) {

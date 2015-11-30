@@ -5,8 +5,7 @@
 module.exports = function(app) {
 	var passport = require('passport')
 	var LocalStrategy = require('passport-local').Strategy
-	var bcrypt = require('bcrypt')
-	var SALT_WORK_FACTOR = 10;
+	// var SALT_WORK_FACTOR = 10;
 	var flash = require('express-flash');
 	app.use(passport.initialize());
     app.use(passport.session());
