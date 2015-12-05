@@ -59,22 +59,22 @@ userSchema.pre('save', function(next) {
 
 // Password verification
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
-  console.log( "candidatePassword: " + candidatePassword)
-  console.log("+ " + this.password)
+  // console.log( "candidatePassword: " + candidatePassword)
+  // console.log("+ " + this.password)
   // console.log("+ " + user.password)
     var userdbPass = this.password;
 
   crypto.pbkdf2(candidatePassword, secret.secret, 4096, 64, 'sha256', function(err, key) {
     if(err) return cb(err);
-    console.log(key.toString('hex') == this.password)
-    console.log("+ " + key.toString('hex'))
+    // console.log(key.toString('hex') == this.password)
+    // console.log("+ " + key.toString('hex'))
 
     if(key.toString('hex') === userdbPass){
-      console.log("pass")
+      // console.log("pass")
       cb(null, true);
       // next();
     }else{
-       console.log("fail")
+       // console.log("fail")
       cb(null, false);
 
     }

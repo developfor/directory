@@ -2,9 +2,8 @@
 
 var mongoose = require('mongoose');
 var _ = require('underscore');
-var multer  = require('multer')
-var upload = multer()
 
+var crypto = require('crypto');
 
 var Person = require('../../models/person.js');
 var Hub = require('../../models/hub.js');
@@ -16,9 +15,20 @@ var secret_key = require('../../config/secret.js');
 var passport = require('../../config/passport.js');
 var flash = require('express-flash');
 
-var bodyParser = require('body-parser');
 var csrfProtection = csrf({ cookie: true })
-var parseForm = bodyParser.urlencoded({ extended: false })
+
+
+
+
+
+var upload = require('./../../helpers/upload.js').upload;
+var imageProcessor = require('./../../helpers/image_processor.js');
+var deleteImgFile = require('./../../helpers/delete_img_file.js')
+
+
+
+
+
 
 var  ensureAuthenticated = function(req, res, next) {
 	  if (req.isAuthenticated()) { return next(); }
@@ -32,23 +42,20 @@ var nocache = function (req, res, next) {
 }
 
 module.exports = function(app) {
-	app.use(bodyParser.urlencoded({
-	    extended: true
-	}));
-	// app.get('/', function (req, res) {
-	//   res.send('Hello World!');
-	// });
 
-	// app.get('/', function (req, res) {
-	// 	console.log("rout")
-	// 		res.render('index');
-	// 	})
+
+
+
 	app.all('/hub', ensureAuthenticated, nocache);
 	app.all('/hub/*', ensureAuthenticated, nocache);
 	app.all('/hub/:id/add_person', ensureAuthenticated, nocache);
 	app.all('/hub/:id/persons',ensureAuthenticated, nocache);
 	app.all('/hub/:id/person',ensureAuthenticated, nocache);
 	app.all('/hub/:id/person/*',ensureAuthenticated, nocache);
+
+
+
+
 
 	// CREATE 
 	app.get('/hub/:id/add_person', csrfProtection, function (req, res) {
@@ -64,61 +71,196 @@ module.exports = function(app) {
 
 		});
 	})
-	// CREATE parseForm, csrfProtection,
-	app.post('/hub/:id/add_person', parseForm, csrfProtection, upload.array(), function (req, res) {
-	// app.post('/hub/:id/add_person', parseForm, csrfProtection, function (req, res) {
 
-		// console.log(req.body);
-		// console.log(req.params.id);
-		console.dir(req)
+
+
+
+
+
+
+	// CREATE parseForm, csrfProtection,
+	app.post('/hub/:id/add_person', upload.single('image'), csrfProtection,  function (req, res) {
+		console.log("yay!!!")
 
 		
 		return Hub.find(req.params.id, function(err, hub){
+
+			// console.log(req.body)
+
 			if(err || hub === null){ 	
 				req.flash('info', "Hub not found.")
 				res.redirect('/hubs');
 				return console.log("err++: " + err) 	
 			}
 
+		
 
 
-			var person = new Person();
-	
-			person.hub_id = mongoose.Types.ObjectId(req.params.id);
+			var token = crypto.randomBytes(8).toString('hex') + "_" +Date.now(); 
+			var randomString = token;
+			
+			var	uploadImage = function(){
+				console.log("uploading img")
 
-			person.first_name = req.body.title;
-			person.first_name = req.body.first_name;
-			person.last_name = req.body.last_name;
-			person.suffix = req.body.suffix;
+					var person = new Person();
+			
+					person.hub_id = mongoose.Types.ObjectId(req.params.id);
 
-			person.job_title = req.body.job_title;
-			person.gender = req.body.gender;
-			person.birthday = req.body.birthday;
+					person.title = req.body.title;
+					person.first_name = req.body.first_name;
+					person.last_name = req.body.last_name;
+					person.suffix = req.body.suffix;
 
-			person.short_description = req.body.short_description;
-			person.description = req.body.description;
+					person.job_title = req.body.job_title;
+					person.gender = req.body.gender;
+					person.birthday = req.body.birthday;
 
-			person.email = req.body.email;
-			person.primary_phone = req.body.primary_phone;
-			person.mobile_phone = req.body.mobile_phone;
-			person.address = req.body.address;
-			person.web_address_a = req.body.web_address_a;
-			person.web_address_b = req.body.web_address_b;
-			person.web_address_c = req.body.web_address_c;
+					person.short_description = req.body.short_description;
+					person.description = req.body.description;
+
+					person.email = req.body.email;
+					person.primary_phone = req.body.primary_phone;
+					person.mobile_phone = req.body.mobile_phone;
+					person.address = req.body.address;
+					person.web_address_a = req.body.web_address;
+		
+					person.img_originalname = req.file.originalname;
+					person.img_foldername = randomString;
+					person.img_icon = "icon_" + randomString +".jpg";
+					person.img_thumbnail = "thumb_" + randomString +".jpg";
+					person.img_normal = "normal_" + randomString+".jpg";
+				
+
+				person.save(function(err){
+					if(err){
+						console.log('Error while saving image: ' + err);
+						res.send({ error:err });
+
+						return;
+					} else {
+						return res.redirect("/");
+						// console.log("Image created");
+						// ImageUpload.find(function(err, imageuploads) {
+
+						// if(!err) {  
+						//         return res.redirect("/");
+						//     } else {
+						//     	res.statusCode = 500;
+						//     	console.log('Internal error(%d): %s',res.statusCode,err.message);
+						//     	return res.send({ error: 'Server error' });
+						//     }
+
+						// });
+					}	
+				});
+			}
+
+			var	uploadtext = function(){
+
+				console.log("uploading txt")
+				var person = new Person();
+			
+					person.hub_id = mongoose.Types.ObjectId(req.params.id);
+
+					person.title = req.body.title;
+					person.first_name = req.body.first_name;
+					person.last_name = req.body.last_name;
+					person.suffix = req.body.suffix;
+
+					person.job_title = req.body.job_title;
+					person.gender = req.body.gender;
+					person.birthday = req.body.birthday;
+
+					person.short_description = req.body.short_description;
+					person.description = req.body.description;
+
+					person.email = req.body.email;
+					person.primary_phone = req.body.primary_phone;
+					person.mobile_phone = req.body.mobile_phone;
+					person.address = req.body.address;
+					person.web_address_a = req.body.web_address_a;
+					person.web_address_b = req.body.web_address_b;
+					person.web_address_c = req.body.web_address_c;
+
+				person.save(function(err){
+					if(err){
+						console.log('Error while saving image: ' + err);
+						res.send({ error:err });
+						return;
+					} else {
+						console.log("Image created");
+						 return res.redirect("/");
+						// ImageUpload.find(function(err, imageuploads) {
+
+						// if(!err) {  
+						//         return res.redirect("/");
+						//     } else {
+						//     	res.statusCode = 500;
+						//     	console.log('Internal error(%d): %s',res.statusCode,err.message);
+						//     	return res.send({ error: 'Server error' });
+						//     }
+
+						// });
+					}	
+				});
+			}
+
+
+
+			if(req.file === undefined){
+				// check if the file is there or not
+				console.log("file undefined")
+				uploadtext()
+
+			}else{
+				upload.single('image')(req, res, function (err) {
+
+				    if (err) {
+				    	console.log("err")
+				    	return res.redirect('/'); 
+				      // An error occurred when uploading
+				    }
+				    imageProcessor(req,res, uploadImage, randomString)
+				    // Everything went fine
+			     })
+			}
 
 
 
 
-			person.save(function (err, person) {
-				if(err){ 	
-					req.flash('info', "Did not save person.")
-					// res.redirect('/hub/:id/add_person');
-					// res.render('person/add_person');
-						res.redirect('/hub/' + req.params.id + '/add_person');
-					return console.log("err++: " + err) 	
-				}	
-				res.redirect('/hub/' + req.params.id +"/person/" + person.id);
-			});		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			// person.save(function (err, person) {
+			// 	if(err){ 	
+			// 		req.flash('info', "Did not save person.")
+			// 		// res.redirect('/hub/:id/add_person');
+			// 		// res.render('person/add_person');
+			// 			res.redirect('/hub/' + req.params.id + '/add_person');
+			// 		return console.log("err++: " + err) 	
+			// 	}	
+			// 	res.redirect('/hub/' + req.params.id +"/person/" + person.id);
+			// });		
 
 
 		})
@@ -220,7 +362,7 @@ module.exports = function(app) {
 		})
 	});
 
-	app.post('/hub/:id/person/:person_id/update', parseForm, csrfProtection, function (req, res) {
+	app.post('/hub/:id/person/:person_id/update', csrfProtection, function (req, res) {
 		console.log("update")
 		return Hub.findById(req.params.id, function(err, hub){
 					if(err){ 

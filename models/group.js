@@ -33,7 +33,8 @@ var Group = new Schema({
 	// ----- contact info -------
 	email: {
 		type: String,
-		validate: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/
+		// validate: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/,
+		// default: null
 	},
 	primary_phone: {
 		type: String,

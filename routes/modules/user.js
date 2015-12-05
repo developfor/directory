@@ -15,7 +15,7 @@ var Hub = require('../../models/hub.js');
 var nodemailer = require('nodemailer');
 var mg = require('nodemailer-mailgun-transport');
 var csrf = require('csurf')
-var bodyParser = require('body-parser')
+// var bodyParser = require('body-parser')
   
 
 // var mailGunCred = require('../../config/mail.js');
@@ -31,7 +31,7 @@ var app = express();
 // csrf
 var bodyParser = require('body-parser');
 var csrfProtection = csrf({ cookie: true })
-var parseForm = bodyParser.urlencoded({ extended: false })
+var parseForm = bodyParser.urlencoded({ extended: true})
 
 
 var passport = require('passport')
@@ -75,10 +75,13 @@ var flash = require('express-flash');
 
 
 module.exports = function(app) {
+  app.use(bodyParser.urlencoded({
+      extended: true
+  }));
 
 
   app.all('/login', csrfProtection, parseForm);
-  app.all('/', csrfProtection);
+  app.all('/', csrfProtection, parseForm);
 
   app.use(passport.initialize());
   app.use(passport.session());

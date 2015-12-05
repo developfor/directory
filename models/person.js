@@ -14,17 +14,17 @@ var Person = new Schema({
 	first_name: {
 		type: String,
 		require: true,
-		// validate: /\S+$/
+		validate: /\S+$/
 	},
 	middle_name: {
-		type: String,
+		type: String
 		
 		// validate: /\S+/
 	},
 	last_name: {
 		type: String,
 		require: true,
-		// validate: /\S+$/
+		validate: /\S+$/
 	},
 	suffix: {
 		type: String
@@ -59,6 +59,7 @@ var Person = new Schema({
 	// ----- contact info -------
 	email: {
 		type: String,
+		// default: "",
 		validate: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/
 	},
 	primary_phone: {
@@ -72,20 +73,29 @@ var Person = new Schema({
 	},
 
 	// ----- online presence info -------
-	web_address_a: {
-		type: String,
-	},
-	web_address_b: {
-		type: String,
-	},
-	web_address_c: {
+	web_address: {
 		type: String,
 	},
 
+	// images 
 
+	img_foldername:{
+		type: String,
+	},
+	img_originalname:{
+		type: String,
+	},
+	img_icon: {
+		type: String,
+	},
+	img_thumbnail: {
+		type: String,
+	},
+	img_normal: {
+		type: String,
+	},
 
-
-
+	// core details
 
 	hub_id: {
 		type: Schema.ObjectId,
@@ -101,5 +111,37 @@ var Person = new Schema({
 		default: Date.now
 	}
 });
+
+// Person.pre('save', function(next) {
+// 	// var validate = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/.test(Person.email)
+// 	// if(validate === false){
+// 	// 	// Person.email
+// 	// // }else{
+// 	// 	Person.email = null;
+// 	// }
+// 	// if Person.email === 
+// 	next();
+//   // var user = this;
+
+//   // if(!user.isModified('password')) return next();
+
+//   // crypto.pbkdf2(user.password, secret.secret, 4096, 64, 'sha256', function(err, key) {
+//   //   if(err) return next(err);
+//   //   // console.log(secret.secret)
+//   //   console.log(key.toString('hex'));  // 'c5e478d...1469e50'
+//   //   user.password = key.toString('hex');
+//   //   next();
+//   // });
+
+//   // bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+//   //   if(err) return next(err);
+
+//   //   bcrypt.hash(user.password, salt, function(err, hash) {
+//   //     if(err) return next(err);
+//   //     user.password = hash;
+//   //     next();
+//   //   });
+//   // });
+// });
 
 module.exports = mongoose.model('Person', Person);
