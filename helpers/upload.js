@@ -7,12 +7,12 @@ module.exports = {
 				 // fieldNameSize: 100,
 			      fileSize: 5242880,
 			      // fileSize: 428,
-			      files: 1,
-			      // fields: 1
+			      // files: 1,
+			      //  fields: 100
 			},
 
 		    fileFilter: function (req, file, cb) {
-		 		console.log(req);
+		 		console.log(req.body);
 			    if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/jpeg') {
 			      cb(null, false)
 

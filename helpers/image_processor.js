@@ -93,7 +93,7 @@ module.exports = function(req, res, funct, randomString) {
 										fs.unlink(imageFilePath, function(){
 											console.log("deleted" + req.file.filename);
 											console.log(funct);
-											return funct();
+											return funct;
 										})
 
 									})

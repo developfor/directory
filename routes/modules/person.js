@@ -18,7 +18,7 @@ var flash = require('express-flash');
 var csrfProtection = csrf({ cookie: true })
 
 
-
+var bodyParser = require('body-parser')
 
 
 var upload = require('./../../helpers/upload.js').upload;
@@ -43,7 +43,9 @@ var nocache = function (req, res, next) {
 
 module.exports = function(app) {
 
-
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 
 	app.all('/hub', ensureAuthenticated, nocache);
@@ -80,9 +82,11 @@ module.exports = function(app) {
 
 	// CREATE parseForm, csrfProtection,
 	app.post('/hub/:id/add_person', upload.single('image'), csrfProtection,  function (req, res) {
-		console.log("yay!!!")
+		console.log("-----------------------------------")
+		console.log(req.body)
+		var requestBody = req.body;
+		console.log("-----------------------------------")
 
-		
 		return Hub.find(req.params.id, function(err, hub){
 
 			// console.log(req.body)
@@ -101,35 +105,36 @@ module.exports = function(app) {
 			
 			var	uploadImage = function(){
 				console.log("uploading img")
+				// console.log( req)
 
-					var person = new Person();
+					var person = new Person(req);
 			
 					person.hub_id = mongoose.Types.ObjectId(req.params.id);
 
-					person.title = req.body.title;
-					person.first_name = req.body.first_name;
-					person.last_name = req.body.last_name;
-					person.suffix = req.body.suffix;
+					person.title = requestBody.title;
+					person.first_name = requestBody.first_name;
+					person.last_name = requestBody.last_name;
+					person.suffix = requestBody.suffix;
 
-					person.job_title = req.body.job_title;
-					person.gender = req.body.gender;
-					person.birthday = req.body.birthday;
+					person.job_title = requestBody.job_title;
+					person.gender = requestBody.gender;
+					person.birthday = requestBody.birthday;
 
-					person.short_description = req.body.short_description;
-					person.description = req.body.description;
+					person.short_description = requestBody.short_description;
+					person.description = requestBody.description;
 
-					person.email = req.body.email;
-					person.primary_phone = req.body.primary_phone;
-					person.mobile_phone = req.body.mobile_phone;
-					person.address = req.body.address;
-					person.web_address_a = req.body.web_address;
+					person.email = requestBody.email;
+					person.primary_phone = requestBody.primary_phone;
+					person.mobile_phone = requestBody.mobile_phone;
+					person.address = requestBody.address;
+					person.web_address = requestBody.web_address;
 		
 					person.img_originalname = req.file.originalname;
 					person.img_foldername = randomString;
 					person.img_icon = "icon_" + randomString +".jpg";
 					person.img_thumbnail = "thumb_" + randomString +".jpg";
 					person.img_normal = "normal_" + randomString+".jpg";
-				
+					console.log(requestBody)
 
 				person.save(function(err){
 					if(err){
@@ -178,9 +183,7 @@ module.exports = function(app) {
 					person.primary_phone = req.body.primary_phone;
 					person.mobile_phone = req.body.mobile_phone;
 					person.address = req.body.address;
-					person.web_address_a = req.body.web_address_a;
-					person.web_address_b = req.body.web_address_b;
-					person.web_address_c = req.body.web_address_c;
+					person.web_address = requestBody.web_address;
 
 				person.save(function(err){
 					if(err){
@@ -220,7 +223,7 @@ module.exports = function(app) {
 				    	return res.redirect('/'); 
 				      // An error occurred when uploading
 				    }
-				    imageProcessor(req,res, uploadImage, randomString)
+				    imageProcessor(req,res, uploadImage(), randomString)
 				    // Everything went fine
 			     })
 			}
