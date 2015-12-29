@@ -315,9 +315,9 @@ var personController = function(personService, app ){
 					var oldPersonImg = person.img_foldername;
 
 					if(err || person === null){ 	
-						req.flash('info', "Person not found.")
+						req.flash('info', "Person not found.");
 						res.redirect('/hub/:id/persons');
-						return console.log("err++: " + err) 	
+						return console.log("err++: " + err);
 					}	
 
 					var token = crypto.randomBytes(8).toString('hex') + "_" +Date.now(); 
@@ -329,7 +329,7 @@ var personController = function(personService, app ){
 					// var person = new Person();
 					
 					person.hub_id = req.params.id;
-					person.update_date = Date.now()
+					person.update_date = Date.now();
 
 			
 				    person.title = requestBody.title;
@@ -358,9 +358,9 @@ var personController = function(personService, app ){
 					person.address = requestBody.address;
 					person.web_address = requestBody.web_address;
 
-					console.log("_____________________")
-					console.log(requestBody)
-					console.log("_____________________")
+					console.log("_____________________");
+					console.log(requestBody);
+					console.log("_____________________");
 					
 					var save = function(){
 
@@ -388,13 +388,13 @@ var personController = function(personService, app ){
 						person.img_normal = "normal_" + randomString+".jpg";
 
 					    imageProcessor(req,res, randomString, function(){
-							save()
-							console.log("++++++++++++++++++++++++")
+							save();
+							console.log("++++++++++++++++++++++++");
 
-							console.log(person.img_foldername)
+							console.log(person.img_foldername);
 
-							console.log(oldPersonImg)
-							console.log("++++++++++++++++++++++++")
+							console.log(oldPersonImg);
+							console.log("++++++++++++++++++++++++");
 							deleteImgFile(oldPersonImg);
 							return; 
 					    })
@@ -417,9 +417,68 @@ var personController = function(personService, app ){
 
 		}
 
-		return hubchecker(req, res, postPerson)
+		return hubchecker(req, res, postPerson);
 
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+	var personDelete = function (req, res) {
+
+		var postPerson = function(hub){
+
+
+			var hubOwner = hub.user_owner_id
+			var user = req.user._id
+
+			if(_.isEqual(user, hubOwner)){
+
+				Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
+
+					console.log("-----------------");
+					console.log(person.first_name);
+					console.log("-----------------");
+					deleteImgFile(person.img_foldername);
+				
+				      if(!person) {
+				        res.statusCode = 404;
+				        return res.send({ error: 'Not found' });
+				      }
+
+				      return Person.remove({_id: req.params.person_id, hub_id: hub.id}, function(err) {
+				        if(!err) {
+				          console.log('Removed person');
+				          return res.redirect('/');
+				        } else {
+				          res.statusCode = 500;
+				          console.log('Internal error(%d): %s',res.statusCode,err.message);
+				          return res.send({ error: 'Server error' });
+				        }
+				      })
+
+				})
+						
+			} else {
+				console.log("not equals");
+				// console.log(req);
+			  return res.redirect('/hubs');
+			}
+
+		}
+		return hubchecker(req, res, postPerson);
+	}
+
+
+
 
 
 
@@ -444,7 +503,8 @@ var personController = function(personService, app ){
 		person: person,
 		personInfo: personInfo,
 		personUpdate: personUpdate,
-		personUpdatePost: personUpdatePost
+		personUpdatePost: personUpdatePost,
+		personDelete: personDelete
 	}
 
 
