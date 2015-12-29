@@ -2,8 +2,178 @@
 <% if ( messages.info) { %>
 	<p><%= messages.info %></p>
 <% } %>
-<% persons.forEach(function(name){ %>
-	<%= name.first_name %> <%= name.last_name %>  <a href="/hub/<%= hub._id %>/person/<%= name._id %>">view person</a><br>
-<% }) %>
 
-<a href="/hub/<%= hub.id %>/add_person">add person</a>
+
+
+
+
+<div class="bread-crumbs">
+          
+		<%if(hub.user_owner_id.toString() === user._id.toString()){ %>
+			<span>This is your hub: <%= user.displayname %></span>
+		<% }else{ %>
+			<span>This is hub belongs to: <%= user.displayname %></span>
+		<% } %>
+        
+      </div>
+      <div class="bread-crumbs">
+      
+
+        <span> <b>Navigation: </b><a href="/hub/<%= hub._id %>/">Hub</a>/<a href="/hub/<%= hub._id %>/persons">People</a>/<a href="/hub/<%= hub._id %>/groups">Groups</a>/<a href="/hub/<%= hub._id %>/events">Events</a> </span><br>
+      </div>
+      <div class="p-content-list">
+	
+      	 <a class="button button-primary" href="/hub/<%= hub.id %>/add_person">+ add person</a>
+      
+
+
+	    <div class="search-things">
+	    	
+	        <form >
+	          <div class="row">
+	            <div class="six columns title-info">
+	              <label for="FirstName">First Name:</label>
+	              <input name="first_name" class="u-full-width" type="text" placeholder="First Name" id="input-first-name" value="<%= query.first_name %>">
+	            </div>
+	            <div class="six columns title-info">
+	              <label for="LastName">last Name:</label>
+	              <input name="last_name" class="u-full-width" type="text" placeholder="Last Name" id="input-lasst-name" value="<%= query.last_name %>">
+	            </div>
+	          </div>
+
+
+
+			 <div class="row">
+	            <div class="twelve columns">
+	                <input class="button-primary" type="submit" value="Submit">
+	                 <a class="button button-primary" href="/hub/<%= hub.id %>/persons"> < reset</a>
+	             
+	            </div>
+	          </div>
+
+	          
+       
+	        </form>
+
+	    </div>
+
+
+		  <% if(persons.length === 0){ %>
+		  			
+		  	<div class="row">
+	            <div class="twelve columns">
+		  		
+		  				<p> <b> No entries. </b> </p>
+			            
+			         
+
+			           </div>
+	          </div>
+		  <%  } %>
+
+		<% persons.forEach(function(person){ %>
+
+
+ 
+		
+
+			<div class="p-content">
+				<a href="/hub/<%= hub._id %>/person/<%= person._id %>">
+					<%  if(person.img_foldername && person.img_thumbnail){ %>
+					<img src="/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>">
+					     <!-- <img src="/app/img/no-image.png" > -->
+					<% }else{  %>
+						 <img src="/app/img/no-image.png" >
+					<% }  %>
+				</a>
+				<div>
+					<div>
+						<span class="title-info"><%= person.title %> <%= person.first_name %> <%= person.middle_name %> <%= person.last_name %> <%= person.suffix %></span>
+					</div>
+					<div class="p-content-desc">
+						<span class="small-text" > <%= person.short_description %></span><br>
+					</div>
+					<div class="updated-date">
+						<b class="small-text">Edited <span  data-livestamp="<%= person.update_date %>"> </span></b><br>
+					</div>
+				</div> 
+
+					<a class="button button-primary" href="/hub/<%= hub._id %>/person/<%= person._id %>">More Details »</a>          
+			</div>
+
+          
+		<% }) %>
+
+
+
+
+              
+      </div>
+
+  <script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
+  <script type="text/javascript" src="/vendor/js/URI.js"></script>
+  <script type="text/javascript" src="/vendor/js/moment.js"></script>
+  <script type="text/javascript" src="/vendor/js/livestamp.min.js"></script>
+ 
+
+
+        <div class="prev-next-buttons">
+          <div class="button button-primary prev-button"  id="previous" href="#">« Previous</div>  
+          <div class="button button-primary next-button"  id="next" href="#">Next »</div>  
+        </div>
+
+    </div>
+
+
+
+
+    <script type="text/javascript">
+      $(function() {
+          $('.p-content').matchHeight();
+
+
+			var uri = new URI(location.href)
+			var queries = uri.search(true)
+			var querySkip = parseInt(queries.skip) || 0;
+			queries.first_name = queries.first_name || "";
+			queries.last_name = queries.last_name || "";
+			var queriesPage = queries.first_name
+
+
+
+
+
+			if(querySkip === 0){
+			  $('#previous').on("click", function (e) {
+			        console.log("begining")
+			    });
+			  $('#next').on("click", function (e) {
+					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1)
+			    });
+			  
+			  // console.log("queries.page")
+			  
+			}else{
+				$('#previous').on("click", function (e) {
+					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip - 1)
+			    });
+			    $('#next').on("click", function (e) {
+					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1)
+			    });
+			   // console.log("ubhjbhjbhjed")
+			}
+
+
+			console.log(location.pathname)
+			console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + querySkip)
+			console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1))
+
+
+      });
+    </script>
+
+
+
+
+  </body>
+</html>

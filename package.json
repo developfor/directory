@@ -18,19 +18,20 @@
     "ejs": "^2.3.3",
     "express": "^4.13.3",
     "express-brute": "^0.6.0",
+    "gm": "^1.21.1",
     "method-override": "^2.3.5",
+    "mkdirp": "~0.5.1",
+    "moment": "~2.10.6",
     "mongoose": "^4.1.11",
     "morgan": "^1.6.1",
+    "multer": "~1.1.0",
     "nodemailer": "^1.4.0",
     "nodemailer-mailgun-transport": "^1.0.1",
     "nodemon": "^1.4.1",
     "passport": "^0.3.0",
     "passport-local": "^1.0.0",
+    "rmdir": "~1.1.0",
     "shortid": "^2.2.2",
-    "underscore": "^1.8.3",
-    "gm": "~1.21.1",
-    "multer": "~1.1.0",
-    "mkdirp": "~0.5.1",
-    "rmdir": "~1.1.0"
+    "underscore": "^1.8.3"
   }
 }

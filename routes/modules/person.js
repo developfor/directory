@@ -29,6 +29,8 @@ var deleteImgFile = require('./../../helpers/delete_img_file.js')
 
 
 
+var moment = require('moment');
+
 
 var  ensureAuthenticated = function(req, res, next) {
 	  if (req.isAuthenticated()) { return next(); }
@@ -43,9 +45,11 @@ var nocache = function (req, res, next) {
 
 module.exports = function(app) {
 
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+	var personController = require('./../../controllers/person.js')(null, app)
+
+	app.use(bodyParser.urlencoded({
+	    extended: true
+	}));
 
 
 	app.all('/hub', ensureAuthenticated, nocache);
@@ -56,419 +60,101 @@ app.use(bodyParser.urlencoded({
 	app.all('/hub/:id/person/*',ensureAuthenticated, nocache);
 
 
-
+	// var fname = ""
+	// var lname = "w"
+	// return Person.find({first_name: new RegExp('^'+fname, "i"), last_name: new RegExp('^'+lname, "i")}, function(err, person){
+	// 	if(err){ 
+	// 		res.redirect('/hubs');
+	// 		return console.log("err: " + err) 
+	// 	}
+	// 	return console.log(person) 
+	// });
 
 
 	// CREATE 
-	app.get('/hub/:id/add_person', csrfProtection, function (req, res) {
-		// console.log("rout")
-
-		return Hub.findById(req.params.id, function(err, hub){
-			if(err){ 
-				res.redirect('/hubs');
-				return console.log("err: " + err) 
-			}
-
-			res.render('person/add_person', {csrfToken: req.csrfToken()});
-
-		});
-	})
-
-
-
-
+	app.get('/hub/:id/add_person', csrfProtection, personController.add_person)
 
 
 
 	// CREATE parseForm, csrfProtection,
-	app.post('/hub/:id/add_person', upload.single('image'), csrfProtection,  function (req, res) {
-		console.log("-----------------------------------")
-		console.log(req.body)
-		var requestBody = req.body;
-		console.log("-----------------------------------")
+	app.post('/hub/:id/add_person', upload.single('image'), csrfProtection,  personController.add_person_post)
 
-		return Hub.find(req.params.id, function(err, hub){
+	// READ Persons
+	app.get('/hub/:id/persons', personController.persons)
 
-			// console.log(req.body)
+	// READ Person
+	app.get('/hub/:id/person/:person_id', personController.person)
 
-			if(err || hub === null){ 	
-				req.flash('info', "Hub not found.")
-				res.redirect('/hubs');
-				return console.log("err++: " + err) 	
-			}
+	
+	app.get('/hub/:id/person/:person_id/info', personController.personInfo)
 
+	// app.get('/hub/:id/person/:person_id/info', function (req, res) {
 		
+	// 		return Hub.findById(req.params.id, function(err, hub){
 
+	// 					if(err || hub === null){ 	
+	// 						req.flash('info', "Hub not found.")
+	// 						res.redirect('/hubs');
+	// 						return console.log("err++: " + err) 	
+	// 					}
 
-			var token = crypto.randomBytes(8).toString('hex') + "_" +Date.now(); 
-			var randomString = token;
-			
-			var	uploadImage = function(){
-				console.log("uploading img")
-				// console.log( req)
+	// 					var hubOwner = hub.user_owner_id
+	// 					var user = req.user._id
 
-					var person = new Person(req);
-			
-					person.hub_id = mongoose.Types.ObjectId(req.params.id);
+	// 					if(_.isEqual(user, hubOwner)){
 
-					person.title = requestBody.title;
-					person.first_name = requestBody.first_name;
-					person.last_name = requestBody.last_name;
-					person.suffix = requestBody.suffix;
+	// 						return Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
+	// 							if(err || person === null){ 	
+	// 								req.flash('info', "Person not found.")
+	// 								res.redirect('/hub/:id');
+	// 								return console.log("err++: " + err) 	
+	// 							}
+	// 							console.log(person);
+	// 							var creationDate = moment(person.creation_date).format('ll @ h:mma');
+	// 							var updateDate = moment(person.update_date).format('ll @ h:mma');
 
-					person.job_title = requestBody.job_title;
-					person.gender = requestBody.gender;
-					person.birthday = requestBody.birthday;
 
-					person.short_description = requestBody.short_description;
-					person.description = requestBody.description;
+	// 							var ptitle = person.title || "";
+	// 							var pmiddle = person.middle_name || "";	
+	// 							var psuffix = person.suffix || "";
 
-					person.email = requestBody.email;
-					person.primary_phone = requestBody.primary_phone;
-					person.mobile_phone = requestBody.mobile_phone;
-					person.address = requestBody.address;
-					person.web_address = requestBody.web_address;
-		
-					person.img_originalname = req.file.originalname;
-					person.img_foldername = randomString;
-					person.img_icon = "icon_" + randomString +".jpg";
-					person.img_thumbnail = "thumb_" + randomString +".jpg";
-					person.img_normal = "normal_" + randomString+".jpg";
-					console.log(requestBody)
+	// 							var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
 
-				person.save(function(err){
-					if(err){
-						console.log('Error while saving image: ' + err);
-						res.send({ error:err });
 
-						return;
-					} else {
-						return res.redirect("/");
-						// console.log("Image created");
-						// ImageUpload.find(function(err, imageuploads) {
+	// 							res.render('person/info', {title: title, person : person, hub: hub, updateDate: updateDate, creationDate: creationDate   });
+	// 						})
 
-						// if(!err) {  
-						//         return res.redirect("/");
-						//     } else {
-						//     	res.statusCode = 500;
-						//     	console.log('Internal error(%d): %s',res.statusCode,err.message);
-						//     	return res.send({ error: 'Server error' });
-						//     }
+				  
+	// 					} else {
+	// 						console.log("not equals");
+	// 						// console.log(req);
+	// 					  // return res.redirect('/hubs');
+	// 					  res.send('404: Page not Found', 404);
+	// 					}
 
-						// });
-					}	
-				});
-			}
+				
+	// 		});
+	// });
 
-			var	uploadtext = function(){
-
-				console.log("uploading txt")
-				var person = new Person();
-			
-					person.hub_id = mongoose.Types.ObjectId(req.params.id);
-
-					person.title = req.body.title;
-					person.first_name = req.body.first_name;
-					person.last_name = req.body.last_name;
-					person.suffix = req.body.suffix;
-
-					person.job_title = req.body.job_title;
-					person.gender = req.body.gender;
-					person.birthday = req.body.birthday;
-
-					person.short_description = req.body.short_description;
-					person.description = req.body.description;
-
-					person.email = req.body.email;
-					person.primary_phone = req.body.primary_phone;
-					person.mobile_phone = req.body.mobile_phone;
-					person.address = req.body.address;
-					person.web_address = requestBody.web_address;
-
-				person.save(function(err){
-					if(err){
-						console.log('Error while saving image: ' + err);
-						res.send({ error:err });
-						return;
-					} else {
-						console.log("Image created");
-						 return res.redirect("/");
-						// ImageUpload.find(function(err, imageuploads) {
-
-						// if(!err) {  
-						//         return res.redirect("/");
-						//     } else {
-						//     	res.statusCode = 500;
-						//     	console.log('Internal error(%d): %s',res.statusCode,err.message);
-						//     	return res.send({ error: 'Server error' });
-						//     }
-
-						// });
-					}	
-				});
-			}
-
-
-
-			if(req.file === undefined){
-				// check if the file is there or not
-				console.log("file undefined")
-				uploadtext()
-
-			}else{
-				upload.single('image')(req, res, function (err) {
-
-				    if (err) {
-				    	console.log("err")
-				    	return res.redirect('/'); 
-				      // An error occurred when uploading
-				    }
-				    imageProcessor(req,res, uploadImage(), randomString)
-				    // Everything went fine
-			     })
-			}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			// person.save(function (err, person) {
-			// 	if(err){ 	
-			// 		req.flash('info', "Did not save person.")
-			// 		// res.redirect('/hub/:id/add_person');
-			// 		// res.render('person/add_person');
-			// 			res.redirect('/hub/' + req.params.id + '/add_person');
-			// 		return console.log("err++: " + err) 	
-			// 	}	
-			// 	res.redirect('/hub/' + req.params.id +"/person/" + person.id);
-			// });		
-
-
-		})
-
-
-		// var person = new Person(req.body);
-
-		// person.save(function (err, person) {
-		// 	if(err || person === null){ 	
-		// 		req.flash('info', "Did not save person.")
-		// 		res.redirect('/persons');
-		// 		return console.log("err++: " + err) 	
-		// 	}	
-		//   res.redirect('persons');
-		// });		
-	})
-
-	// READ
-	app.get('/hub/:id/persons', function (req, res) {
-		return Hub.findById(req.params.id, function(err, hub){
-			if(err || hub === null){ 	
-				req.flash('info', "Hub not found.")
-				res.redirect('/hubs');
-				return console.log("err++: " + err) 	
-			}
-
-			// console.log(hub)
-			var hubOwner = hub.user_owner_id
-			var user = req.user._id
-			// console.log(hub.user_owner_id)
-			// console.log(req.user._id)
-			// console.log(_.isEqual(hub.user_owner_id, req.user._id));
-
-			
-			if(_.isEqual(user, hubOwner)){
-
-				Person.find({hub_id: hub.id}, function(err, persons){					
-						return res.render('person/persons', {hub: hub, persons: persons});
-					  	console.log("equals")		
-				});
-
-	  
-			} else {
-				console.log("not equals");
-				// console.log(req);
-			  return res.redirect('/hubs');
-			}
-			
-		});
-	})
-	// READ
-	app.get('/hub/:id/person/:person_id', function (req, res) {
-		return Hub.findById(req.params.id, function(err, hub){
-					if(err || hub === null){ 	
-						req.flash('info', "Hub not found.")
-						res.redirect('/hubs');
-						return console.log("err++: " + err) 	
-					}
-
-					var hubOwner = hub.user_owner_id
-					var user = req.user._id
-
-					if(_.isEqual(user, hubOwner)){
-
-						return Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
-							if(err || person === null){ 	
-								req.flash('info', "Person not found.")
-								res.redirect('/hub/:id');
-								return console.log("err++: " + err) 	
-							}
-							console.log(person);
-							res.render('person/person', {person : person, hub: hub });
-						})
-
-			  
-					} else {
-						console.log("not equals");
-						// console.log(req);
-					  // return res.redirect('/hubs');
-					  res.send('404: Page not Found', 404);
-					}
-
-			
-		});
-	});
 
 
 
 	// UPDATE
-	app.get('/hub/:id/person/:person_id/update', csrfProtection, function (req, res) {
-		return Person.findById(req.params.person_id, function(err, person){
-			if(err || person === null){ 	
-				req.flash('info', "Person not found.")
-				res.redirect('/hub/:id');
-				return console.log("err++: " + err) 	
-			}	
-			console.log(person);
-			res.render('person/person_update', {person : person, csrfToken: req.csrfToken()});
-		})
-	});
+	app.get('/hub/:id/person/:person_id/update', csrfProtection, personController.personUpdate)
 
-	app.post('/hub/:id/person/:person_id/update', csrfProtection, function (req, res) {
-		console.log("update")
-		return Hub.findById(req.params.id, function(err, hub){
-					if(err){ 
-						res.redirect('/hubs');
-						return console.log("err: " + err) 
-					}
+	// app.get('/hub/:id/person/:person_id/update', csrfProtection, function (req, res) {
+	// 	return Person.findById(req.params.person_id, function(err, person){
+	// 		if(err || person === null){ 	
+	// 			req.flash('info', "Person not found.")
+	// 			res.redirect('/hub/:id');
+	// 			return console.log("err++: " + err) 	
+	// 		}	
+	// 		console.log(person);
+	// 		res.render('person/person_update', {person : person, csrfToken: req.csrfToken()});
+	// 	})
+	// });
 
-					var hubOwner = hub.user_owner_id
-					var user = req.user._id
-
-					if(_.isEqual(user, hubOwner)){
-
-
-						var person = new Person(req.body);
-						console.log(req.params.id)
-						person.hub_id = req.params.id;
-
-						// Person.findById(req.params.person_id, function (err, person) {
-
-						Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function (err, person) {
-							console.log(person)
-							if(err || person === null){ 	
-								req.flash('info', "Person not found.")
-								res.redirect('/hub/:id/persons');
-								return console.log("err++: " + err) 	
-							}	
-							person._id = req.params.person_id
-							person.first_name = req.body.first_name;
-							person.last_name = req.body.last_name;
-							person.description = req.body.description;
-							person.email = req.body.email;
-
-							person.save(function (err) {
-								if (err) return console.log(err);
-								res.redirect('/hub/' + req.params.id + "/person/" +  req.params.person_id);
-							});
-						});
-						// Person.update({_id: req.params.person_id, hub_id: hub.id}, { first_name: req.body.first_name, last_name: req.body.last_name, description: req.body.description, email: req.body.email }, options, callback)
-
-
-
-
-
-
-
-
-						// person.save(function (err, person) {
-						// 	if(err){ 	
-						// 		req.flash('info', "Did not save person.")
-						// 		// res.redirect('/hub/:id/add_person');
-						// 		// res.render('person/add_person');
-						// 			res.redirect('/hub/' + req.params.id + '/add_person');
-						// 		return console.log("err++: " + err) 	
-						// 	}	
-						// 	res.redirect('/hub/' + req.params.id);
-						// });		
-
-
-
-
-						// return Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
-						// 	if(err || person === null){ 	
-						// 		req.flash('info', "Person not found.")
-						// 		res.redirect('/hub/:id');
-						// 		return console.log("err++: " + err) 	
-						// 	}
-						// 	console.log(person);
-						// 	res.render('person/person', {person : person, hub: hub });
-						// })
-
-			  
-					} else {
-						console.log("not equals");
-						// console.log(req);
-					  return res.redirect('/hubs');
-					}
-
-			
-		});
-
-			
-		console.log("update person")
-
-		// Person.findById(req.params.id, function (err, person) {
-		// 	console.log(person)
-		// 	if(err || person === null){ 	
-		// 		req.flash('info', "Person not found.")
-		// 		res.redirect('/persons');
-		// 		return console.log("err++: " + err) 	
-		// 	}	
-		// 	person._id = req.params.id
-		// 	person.first_name = req.body.first_name;
-		// 	person.last_name = req.body.last_name;
-		// 	person.description = req.body.description;
-		// 	person.email = req.body.email;
-
-		// 	person.save(function (err) {
-		// 		if (err) return handleError(err);
-		// 		res.redirect('/person/'+req.params.id );
-		// 	});
-		// });
-			
-	});
+	app.post('/hub/:id/person/:person_id/update', upload.single('image'), csrfProtection, personController.personUpdatePost);
 
 	app.delete('/hub/:id/person/:person_id',  function (req, res) {
 		return Hub.findById(req.params.id, function(err, hub){
@@ -492,20 +178,67 @@ app.use(bodyParser.urlencoded({
 				// 	console.log("delete");
 				// 	res.redirect('/persons');
 				// });
+				
+				// deleteImgFile(person.img_foldername);
+				Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
+
+					console.log("-----------------");
+					console.log(person.first_name);
+					console.log("-----------------");
+					deleteImgFile(person.img_foldername);
+					// var rmdir = require( 'rmdir' );
+					// var path = 'public/uploads/img/' + person.img_foldername
+					
+					// rmdir( path, function ( err, dirs, files ){
+					// 	console.log(err)
+					//   console.log( dirs );
+					//   console.log( files );
+					//   console.log( 'all files are removed' );
+					// });
+
+					 // if(person.img_foldername !== undefined){
+					  	
+						// }
+				      if(!person) {
+				        res.statusCode = 404;
+				        return res.send({ error: 'Not found' });
+				      }
+
+				      return Person.remove({_id: req.params.person_id, hub_id: hub.id}, function(err) {
+				        if(!err) {
+				          console.log('Removed person');
+				          return res.redirect('/');
+				        } else {
+				          res.statusCode = 500;
+				          console.log('Internal error(%d): %s',res.statusCode,err.message);
+				          return res.send({ error: 'Server error' });
+				        }
+				      })
 
 
 
-				return Person.remove({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
-					if(err || person === null){ 	
-						req.flash('info', "Person not found.")
-						res.redirect('/hub/:id');
-						return console.log("err++: " + err) 	
-					}
-					console.log(person);
-					return res.redirect('/hub/'+ hub.id + '/persons' );
 
-					// res.render('person/person', {person : person});
+					// return person.remove({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
+					// 		if(err || person === null){ 	
+					// 			req.flash('info', "Person not found.")
+					// 			res.redirect('/hub/:id');
+					// 			return console.log("err++: " + err) 	
+					// 		}
+					// 		console.log("-----------------");
+					// 		console.log(person);
+					// 		console.log("-----------------");
+					// 		// if(person.img_foldername !== null){
+							  	
+					// 		// }
+					// 		return res.redirect('/hub/'+ hub.id + '/persons' );
+
+					// 		// res.render('person/person', {person : person});
+					// 	})
+
+
 				})
+						
+					
 
 	  
 			} else {

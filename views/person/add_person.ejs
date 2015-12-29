@@ -1,17 +1,13 @@
-<% include ../_partials/header %>
+
+
+	<% include ../_partials/header %>
+<%= person %>
+
+
 
 <!-- text editor -->
  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"/>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/vendor/css/froala_editor.css">
-  <link rel="stylesheet" href="/vendor/css/froala_style.css">
-  <link rel="stylesheet" href="/vendor/css/plugins/code_view.css">
-  <link rel="stylesheet" href="/vendor/css/plugins/image_manager.css">
-  <link rel="stylesheet" href="/vendor/css/plugins/image.css">
-  <link rel="stylesheet" href="/vendor/css/plugins/table.css">
-  <link rel="stylesheet" href="/vendor/css/plugins/video.css">
-  <link rel="stylesheet" href="/vendor/css/plugins/colors.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
 
 
 <!-- text editor  end -->
@@ -22,23 +18,23 @@
 		<input type='file' name='image'><br>
 
 		<!-- name info -->
-		title: <input type="text" name="title" /> <br>
-		first_name*: <input type="text" name="first_name" /> <br>
-		middle_name: <input type="text" name="middle_name" /> <br>
-		last_name*: <input type="text" name="last_name" /><br>
-		suffix: <input type="text" name="suffix" /><br>
+		title: <input type="text" name="title" value="<%= person.title %>"/> <br>
+		first_name*: <input type="text" name="first_name" value="<%= person.first_name %>"/> <br>
+		middle_name: <input type="text" name="middle_name" value="<%= person.middle_name %>" /> <br>
+		last_name*: <input type="text" name="last_name" value="<%= person.last_name %>" /><br>
+		suffix: <input type="text" name="suffix" value="<%= person.suffix %>" /><br>
 		
 		<!-- general info -->
-		job title: <input type="text" name="job_title" /><br>
-		gender: <input type="text" name="gender" /><br>
-		birthday: <input type="text" name="birthday" /><br>
+		job title: <input type="text" name="job_title" value="<%= person.job_title %>" /><br>
+		gender: <input type="text" name="gender" value="<%= person.gender %>" /><br>
+		birthday: <input type="text" name="birthday" value="<%= person.birthday %>" /><br>
 
 		<!-- contact info  -->
-		email: <input type="email" name="email" /><br>
-		primary phone: <input type="text" name="primary_phone" /><br>
-		mobile phone: <input type="text" name="mobile_phone" /><br>
-		street address: <input type="text" name="address" /><br>
-		web address: <input type="text" name="web_address" /><br>
+		email: <input type="email" name="email" value="<%= person.email %>" /><br>
+		primary phone: <input type="text" name="primary_phone" value="<%= person.primary_phone %>" /><br>
+		mobile phone: <input type="text" name="mobile_phone" value="<%= person.mobile_phone %>" /><br>
+		street address: <input type="text" name="address" value="<%= person.address %>" /><br>
+		web address: <input type="text" name="web_address" value="<%= person.web_address %>" /><br>
 					
 
 
@@ -47,8 +43,8 @@
 
 
 		<!-- description info -->
-		short description: <br><textarea id="short-description" type="text" name="short_description" /></textarea><div id="short-description-count"></div><br>
-		description: <br><textarea  id="description" type="text" name="description" ></textarea><br>
+		short description: <br><textarea id="short-description" type="text" name="short_description" /><%= person.short_description %></textarea><div id="short-description-count"></div><br>
+		description: <br><textarea  id="description" type="text" name="description"  ><%= person.description %></textarea><br>
 		<!-- submit button -->
 		<input type ="submit" value="Save">
 	</form>
@@ -56,35 +52,19 @@
 	<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
 
-  <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  
 
 <hr>
   <form method="post">
-    <textarea id="mytextarea"></textarea>
+    <textarea id="mytextarea" value=""></textarea>
   </form>
   
 
 <hr>
 
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
- 
-  <script type="text/javascript" src="/vendor/js/froala_editor.min.js"></script>
 
-   <script type="text/javascript" src="/vendor/js/plugins/colors.min.js"></script>
-
-
- 	<script type="text/javascript" src="/vendor/js/plugins/link.min.js"></script>
-
-  <script type="text/javascript" src="/vendor/js/plugins/lists.min.js"></script>
-  <script type="text/javascript" src="/vendor/js/plugins/paragraph_format.min.js"></script>
-  <script type="text/javascript" src="/vendor/js/plugins/paragraph_style.min.js"></script>
-  <script type="text/javascript" src="/vendor/js/plugins/table.min.js"></script>
-  <script type="text/javascript" src="/vendor/js/plugins/video.min.js"></script>
-  <script type="text/javascript" src="/vendor/js/plugins/url.min.js"></script>
-  <script type="text/javascript" src="/vendor/js/plugins/entities.min.js"></script>
-
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
 
 
@@ -98,17 +78,20 @@
 		  ]
 		}
 		    tinymce.init({
-		       // theme: "modern",
-		      selector: "#description",
-		        plugins : " autolink link lists charmap preview textcolor",
-		      toolbar: showToolbar,
-		       menubar: false,
-		       statusbar: false,
-		       content_css : "/app/css/style.css",
-		       default_link_target: "_blank",
-		       target_list: false,
-		link_title: false
-		        
+		    
+				selector: "#description",
+				plugins : "paste autolink link lists charmap preview textcolor",
+				toolbar: showToolbar,
+				menubar: false,
+				statusbar: false,
+				content_css : "/app/css/style.css",
+				default_link_target: "_blank",
+				target_list: false,
+				link_title: false,
+				paste_as_text: true,
+				paste_text_sticky : true,
+				paste_text_sticky_default: true,
+				link_assume_external_targets: true   
 
 		    });
 
@@ -132,18 +115,25 @@
    
 
        $('#short-description').keyup(function () {
-		  var max = 160;
-		  var len = $(this).val().length;
+       	
+			var max = 160;
+			var len = $(this).val().length;
 
-		  if(len > max){
-		  	$(this).val($(this).val().substring(0, len-1));
-		  }
-		  if (len >= max) {
-		    $('#short-description-count').text(' you have reached the limit');
-		  } else {
-		    var char = max - len;
-		    $('#short-description-count').text(char + ' characters left');
-		  }
+			v = $(this).val().substring(0,160)
+			 $(this).val(v);
+
+
+			if(len > max){
+				$(this).val($(this).val().substring(0, len-1));
+			}
+			if (len >= max) {
+			$('#short-description-count').text(' you have reached the limit');
+			} else {
+			var char = max - len;
+			$('#short-description-count').text(char + ' characters left');
+			 console.log(v)
+
+			}
 		}).bind('keypress', function(e) {
 		  if ((e.keyCode || e.which) == 13) {
 		    return false;
@@ -153,7 +143,3 @@
 
       });
   </script>
-
-
-
-

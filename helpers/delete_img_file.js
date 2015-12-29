@@ -1,12 +1,12 @@
-module.exports = function(app) {
+module.exports = function(foldername) {
 
-	var deleteFile = function(filename){
+	
 
 		var rmdir = require( 'rmdir' );
-		if (filename !== null){
+		if (foldername !== null){
 
-			var path = 'public/uploads/img/' + filename
-			console.log(path)
+			var path = 'public/uploads/img/' + foldername
+			// console.log(path)
 			rmdir( path, function ( err, dirs, files ){
 			  console.log( dirs );
 			  console.log( files );
@@ -15,6 +15,5 @@ module.exports = function(app) {
 		
 		}
 			
-	}
 	
 }

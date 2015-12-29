@@ -14,44 +14,81 @@ var Person = new Schema({
 	first_name: {
 		type: String,
 		require: true,
-		validate: /\S+$/
+		validate: /\S+$/,
+		validator: function(v) {
+	        return /\S+$/.test(v);
+	      },
+	     message: '{VALUE} is not a valid name!'
+	},
+	lowercase_first_name:{
+		type: String,
+		require: true,
+		validate: /\S+$/,
+		validator: function(v) {
+	        return /\S+$/.test(v);
+	      },
+	     message: '{VALUE} is not a valid name!'
+
 	},
 	middle_name: {
 		type: String
-		
-		// validate: /\S+/
+	},
+	lowercase_middle_name:{
+		type: String
 	},
 	last_name: {
 		type: String,
 		require: true,
-		validate: /\S+$/
+		validate: /\S+$/,
+		validator: function(v) {
+	        return /\S+$/.test(v);
+	      },
+	      message: '{VALUE} is not a valid name!'
+	},
+	lowercase_last_name:{
+		type: String,
+		require: true,
+		validate: /\S+$/,
+		validator: function(v) {
+	        return /\S+$/.test(v);
+	      },
+	     message: '{VALUE} is not a valid name!'
+
 	},
 	suffix: {
-		type: String
+		type: String,
+		default: ""
 	},
 
 	// ----- general info -------
 	job_title: {
 		type: String,
+		default: ""
 		// require: true,
 		// validate: /\S+/
 	},
 	gender: {
 		type: String,
+		default: ""
 		// require: true,
 		// validate: /\S+/
 	},
 	birthday: {
-		type: Date,
+		type: String,
+		default: ""
+		// type: Date,
+		// default: null
 	},
 
 	// ----- description info -------
 	short_description: {
-		type: String
+		type: String,
+		default: ""
 	},
 
 	description: {
-		type: String
+		type: String,
+		default: ""
 	},
 
 
@@ -59,22 +96,34 @@ var Person = new Schema({
 	// ----- contact info -------
 	email: {
 		type: String,
-		// default: "",
-		validate: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/
+		default: "",
+		validator: function(v) {
+	        return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/.test(v);
+	      },
+	      message: '{VALUE} is not a valid email!'
+	    
 	},
 	primary_phone: {
 		type: String,
+		default: ""
 	},
 	mobile_phone: {
 		type: String,
+		default: ""
+	},
+	fax: {
+		type: String,
+		default: ""
 	},
 	address: {
 		type: String,
+		default: ""
 	},
 
 	// ----- online presence info -------
 	web_address: {
 		type: String,
+		default: ""
 	},
 
 	// images 
@@ -105,6 +154,7 @@ var Person = new Schema({
 	update_date: {
 		type: Date,
 		default: Date.now
+		 // default: null
 	},
 	creation_date: {
 		type: Date,

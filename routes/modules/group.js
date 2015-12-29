@@ -222,23 +222,22 @@ module.exports = function(app) {
 						return console.log("err++: " + err) 	
 					}	
 
-					var persons = group.persons
-					persons.forEach(function(element){
-						Person.findById(element, function(err, entry){
-							if(err || entry === null){ 	
-									req.flash('info', "Entry not found.")
-									res.redirect('/hub/' + req.params.id+ '/groups');
-									return console.log("err++: " + err) 	
+					var persons = group.persons || []
+					if(persons.length > 0){
+						persons.forEach(function(element){
+							Person.findById(element, function(err, entry){
+								if(err || entry === null){ 	
+										req.flash('info', "Entry not found.")
+										res.redirect('/hub/' + req.params.id+ '/groups');
+										return console.log("err++: " + err) 	
 								}	
-
-								var result = _.without(entry.group, req.params.group_id);
-								console.log("---------> " + result );
-								Person.findByIdAndUpdate(element, { $set: {group: result}}, function(err, entryNext){
-
+									var result = _.without(entry.group, req.params.group_id);
+									console.log("---------> " + result );
+									Person.findByIdAndUpdate(element, { $set: {group: result}}, function(err, entryNext){
 								})
 							})
 						})
-
+					}
 						Group.remove({_id: req.params.group_id, hub_id: hub.id}, function(err){	
 					// 	if(err){ return console.log("err: " + err) }
 

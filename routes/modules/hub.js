@@ -23,7 +23,7 @@ var _ = require('underscore');
 var Hub = require('../../models/hub.js');
 var Person = require('../../models/person.js');
 var Group = require('../../models/group.js');
-// var Hub = require('../../models/hub.js');
+var Event = require('../../models/event.js');
 
 module.exports = function(app) {
 
@@ -98,13 +98,16 @@ module.exports = function(app) {
 
 				
 				if(_.isEqual(user, hubOnwer)){
+					var sort = {sort: {update_date: -1} } 
 
-					Person.find({hub_id: hub.id}, function(err, persons){
-						Group.find({hub_id: hub.id}, function(err, groups){	
-							return res.render('hub/hub', {user: req.user, hub: hub, persons: persons, groups: groups});
-						  	console.log("equals")		
-					  	});
-					});
+					Person.find({hub_id: hub.id}, null, sort, function(err, persons){
+						Group.find({hub_id: hub.id},  null, {}, function(err, groups){	
+							Event.find({hub_id: hub.id}, null, {}, function(err, events){
+								return res.render('hub/hub', {user: req.user, hub: hub, persons: persons, groups: groups, events: events});
+							  	console.log("equals")
+						  	}).limit(5);	
+					  	}).limit(5);
+					}).limit(5);
 
 		  
 				} else {

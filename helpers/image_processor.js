@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(req, res, funct, randomString) {
+module.exports = function(req, res, randomString, cb) {
 	console.log("You are here!")
 	var multer  = require('multer');
 
@@ -40,11 +40,11 @@ module.exports = function(req, res, funct, randomString) {
 				}
 			
 				gm(imageFilePath)
-					.resize(300,300)
+					.resize(600,600)
 					.gravity('Center')
-					.extent(250,300)
+					.extent(500,600)
 					.background('#ffffff')
-					.crop(250,300, 0, 0)
+					.crop(500,600, 0, 0)
 					.noProfile()
 					.setFormat("jpg")
 					.write(folderName + "/" + "thumb_" + imageFileName , function (err) {
@@ -67,9 +67,9 @@ module.exports = function(req, res, funct, randomString) {
 						 }
 
 
-						var size = {width: 500, height: 500};
+						var size = {width: 10000, height: 1000};
 						gm(imageFilePath)
-							.resize(500,500)
+							.resize(1000,1000)
 							.gravity('Center')
 							.background('#ffffff')
 							.out("-flatten")
@@ -92,8 +92,10 @@ module.exports = function(req, res, funct, randomString) {
 										
 										fs.unlink(imageFilePath, function(){
 											console.log("deleted" + req.file.filename);
-											console.log(funct);
-											return funct;
+											// console.log(funct);
+											console.log("1 first call")
+											cb();
+											
 										})
 
 									})
