@@ -11,13 +11,15 @@ var Event = new Schema({
 	start_date:{
 		type: Date
 	},
-	end_date:{
-		type: Date
-	},
+	// end_date:{
+	// 	type: Date
+	// },
 	description: {
 		type: String
 	},
-	
+	where: {
+		type: String
+	},
 	hub_id: {
 		type: Schema.ObjectId,
 		require: true,

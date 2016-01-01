@@ -4,9 +4,12 @@ var mongoose = require('mongoose');
 var _ = require('underscore');
 
 var crypto = require('crypto');
+var forEachAsync = require('forEachAsync').forEachAsync;
 
 var Person = require('../models/person.js');
+var Group = require('../models/group.js');
 var Hub = require('../models/hub.js');
+var PersonGroupJoin = require('../models/person_group_join.js');
 var csrf = require('csurf')
 
 var bodyParser = require('body-parser')
@@ -51,7 +54,7 @@ var personController = function(personService, app ){
 	}
 
 
-
+	// ADD Person
 	var add_person_post = function (req, res) {
 		var postPerson = function(){
 
@@ -185,7 +188,7 @@ var personController = function(personService, app ){
 
 
 
-
+	// Read Person
 	var person = function (req, res) {
 		var readPerson = function(hub){
 			console.log("person id")
@@ -272,6 +275,94 @@ var personController = function(personService, app ){
 
 		return hubchecker(req, res, readPerson)
 	}
+
+
+
+
+
+
+
+
+
+	var personGroups = function (req, res) {
+
+		var readPerson = function(hub){
+
+			var hubOwner = hub.user_owner_id
+			var user = req.user._id
+
+			if(_.isEqual(user, hubOwner)){
+
+				PersonGroupJoin.find({person_id: req.params.person_id, hub_id: hub.id}, function(err, groupJoins){		
+
+					// console.log(groupJoins)
+					var groupArray = [];
+
+
+					forEachAsync(groupJoins, function (next, element, index, array) {
+						Group.find({_id: element.group_id, hub_id: element.hub_id}, function(err, group){
+							// console.log(group);
+							groupArray.push(group[0])
+							// console.log(groupArray)
+							next()
+						})
+
+
+					   	
+					}).then(function () {
+					    
+
+						Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
+							if(err || person === null){ 	
+								req.flash('info', "Person not found.")
+								res.redirect('/hub/:id');
+								return console.log("err++: " + err) 	
+							}
+							// console.log(person);
+							var creationDate = moment(person.creation_date).format('ll @ h:mma');
+							var updateDate = moment(person.update_date).format('ll @ h:mma');
+
+
+							var ptitle = person.title || "";
+							var pmiddle = person.middle_name || "";	
+							var psuffix = person.suffix || "";
+							console.log(groupArray);
+							var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
+							res.render('person/groups', {title: title, person : person, hub: hub, updateDate: updateDate, creationDate: creationDate, groupArray: groupArray });
+
+
+						})
+
+					    console.log('All requests have finished');
+					    
+					});
+
+				    // _.each(groupJoins, function(){}, console.log("complete"));
+					// groupJoins.forEach(function(entry){	
+					// 	console.log(entry.group_id);	 
+					// 	Group.find({_id: entry.group_id, hub_id: entry.hub_id}, function(err, group){
+					// 		console.log(group);
+					// 	})
+					// })
+
+		
+					
+				})
+			} else {
+				console.log("not equals");
+				// console.log(req);
+			  // return res.redirect('/hubs');
+			  res.send('404: Page not Found', 404);
+			}
+
+		}
+
+		return hubchecker(req, res, readPerson)
+	}
+
+
+
+
 
 
 
@@ -502,6 +593,7 @@ var personController = function(personService, app ){
 		persons: persons,
 		person: person,
 		personInfo: personInfo,
+		personGroups: personGroups,
 		personUpdate: personUpdate,
 		personUpdatePost: personUpdatePost,
 		personDelete: personDelete

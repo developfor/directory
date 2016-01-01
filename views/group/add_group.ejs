@@ -1,5 +1,7 @@
 <% include ../_partials/header %>
-<form method="post" accept-charset="utf-8">
+<form method="post" action="?_csrf=<%= csrfToken %>" enctype="multipart/form-data" accept-charset="utf-8">
+	<input type='file' name='image'><br>
+
 	title: <input type="text" name="title" /> <br>	
 	description: <input type="text" name="description" /><br>
 

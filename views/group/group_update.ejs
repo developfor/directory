@@ -1,9 +1,11 @@
 <% include ../_partials/header %>
 <%= group %>
 
-<form method="post" accept-charset="utf-8">
-	title: <input type="text" name="title" value="<%= group.title %>"/> <br>	
-	description: <input type="text" name="description" value="<%= group.description %>"/><br>
+<form method="post" action="?_csrf=<%= csrfToken %>" enctype="multipart/form-data" accept-charset="utf-8">
+	<input type='file' name='image'><br>
+
+	title: <input type="text" name="title" /> <br>	
+	description: <input type="text" name="description" /><br>
 
 	<input type ="submit" value="Save">
 </form>

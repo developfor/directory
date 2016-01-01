@@ -11,15 +11,12 @@ var csrf = require('csurf')
 
 var secret_key = require('../../config/secret.js');
 
-
 var passport = require('../../config/passport.js');
 var flash = require('express-flash');
 
 var csrfProtection = csrf({ cookie: true })
 
-
 var bodyParser = require('body-parser')
-
 
 var upload = require('./../../helpers/upload.js').upload;
 var imageProcessor = require('./../../helpers/image_processor.js');
@@ -65,8 +62,11 @@ module.exports = function(app) {
 	// READ PERSON
 	app.get('/hub/:id/person/:person_id', personController.person);
 
-	// READ UPDATE 
+	// READ INFO
 	app.get('/hub/:id/person/:person_id/info', personController.personInfo);
+
+	// READ GROUPS
+	app.get('/hub/:id/person/:person_id/groups', personController.personGroups);
 
 	// READ UPDATE 
 	app.get('/hub/:id/person/:person_id/update', csrfProtection, personController.personUpdate);

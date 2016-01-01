@@ -1,0 +1,60 @@
+"use strict";
+
+var mongoose = require('mongoose');
+var _ = require('underscore');
+
+var crypto = require('crypto');
+var forEachAsync = require('forEachAsync').forEachAsync;
+
+var Person = require('../models/person.js');
+var Group = require('../models/group.js');
+var Hub = require('../models/hub.js');
+var PersonGroupJoin = require('../models/person_group_join.js');
+var csrf = require('csurf')
+
+var bodyParser = require('body-parser')
+
+
+var upload = require('./../helpers/upload.js').upload;
+var imageProcessor = require('./../helpers/image_processor.js');
+var deleteImgFile = require('./../helpers/delete_img_file.js')
+
+var moment = require('moment');
+
+
+// Private Functions
+var hubchecker = function(req, res, method){
+	Hub.findById(req.params.id, function(err, hub){
+		if(err){ 
+			res.redirect('/hubs');
+			return console.log("err: " + err) 
+		}
+		console.log("hubchecked")
+
+		return method(hub);
+
+	});
+}
+
+var groupController = function(personService, app ){
+	var add_group = function (req, res) {
+
+		var render = function(){
+			res.render('group/add_group', {csrfToken: req.csrfToken(), person : ""})
+		}
+
+		// running the hubchecker
+		hubchecker(req, res, render)
+		
+	}
+
+
+
+	return{
+		add_group: add_group
+	}
+
+}
+
+
+module.exports = groupController;

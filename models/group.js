@@ -59,7 +59,23 @@ var Group = new Schema({
 
 
 
+	// images 
 
+	img_foldername:{
+		type: String,
+	},
+	img_originalname:{
+		type: String,
+	},
+	img_icon: {
+		type: String,
+	},
+	img_thumbnail: {
+		type: String,
+	},
+	img_normal: {
+		type: String,
+	},
 
 
 

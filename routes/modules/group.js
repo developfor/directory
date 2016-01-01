@@ -9,9 +9,20 @@ var async = require('async')
 var mongoose = require('mongoose');
 var _ = require('underscore');
 
+
+var csrf = require('csurf')
+var csrfProtection = csrf({ cookie: true })
+
+
 var Hub = require('../../models/hub.js');
 var Group = require('../../models/group.js');
 var Person = require('../../models/person.js');
+
+
+var upload = require('./../../helpers/upload.js').upload;
+var imageProcessor = require('./../../helpers/image_processor.js');
+var deleteImgFile = require('./../../helpers/delete_img_file.js')
+
 
 var Person_group_join = require('../../models/person_group_join.js');
 
@@ -28,6 +39,9 @@ var hubId = function(method){
 		}
 
 module.exports = function(app) {
+
+	var groupController = require('./../../controllers/group.js')(null, app)
+
 	// app.get('/', function (req, res) {
 	//   res.send('Hello World!');
 	// });
@@ -38,125 +52,24 @@ module.exports = function(app) {
 	app.all('/hub/:id/group/*', ensureAuthenticated);
 
 
-	app.get('/hub/:id/add_group', function (req, res) {
-		return Hub.findById(req.params.id, function(err, hub){
-			if(err){ 
-				res.redirect('/hubs');
-				return console.log("err: " + err) 
-			}
-			res.render('group/add_group');
-		})
-	})
 
-	app.post('/hub/:id/add_group', function (req, res) {
-		
+	
+	// ADD GROUP
+	app.get('/hub/:id/add_group', csrfProtection,  groupController.add_group)
 
-		var group_save = function(){
+	// app.get('/hub/:id/add_group', function (req, res) {
+	// 	return Hub.findById(req.params.id, function(err, hub){
+	// 		if(err){ 
+	// 			res.redirect('/hubs');
+	// 			return console.log("err: " + err) 
+	// 		}
+	// 		res.render('group/add_group');
+	// 	})
+	// })
 
-			var group = new Group();
+	app.post('/hub/:id/add_group', upload.single('image'), csrfProtection, groupController.add_group_post)
 
-			group.hub_id = mongoose.Types.ObjectId(req.params.id);
-			group.title = req.body.title;
-			group.description = req.body.description;
-
-			group.save(function (err, group) {
-				if(err || group === null){ 	
-					req.flash('info', "Did not save group.")
-					res.redirect('/hub/' + req.params.id+ '/add_group');
-					return console.log("err++: " + err) 	
-				}	
-				res.redirect('/hub/' + req.params.id+ '/groups');
-
-			});	
-
-		}
-
-
-		var hubId = function(method){
-
-			return Hub.find(req.params.id, function(err, hub){
-					if(err || hub === null){ 	
-						req.flash('info', "Hub not found.")
-						res.redirect('/hubs');
-						return console.log("err++: " + err) 	
-					}
-					return method			
-				})	
-		}
-
-		hubId(group_save());
-
-
-
-
-
-
-
-
-
-
-
-
-
-		// return Hub.find(req.params.id, function(err, hub){
-		// 	if(err || hub === null){ 	
-		// 		req.flash('info', "Hub not found.")
-		// 		res.redirect('/hubs');
-		// 		return console.log("err++: " + err) 	
-		// 	}
-
-
-		// 	var group = new Group();
-
-		// 	group.hub_id = mongoose.Types.ObjectId(req.params.id);
-		// 	group.title = req.body.title;
-		// 	group.description = req.body.description;
-
-		// 	group.save(function (err, group) {
-		// 		if(err || group === null){ 	
-		// 			req.flash('info', "Did not save group.")
-		// 			res.redirect('/hub/' + req.params.id+ '/add_group');
-		// 			return console.log("err++: " + err) 	
-		// 		}	
-		// 		res.redirect('/hub/' + req.params.id+ '/groups');
-
-		// 	});		
-		// })	
-
-
-	})
-
-	app.get('/hub/:id/groups', function (req, res) {
-		return Hub.findById(req.params.id, function(err, hub){
-			if(err){ 
-				res.redirect('/hubs');
-				return console.log("err: " + err) 
-			}
-
-			// console.log(hub)
-			var hubOwner = hub.user_owner_id
-			var user = req.user._id
-			// console.log(hub.user_owner_id)
-			// console.log(req.user._id)
-			// console.log(_.isEqual(hub.user_owner_id, req.user._id));
-
-			
-			if(_.isEqual(user, hubOwner)){
-
-				Group.find({hub_id: hub.id}, function(err, groups){
-					if(err){ return console.log("err: " + err) }
-					// console.log(groups);
-					res.render('group/groups', {hub: hub, groups : groups});
-				})
-
-			} else {
-				console.log("not equals");
-				// console.log(req);
-			  return res.redirect('/hubs');
-			}
-			
-		});
-	});
+	app.get('/hub/:id/groups',  groupController.groups);
 
 	app.get('/hub/:id/group/:group_id', function (req, res) {
 		// return Group.findById(req.params.id, function(err, group){
@@ -259,78 +172,10 @@ module.exports = function(app) {
 
 
 	// todo
-	app.get('/hub/:id/group/:group_id/update', function (req, res) {
-		return Group.findById(req.params.group_id, function(err, group){
-			if(err){ return console.log("err: " + err) }
-			// console.log(group);
-			res.render('group/group_update', {group : group});
-		})
-	});
+	app.get('/hub/:id/group/:group_id/update',   csrfProtection,  groupController.groupUpdate);
 	// todo end
 
-	app.post('/hub/:id/group/:group_id/update', function (req, res) {
-
-		Hub.findById(req.params.id, function(err, hub){
-			console.log("update group")
-			console.log(hub)
-			if(err || hub === null){ 
-			// if(err ){ 		
-				req.flash('info', "Hub not found.")
-				res.redirect('/hubs');
-				return console.log("err++: " + err) 	
-			}
-
-
-			var hubOwner = hub.user_owner_id
-			var user = req.user._id
-
-			if(_.isEqual(user, hubOwner)){
-
-
-				var group = new Group();
-				console.log(req.params.id)
-				group.hub_id = req.params.id;
-
-				// Group.findOne({_id: req.params.group_id, hub_id: hub.id}, function (err, person) {
-				// 	console.log(group)
-				// 	if(err || group === null){ 	
-				// 		req.flash('info', "Person not found.")
-				// 		res.redirect('/hub/:id/persons');
-				// 		return console.log("err++: " + err) 	
-				// 	}	
-				// 	group._id = req.params.person_id
-				// 	group.first_name = req.body.first_name;
-				// 	group.last_name = req.body.last_name;
-				// 	group.description = req.body.description;
-				// 	group.email = req.body.email;
-
-				// 	group.save(function (err) {
-				// 		if (err) return console.log(err);
-				// 		res.redirect('/hub/' + req.params.id + "/group/" +  req.params.person_id);
-				// 	});
-				// });
-				Group.findOne({_id: req.params.group_id, hub_id: group.hub_id}, function (err, group) {
-					// console.log(group)
-					if (err) return handleError(err);
-
-					// group._id = req.params.id;
-					group.title = req.body.title;
-					group.description = req.body.description;
-				
-
-					group.save(function (err) {
-						if (err) return handleError(err);
-						res.redirect('/hub/' + req.params.id+ '/group/'+req.params.group_id );
-					});
-				});
-
-
-			} else {
-			  console.log("not equals");
-			  return res.redirect('/hub/' + req.params.id);
-			}
-			
-		});
+	app.post('/hub/:id/group/:group_id/update', upload.single('image'),  csrfProtection,  groupController.groupUpdatePost);
 					
 		// Group.findById(req.params.id, function (err, group) {
 		// 	// console.log(group)
@@ -347,7 +192,7 @@ module.exports = function(app) {
 		// 	});
 		// });
 		
-	});
+	// });
 
 
 	//**************** ADD PERSONS **********************
