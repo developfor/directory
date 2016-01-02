@@ -431,15 +431,15 @@ var groupController = function(personService, app ){
 	var addPersonPost = function (req, res) {
 		var groupPost = function(){
 
-			var person_group_join = new Person_group_join();
+			var personGroupJoin = new PersonGroupJoin();
 
-			person_group_join.hub_id = mongoose.Types.ObjectId(req.params.id);
-			person_group_join.group_id = mongoose.Types.ObjectId(req.params.group_id);
-			person_group_join.person_id = mongoose.Types.ObjectId(req.body.person_id);
+			personGroupJoin.hub_id = mongoose.Types.ObjectId(req.params.id);
+			personGroupJoin.group_id = mongoose.Types.ObjectId(req.params.group_id);
+			personGroupJoin.person_id = mongoose.Types.ObjectId(req.body.person_id);
 
 			// console.dir(person_group_join)
 
-			person_group_join.save(function (err, person_group) {
+			personGroupJoin.save(function (err, person_group) {
 				if(err || person_group === null){ 	
 					req.flash('info', "Did not save group.")
 					res.redirect('/hub/' + req.params.id+ '/add_group');
@@ -454,6 +454,25 @@ var groupController = function(personService, app ){
 		return hubchecker(req, res, groupPost);
 	}
 
+	var removePersonPost = function(req, res){
+		console.log(req.body.person_id)
+
+		var removePerson = function(hub){
+			PersonGroupJoin.remove( {
+
+				group_id: req.params.group_id,
+				hub_id: req.params.id,
+				person_id: req.body.person_id,
+
+			}, function(err, hub){
+					console.log(hub)
+					res.send('Completed remove person');
+
+			});
+		}
+		return hubchecker(req, res, removePerson);
+	}
+
 
 
 
@@ -466,6 +485,7 @@ var groupController = function(personService, app ){
 		addGroupPost: addGroupPost,
 		addPerson: addPerson,
 		addPersonPost: addPersonPost,
+		removePersonPost: removePersonPost,
 		groupUpdate: groupUpdate,
 		groupUpdatePost: groupUpdatePost
 

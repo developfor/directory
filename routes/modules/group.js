@@ -66,130 +66,124 @@ module.exports = function(app) {
 	app.get('/hub/:id/group/:group_id/update',   csrfProtection,  groupController.groupUpdate);
 
 	app.post('/hub/:id/group/:group_id/update', upload.single('image'),  csrfProtection,  groupController.groupUpdatePost);
-					
-
-
-
-
-
-
-
-
+				
 	//**************** ADD PERSONS **********************
 	app.get('/hub/:id/group/:group_id/add_persons',  groupController.addPerson);
-
+	//**************** ADD PERSONS POST
 	app.post('/hub/:id/group/:group_id/add_persons', groupController.addPersonPost);
 
-	app.delete('/hub/:id/group/:group_id/add_persons', function (req, res,  next) {
+	app.delete('/hub/:id/group/:group_id/add_persons',  groupController.removePersonPost);
 
-		 // Person_group_join.find()
-		 //      .and([
-		 //          { $and : [ { group_id : req.params.group_id} ] },
+	// app.delete('/hub/:id/group/:group_id/add_persons', function (req, res,  next) {
 
-		 //          { $and : [ { person_id : req.body.person_id} ] },
+	// 	 // Person_group_join.find()
+	// 	 //      .and([
+	// 	 //          { $and : [ { group_id : req.params.group_id} ] },
+
+	// 	 //          { $and : [ { person_id : req.body.person_id} ] },
 		         
-		 //          { $and : [ { hub_id : req.params.id} ] }
-		 //      ])
-		 //      .exec(function (err, results) {
-		 //          console.log(results)
-			// 	next();
-		 //      });
+	// 	 //          { $and : [ { hub_id : req.params.id} ] }
+	// 	 //      ])
+	// 	 //      .exec(function (err, results) {
+	// 	 //          console.log(results)
+	// 		// 	next();
+	// 	 //      });
 		
-		console.log(req.body.person_id)
+	// 	console.log(req.body.person_id)
 
-		Person_group_join.remove( {
+	// 	Person_group_join.remove( {
 
-			group_id: req.params.group_id,
-			hub_id: req.params.id,
-			person_id: req.body.person_id,
+	// 		group_id: req.params.group_id,
+	// 		hub_id: req.params.id,
+	// 		person_id: req.body.person_id,
 
-		    // $and : [
+	// 	    // $and : [
 
-		    // 	{group_id: {$eq: mongoose.Types.ObjectId(req.params.group_id)}},
-		    // 	{person_id: {$eq: mongoose.Types.ObjectId(req.body.person_id)}},
-		    // 	{hub_id: {$eq: mongoose.Types.ObjectId(req.params.id)}}
+	// 	    // 	{group_id: {$eq: mongoose.Types.ObjectId(req.params.group_id)}},
+	// 	    // 	{person_id: {$eq: mongoose.Types.ObjectId(req.body.person_id)}},
+	// 	    // 	{hub_id: {$eq: mongoose.Types.ObjectId(req.params.id)}}
 		      
-		    // ]
-		}, function(err, hub){
-				console.log(hub)
-				res.send('Completed remove person');
+	// 	    // ]
+	// 	}, function(err, hub){
+	// 			console.log(hub)
+	// 			res.send('Completed remove person');
 
-		} )
+	// 	} )
 
-		// return Person_group_join.find({ $and : [{hub_id: req.params.id}, {group_id: req.params.group_id}, {person_id: req.body.person_id}]}, function(err, hub){
-		// 		console.log(hub)
-		// 		next()
-		// 			// if(err || hub === null){ 	
-		// 			// 	req.flash('info', "Hub not found.")
-		// 			// 	res.redirect('/hubs');
-		// 			// 	return console.log("err++: " + err) 	
-		// 			// }
-		// 			// return method			
-		// 	})	
+	// 	// return Person_group_join.find({ $and : [{hub_id: req.params.id}, {group_id: req.params.group_id}, {person_id: req.body.person_id}]}, function(err, hub){
+	// 	// 		console.log(hub)
+	// 	// 		next()
+	// 	// 			// if(err || hub === null){ 	
+	// 	// 			// 	req.flash('info', "Hub not found.")
+	// 	// 			// 	res.redirect('/hubs');
+	// 	// 			// 	return console.log("err++: " + err) 	
+	// 	// 			// }
+	// 	// 			// return method			
+	// 	// 	})	
 
-		var group_remove = function(){
+	// 	var group_remove = function(){
 
 
 			
 
 
 
-		// 	var person_group_join = new Person_group_join();
+	// 	// 	var person_group_join = new Person_group_join();
 
-		// 	person_group_join.hub_id = mongoose.Types.ObjectId(req.params.id);
-		// 	person_group_join.group_id = mongoose.Types.ObjectId(req.params.group_id);
-		// 	person_group_join.person_id = mongoose.Types.ObjectId(req.body.person_id);
+	// 	// 	person_group_join.hub_id = mongoose.Types.ObjectId(req.params.id);
+	// 	// 	person_group_join.group_id = mongoose.Types.ObjectId(req.params.group_id);
+	// 	// 	person_group_join.person_id = mongoose.Types.ObjectId(req.body.person_id);
 
-		// 	console.dir(person_group_join)
-
-
-
-		// 	Person_group_join.remove({hub_id: person_group_join.hub_id, group_id: person_group_join.group_id, person_id: person_group_join.person_id}, function(err){	
-		// 			// 	if(err){ return console.log("err: " + err) }
-		// 			console.log("remove person <<<<<<<<<<<<<<")
-		// 		res.send('Completed remove person');
-
-		// 				// res.redirect('/hub/' + req.params.id);
-		// 			});
+	// 	// 	console.dir(person_group_join)
 
 
 
-		// 	person_group_join.remove(function (err, person_group) {
-		// 		if(err || group === null){ 	
-		// 			req.flash('info', "Did not save group.")
-		// 			res.redirect('/hub/' + req.params.id+ '/add_group');
-		// 			return console.log("err++: " + err) 	
-		// 		}	
-		// 		// res.redirect('/hub/' + req.params.id+ '/groups');
-		// 		// console.log("add person <<<<<<<<<<<<<<")
-		// 		// res.send('Completed add person');
+	// 	// 	Person_group_join.remove({hub_id: person_group_join.hub_id, group_id: person_group_join.group_id, person_id: person_group_join.person_id}, function(err){	
+	// 	// 			// 	if(err){ return console.log("err: " + err) }
+	// 	// 			console.log("remove person <<<<<<<<<<<<<<")
+	// 	// 		res.send('Completed remove person');
 
-		// 	});	
-
-		// }
+	// 	// 				// res.redirect('/hub/' + req.params.id);
+	// 	// 			});
 
 
-		// var hubId = function(method){
 
-		// 	return Hub.find(req.params.id, function(err, hub){
-		// 			if(err || hub === null){ 	
-		// 				req.flash('info', "Hub not found.")
-		// 				res.redirect('/hubs');
-		// 				return console.log("err++: " + err) 	
-		// 			}
-		// 			return method			
-		// 		})	
-		// }
+	// 	// 	person_group_join.remove(function (err, person_group) {
+	// 	// 		if(err || group === null){ 	
+	// 	// 			req.flash('info', "Did not save group.")
+	// 	// 			res.redirect('/hub/' + req.params.id+ '/add_group');
+	// 	// 			return console.log("err++: " + err) 	
+	// 	// 		}	
+	// 	// 		// res.redirect('/hub/' + req.params.id+ '/groups');
+	// 	// 		// console.log("add person <<<<<<<<<<<<<<")
+	// 	// 		// res.send('Completed add person');
 
-		//  hubId(group_remove());
+	// 	// 	});	
 
-		//    // if(err){ return console.log("err: " + err) }
-		//     res.send('Completed remove person');
-		// console.log("remove person <<<<<<<<<<<<<<")
-		// // next(); 
-		}
+	// 	// }
 
-	})
+
+	// 	// var hubId = function(method){
+
+	// 	// 	return Hub.find(req.params.id, function(err, hub){
+	// 	// 			if(err || hub === null){ 	
+	// 	// 				req.flash('info', "Hub not found.")
+	// 	// 				res.redirect('/hubs');
+	// 	// 				return console.log("err++: " + err) 	
+	// 	// 			}
+	// 	// 			return method			
+	// 	// 		})	
+	// 	// }
+
+	// 	//  hubId(group_remove());
+
+	// 	//    // if(err){ return console.log("err: " + err) }
+	// 	//     res.send('Completed remove person');
+	// 	// console.log("remove person <<<<<<<<<<<<<<")
+	// 	// // next(); 
+	// 	}
+
+	// })
 
 
 
