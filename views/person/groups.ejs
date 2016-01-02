@@ -32,28 +32,31 @@
             <div class="content-groups" >
 
               <% groupArray.forEach(function(item){ %>
-            <!--   <%= item %>
-               <a class="button button-primary" href="/hub/<%= item.hub_id %>/group/<%= item._id %>">More Details »</a>
-               <hr> -->
 
-            <div class="mini-p-content" >
-              <a class="" href="/hub/<%= item.hub_id %>/group/<%= item._id %>">
-                
+                <% if(item !== undefined){ %>
+                  <!--   <%= item %>
+                     <a class="button button-primary" href="/hub/<%= item.hub_id %>/group/<%= item._id %>">More Details »</a>
+                     <hr> -->
 
-                <%  if(item.img_foldername && item.img_thumbnail){ %>
-                      <img style="background-color: #666;    border: 3px solid #000;" src="/uploads/img/<%= item.img_foldername %>/<%=  item.img_thumbnail %>"> 
-                     <!-- <img src="/app/img/no-image.png" > -->
-                  <% }else{  %>
-                  <!--  <img style="background-color: #666; height: 60px; width: 60px;     border: 3px solid #000;" > -->    <img src="/app/img/no-image.png" >
-                  <% }  %>
-              </a>
-              <div>
-                <div class="title-info-wrapper">
-                  <span class="title-info"><%= item.title %> </span>
-                </div>
-              </div> 
-              <a class="button button-primary" href="/hub/<%= item.hub_id %>/group/<%= item._id %>">More Details »</a>
-            </div>
+                  <div class="mini-p-content" >
+                    <a class="" href="/hub/<%= item.hub_id %>/group/<%= item._id %>">
+                      
+
+                      <%  if(item.img_foldername && item.img_thumbnail){ %>
+                            <img style="background-color: #666;    border: 3px solid #000;" src="/uploads/img/<%= item.img_foldername %>/<%=  item.img_thumbnail %>"> 
+                           <!-- <img src="/app/img/no-image.png" > -->
+                        <% }else{  %>
+                        <!--  <img style="background-color: #666; height: 60px; width: 60px;     border: 3px solid #000;" > -->    <img src="/app/img/no-image.png" >
+                        <% }  %>
+                    </a>
+                    <div>
+                      <div class="title-info-wrapper">
+                        <span class="title-info"><%= item.title %> </span>
+                      </div>
+                    </div> 
+                    <a class="button button-primary" href="/hub/<%= item.hub_id %>/group/<%= item._id %>">More Details »</a>
+                  </div>
+                <% } %>
               <% }) %>
 
 

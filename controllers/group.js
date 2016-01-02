@@ -5,11 +5,13 @@ var _ = require('underscore');
 
 var crypto = require('crypto');
 var forEachAsync = require('forEachAsync').forEachAsync;
+var async = require('async')
 
 var Person = require('../models/person.js');
 var Group = require('../models/group.js');
 var Hub = require('../models/hub.js');
 var PersonGroupJoin = require('../models/person_group_join.js');
+
 var csrf = require('csurf')
 
 var bodyParser = require('body-parser')
@@ -37,6 +39,91 @@ var hubchecker = function(req, res, method){
 }
 
 var groupController = function(personService, app ){
+
+
+	var group =  function(req, res){
+		var readGroup = function(hub){
+
+			var hubOwner = hub.user_owner_id
+			var user = req.user._id
+
+			if(_.isEqual(user, hubOwner)){
+
+				return Group.findOne({_id: req.params.group_id, hub_id: hub.id}, function(err, group){
+					if(err || group === null){ 	
+						req.flash('info', "Group not found.")
+						res.redirect('/hub/' + req.params.id);
+						return console.log("err++: " + err) 	
+					}
+					res.render('group/group', {group : group, hub: hub});
+				})
+
+			} else {
+				console.log("not equals");
+				// console.log(req);
+			    // return res.redirect('/hubs');
+				res.send('404: Page not Found', 404);
+			}
+		}
+		return hubchecker(req, res, readGroup)
+	}
+
+
+
+
+
+
+	var deleteGroup =  function(req, res){
+
+		var readGroup = function(hub){
+			var hubOwner = hub.user_owner_id
+			var user = req.user._id
+
+			if(_.isEqual(user, hubOwner)){
+
+				Group.findById( req.params.group_id , function(err, group){
+					// console.log(group);
+
+					if(err || group === null){ 	
+						req.flash('info', "Group not found.")
+						res.redirect('/hub/' + req.params.id+ '/groups');
+						return console.log("err++: " + err) 	
+					}	
+
+					PersonGroupJoin.find({group_id: req.params.group_id}, function(err, personGroup){
+						console.log(personGroup)
+						forEachAsync(personGroup, function(next, element, index, array){
+							PersonGroupJoin.remove({_id: element._id, hub_id: element.hub_id}, function(){})
+							console.log("element: " + element)
+							next()
+						}).then(function(){
+							Group.remove({_id: req.params.group_id, hub_id: hub.id}, function(err){	
+								res.redirect('/hub/' + req.params.id);
+							});
+							console.log('All requests have finished');
+						})
+					})
+
+				})
+
+			} else {
+				console.log("not equals");
+				// console.log(req);
+				// return res.redirect('/hubs');
+				res.send('404: Page not Found', 404);
+			}
+
+		}
+		return hubchecker(req, res, readGroup)
+	}
+
+
+
+
+
+
+
+
 
 	var groups = function (req, res) {
 		var readGroups = function(hub){
@@ -85,16 +172,14 @@ var groupController = function(personService, app ){
 
 
 
-
-
-	var add_group = function (req, res) {
+	var addGroup = function (req, res) {
 		var render = function(){
 			res.render('group/add_group', {csrfToken: req.csrfToken()});
 		}
 		hubchecker(req, res, render)
 	}
 
-	var add_group_post = function (req, res) {
+	var addGroupPost = function (req, res) {
 		var postGroup = function(){
 
 			var token = crypto.randomBytes(8).toString('hex') + "_" + Date.now(); 
@@ -291,12 +376,96 @@ var groupController = function(personService, app ){
 
 
 
+	var addPerson = function (req, res) {
+		var group = function(hub){
+			var person_array = []
+			Group.findById(req.params.group_id, function (err, group) {	
+				return Person.find({hub_id: req.params.id}, null, function(err, persons){
+				  	if(err){ return console.log("err: " + err) }
+
+
+				  	async.eachSeries(persons, function (person, callback) {
+					  	  var p = person.toJSON()
+					  	  p.checked = false;
+
+						  PersonGroupJoin.find({hub_id: req.params.id, person_id: person._id, group_id: req.params.group_id}, null, function(err, person_group){
+							  	 console.log(person_group)
+							  	if(person_group.length > 0){
+									console.log("true")
+							  	 	p.checked = true;
+							  	 	person_array.push(p)
+							  	} else {
+							  		console.log("false")
+							  	 	p.checked = false;
+							  	 	person_array.push(p)
+							  	}
+							  	
+							  	callback(); 
+
+
+						  
+						  	});
+
+					}, function (err) {
+						
+					  if (err) { throw err; }
+					  return PersonGroupJoin.find({hub_id: req.params.id}, null, function(err, person_group){
+				   		res.render('group/add_persons', { person_group: person_group, group : group, persons : person_array});
+				  	  });
+
+					});
+
+				});
+
+			});
+		}
+		return hubchecker(req, res, group);
+
+	}
+
+
+
+
+
+
+	var addPersonPost = function (req, res) {
+		var groupPost = function(){
+
+			var person_group_join = new Person_group_join();
+
+			person_group_join.hub_id = mongoose.Types.ObjectId(req.params.id);
+			person_group_join.group_id = mongoose.Types.ObjectId(req.params.group_id);
+			person_group_join.person_id = mongoose.Types.ObjectId(req.body.person_id);
+
+			// console.dir(person_group_join)
+
+			person_group_join.save(function (err, person_group) {
+				if(err || person_group === null){ 	
+					req.flash('info', "Did not save group.")
+					res.redirect('/hub/' + req.params.id+ '/add_group');
+					return console.log("err++: " + err) 	
+				}	
+				// res.redirect('/hub/' + req.params.id+ '/groups');
+				console.log("add person <<<<<<<<<<<<<<")
+				res.send('Completed add person');
+
+			});	
+		}
+		return hubchecker(req, res, groupPost);
+	}
+
+
+
 
 
 	return{
+		group: group,
+		deleteGroup: deleteGroup,
 		groups: groups,
-		add_group: add_group,
-		add_group_post: add_group_post,
+		addGroup: addGroup,
+		addGroupPost: addGroupPost,
+		addPerson: addPerson,
+		addPersonPost: addPersonPost,
 		groupUpdate: groupUpdate,
 		groupUpdatePost: groupUpdatePost
 

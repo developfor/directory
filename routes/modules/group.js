@@ -5,7 +5,7 @@ var  ensureAuthenticated = function(req, res, next) {
 	  if (req.isAuthenticated()) { return next(); }
 	 res.redirect('/login')
   	}
-var async = require('async')
+
 var mongoose = require('mongoose');
 var _ = require('underscore');
 
@@ -42,287 +42,43 @@ module.exports = function(app) {
 
 	var groupController = require('./../../controllers/group.js')(null, app)
 
-	// app.get('/', function (req, res) {
-	//   res.send('Hello World!');
-	// });
+
 
 	app.all('/hub/:id/add_group', ensureAuthenticated);
 	app.all('/hub/:id/groups', ensureAuthenticated);
-	// app.all('/group', ensureAuthenticated);
+    app.all('/group', ensureAuthenticated);
 	app.all('/hub/:id/group/*', ensureAuthenticated);
 
 
 
 	
 	// ADD GROUP
-	app.get('/hub/:id/add_group', csrfProtection,  groupController.add_group)
+	app.get('/hub/:id/add_group', csrfProtection,  groupController.addGroup)
 
-	// app.get('/hub/:id/add_group', function (req, res) {
-	// 	return Hub.findById(req.params.id, function(err, hub){
-	// 		if(err){ 
-	// 			res.redirect('/hubs');
-	// 			return console.log("err: " + err) 
-	// 		}
-	// 		res.render('group/add_group');
-	// 	})
-	// })
-
-	app.post('/hub/:id/add_group', upload.single('image'), csrfProtection, groupController.add_group_post)
+	app.post('/hub/:id/add_group', upload.single('image'), csrfProtection, groupController.addGroupPost)
 
 	app.get('/hub/:id/groups',  groupController.groups);
 
-	app.get('/hub/:id/group/:group_id', function (req, res) {
-		// return Group.findById(req.params.id, function(err, group){
-		// 	if(err || group === null){ 	
-		// 		req.flash('info', "Group not found.")
-		// 		res.redirect('/groups');
-		// 		return console.log("err++: " + err) 	
-		// 	}	
-		// 	// console.log(group);
-		// 	res.render('group/group', {group : group});
-		// })
+	app.get('/hub/:id/group/:group_id', groupController.group);
 
-		return Hub.findById(req.params.id, function(err, hub){
-			if(err){ 
-				res.redirect('/hubs');
-				return console.log("err: " + err) 
-			}
+	app.delete('/hub/:id/group/:group_id', groupController.deleteGroup);
 
-			var hubOwner = hub.user_owner_id
-			var user = req.user._id
-
-			if(_.isEqual(user, hubOwner)){
-
-				return Group.findOne({_id: req.params.group_id, hub_id: hub.id}, function(err, group){
-					if(err || group === null){ 	
-						req.flash('info', "Group not found.")
-						res.redirect('/hub/' + req.params.id);
-						return console.log("err++: " + err) 	
-					}
-					res.render('group/group', {group : group, hub: hub});
-				})
-
-
-			} else {
-				console.log("not equals");
-				// console.log(req);
-			  // return res.redirect('/hubs');
-			  res.send('404: Page not Found', 404);
-			}
-
-		});
-	});
-
-	app.delete('/hub/:id/group/:group_id', function (req, res) {
-
-		Hub.findById(req.params.id, function(err, hub){
-			if(err){ 
-				res.redirect('/hubs');
-				return console.log("err: " + err) 
-			}
-
-			var hubOwner = hub.user_owner_id
-			var user = req.user._id
-
-			if(_.isEqual(user, hubOwner)){
-
-				Group.findById( req.params.group_id , function(err, group){
-					console.log(group);
-
-					if(err || group === null){ 	
-						req.flash('info', "Group not found.")
-						res.redirect('/hub/' + req.params.id+ '/groups');
-						return console.log("err++: " + err) 	
-					}	
-
-					var persons = group.persons || []
-					if(persons.length > 0){
-						persons.forEach(function(element){
-							Person.findById(element, function(err, entry){
-								if(err || entry === null){ 	
-										req.flash('info', "Entry not found.")
-										res.redirect('/hub/' + req.params.id+ '/groups');
-										return console.log("err++: " + err) 	
-								}	
-									var result = _.without(entry.group, req.params.group_id);
-									console.log("---------> " + result );
-									Person.findByIdAndUpdate(element, { $set: {group: result}}, function(err, entryNext){
-								})
-							})
-						})
-					}
-						Group.remove({_id: req.params.group_id, hub_id: hub.id}, function(err){	
-					// 	if(err){ return console.log("err: " + err) }
-
-						res.redirect('/hub/' + req.params.id);
-					});
-
-				})
-
-			} else {
-				console.log("not equals");
-				// console.log(req);
-				// return res.redirect('/hubs');
-				res.send('404: Page not Found', 404);
-			}
-
-		});
-	
-	});
-
-
-	// todo
 	app.get('/hub/:id/group/:group_id/update',   csrfProtection,  groupController.groupUpdate);
-	// todo end
 
 	app.post('/hub/:id/group/:group_id/update', upload.single('image'),  csrfProtection,  groupController.groupUpdatePost);
 					
-		// Group.findById(req.params.id, function (err, group) {
-		// 	// console.log(group)
-		// 	if (err) return handleError(err);
 
-		// 	group._id = req.params.id;
-		// 	group.title = req.body.title;
-		// 	group.description = req.body.description;
-		
 
-		// 	group.save(function (err) {
-		// 		if (err) return handleError(err);
-		// 		res.redirect('/group/'+req.params.id );
-		// 	});
-		// });
-		
-	// });
+
+
+
+
 
 
 	//**************** ADD PERSONS **********************
-	app.get('/hub/:id/group/:group_id/add_persons', function (req, res) {
-			
-		var group = function(){
-			var person_array = []
-			Group.findById(req.params.group_id, function (err, group) {	
-				// Person_group_join
-				return Person.find({hub_id: req.params.id}, null, function(err, persons){
-				  if(err){ return console.log("err: " + err) }
+	app.get('/hub/:id/group/:group_id/add_persons',  groupController.addPerson);
 
-				  	
-
-				  	async.eachSeries(persons, function (person, callback) {
-				  	  var p = person.toJSON()
-				  	  p.checked = false;
-				  	  // person_array.push(p)
-
-
-					  Person_group_join.find({hub_id: req.params.id, person_id: person._id, group_id: req.params.group_id}, null, function(err, person_group){
-					  	 console.log(person_group)
-					  	if(person_group.length > 0){
-							console.log("true")
-					  	 	p.checked = true;
-					  	 	person_array.push(p)
-					  	} else {
-					  		console.log("false")
-					  	 	p.checked = false;
-					  	 	person_array.push(p)
-					  	}
-					  	// console.log("befor cb " + person_array.length)
-					  	callback(); // Alternatively: callback(new Error());
-
-
-					  
-					  		// person.checked = "true";
-					  		// person_array.push(person)
-					  		// console.log(person_array)
-					   		// res.render('group/add_persons', {person_group: person_group, group : group, persons : persons});
-					  	});
-
-					}, function (err) {
-						// console.log("cb " + person_array.length)
-						// console.log(person_array)
-					  if (err) { throw err; }
-					  // res.render('group/add_persons', { group : group, persons : person_array});
-					  return Person_group_join.find({hub_id: req.params.id}, null, function(err, person_group){
-				   		res.render('group/add_persons', { person_group: person_group, group : group, persons : person_array});
-				  	  });
-
-					  // console.log(person_array);
-					});
-
-
-
-
-
-				  	// persons.forEach(function(name){
-				  	// 	console.log(name._id);
-				  	
-
-				  	// })
-
-
-				  	
-					// console.log(persons);
-					// res.send(persons)
-				});
-				// console.log(group);	
-
-			});
-		}
-
-
-		var hubId = function(method){
-
-			return Hub.find(req.params.id, function(err, hub){
-					if(err || hub === null){ 	
-						req.flash('info', "Hub not found.")
-						res.redirect('/hubs');
-						return console.log("err++: " + err) 	
-					}
-					return method			
-				})	
-		}
-
-		hubId(group());
-
-
-	});
-
-	app.post('/hub/:id/group/:group_id/add_persons', function (req, res,  next) {
-		   // if(err){ return console.log("err: " + err) }
-		    // res.set('Connection', 'close');
-
-		var group_save = function(){
-
-			var person_group_join = new Person_group_join();
-
-			person_group_join.hub_id = mongoose.Types.ObjectId(req.params.id);
-			person_group_join.group_id = mongoose.Types.ObjectId(req.params.group_id);
-			person_group_join.person_id = mongoose.Types.ObjectId(req.body.person_id);
-
-			// console.dir(person_group_join)
-
-			person_group_join.save(function (err, person_group) {
-				if(err || person_group === null){ 	
-					req.flash('info', "Did not save group.")
-					res.redirect('/hub/' + req.params.id+ '/add_group');
-					return console.log("err++: " + err) 	
-				}	
-				// res.redirect('/hub/' + req.params.id+ '/groups');
-				console.log("add person <<<<<<<<<<<<<<")
-				res.send('Completed add person');
-
-			});	
-
-		}
-
-
-		
-
-		hubId(group_save());
-		    
-
-		
-		// next(); 
-
-	})
+	app.post('/hub/:id/group/:group_id/add_persons', groupController.addPersonPost);
 
 	app.delete('/hub/:id/group/:group_id/add_persons', function (req, res,  next) {
 

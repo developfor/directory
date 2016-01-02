@@ -206,8 +206,11 @@ var personController = function(personService, app ){
 						return console.log("err++: " + err) 	
 					}
 					console.log(person);
-					var updateDate = moment(person.update_date).format('ll @ h:mma');
-					var creationDate = moment(person.creation_date).format('ll @ h:mma');
+					// var updateDate = moment(person.update_date).format('ll @ h:mma');
+					// var creationDate = moment(person.creation_date).format('ll @ h:mma');
+					var updateDate = person.update_date
+					var creationDate = person.creation_date
+
 
 
 					var ptitle = person.title || "";
@@ -362,9 +365,25 @@ var personController = function(personService, app ){
 
 
 
+	var addGroups = function (req, res) {
+		var getGroups = function(hub){
+			Group.find({hub_id: hub.id}, function(err, groups){
+				console.log(groups)
+				// res.render('person/add_groups', {  groups : groups});
+			})
+
+		}
+		return hubchecker(req, res, getGroups)
+	}
 
 
 
+	var addGroupsPost = function (req, res) {
+		var postGroups = function(hub){
+			
+		}
+		return hubchecker(req, res, postGroups)
+	}
 
 
 
@@ -594,6 +613,8 @@ var personController = function(personService, app ){
 		person: person,
 		personInfo: personInfo,
 		personGroups: personGroups,
+		addGroupsPost: addGroupsPost,
+		addGroups: addGroups,
 		personUpdate: personUpdate,
 		personUpdatePost: personUpdatePost,
 		personDelete: personDelete
