@@ -8,13 +8,13 @@
               <ul>
              
                 <li>
-                    <a class="no-style-link" href="/hub/<%= hub._id %>/person/<%= person._id %>">description</a>
+                    <a class="no-style-link" href="/hub/<%= hub._id %>/person/<%= person._id %>#i">description</a>
                 </li>
                 <li>
-                    <a class="no-style-link selected" href="/hub/<%= hub._id %>/person/<%= person._id %>/info">information</a>
+                    <a class="no-style-link selected" href="/hub/<%= hub._id %>/person/<%= person._id %>/info#i">information</a>
                 </li>
                 <li>
-                     <a class="no-style-link" href="/hub/<%= hub._id %>/person/<%= person._id %>/groups">groups</a>
+                     <a class="no-style-link" href="/hub/<%= hub._id %>/person/<%= person._id %>/groups#i">groups</a>
                 </li>
                  <li>
                     <a class="no-style-link" href="#">events</a>
@@ -28,8 +28,8 @@
               </ul>
               
             </div>
-
-            <div>
+             <div>
+           <!--  <div id="i"> -->
               <span class="title-info">Full Name:</span>
               <p><%= person.title %> <%= person.first_name %> <%= person.middle_name %> <%= person.last_name %> <%= person.suffix %></p>
 

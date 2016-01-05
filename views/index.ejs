@@ -1,8 +1,9 @@
 <% include _partials/header %>
 
-home page<br>
-<% if (!user) { %>
 
+<% if (!user) { %>
+<h5 style="max-width: 600px;">'Describing' is your personal social encyclopedia. </h5>
+<p> Start describing sign up below. </p>
 	<form action="/login" method="post">
 		<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 		<div>

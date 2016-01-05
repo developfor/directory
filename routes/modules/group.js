@@ -194,75 +194,75 @@ module.exports = function(app) {
 
 
 
-	function personAdd(req,res,next){
-		var person = req.body.person;
+	// function personAdd(req,res,next){
+	// 	var person = req.body.person;
 
-		if(person === undefined){
-			person = [];
-		}
+	// 	if(person === undefined){
+	// 		person = [];
+	// 	}
 
-		if(person.constructor !== Array && person.constructor !== undefined){
-			person = [req.body.person];
-		}
+	// 	if(person.constructor !== Array && person.constructor !== undefined){
+	// 		person = [req.body.person];
+	// 	}
 
 
 
-		Group.findById(req.params.id, function(err, originA){
-		    if(err){ return console.log("err: " + err) }
+	// 	Group.findById(req.params.id, function(err, originA){
+	// 	    if(err){ return console.log("err: " + err) }
 
-			var originA = originA;
-			console.log("originA " + originA.persons);
+	// 		var originA = originA;
+	// 		console.log("originA " + originA.persons);
 			
-			Group.findByIdAndUpdate(req.params.id,{ $set: { persons: person }}, function(err, affected){
-				if(err){ return console.log("err: " + err) }
+	// 		Group.findByIdAndUpdate(req.params.id,{ $set: { persons: person }}, function(err, affected){
+	// 			if(err){ return console.log("err: " + err) }
 
-					var affected = affected;
+	// 				var affected = affected;
 
-				Group.findById(req.params.id, function(err, originB){
-					console.log("originB " + originB.persons);
+	// 			Group.findById(req.params.id, function(err, originB){
+	// 				console.log("originB " + originB.persons);
 
-					var removeArray = _.difference(originA.persons, originB.persons);
-					// console.log(removeArray);
-					removeArray.forEach(function(element){
-						// console.log("element: " +element)
-						Person.findById(element, function(err, entry){
-							console.log(entry.group)
-							var result = _.without(entry.group, req.params.id);
-							console.log(result)
+	// 				var removeArray = _.difference(originA.persons, originB.persons);
+	// 				// console.log(removeArray);
+	// 				removeArray.forEach(function(element){
+	// 					// console.log("element: " +element)
+	// 					Person.findById(element, function(err, entry){
+	// 						console.log(entry.group)
+	// 						var result = _.without(entry.group, req.params.id);
+	// 						console.log(result)
 
-							if(result === undefined){
-								result = [];
-							}
-							if(result.constructor !== Array && result.constructor !== undefined){
-								result = [result];
-							}
+	// 						if(result === undefined){
+	// 							result = [];
+	// 						}
+	// 						if(result.constructor !== Array && result.constructor !== undefined){
+	// 							result = [result];
+	// 						}
 
-							Person.findByIdAndUpdate(element, { $set: {group: result}}, function(err, entryNext){
+	// 						Person.findByIdAndUpdate(element, { $set: {group: result}}, function(err, entryNext){
 						
-							})
+	// 						})
 
-						})
+	// 					})
 
-					})
+	// 				})
 
 					
-				})
+	// 			})
 
 
-				person.forEach(function(entry){
+	// 			person.forEach(function(entry){
 					
 
 
-					Person.findByIdAndUpdate(entry, { $addToSet: {group: req.params.id}}, function(err, entry){
+	// 				Person.findByIdAndUpdate(entry, { $addToSet: {group: req.params.id}}, function(err, entry){
 						
-					})
-				});//end of for each
-	    		res.redirect('/group/'+req.params.id+'/add_persons' );
-			});	
+	// 				})
+	// 			});//end of for each
+	//     		res.redirect('/group/'+req.params.id+'/add_persons' );
+	// 		});	
 
-		})
-		next();
-	}
+	// 	})
+	// 	next();
+	// }
 
 	// app.post('/hub/:id/group/:group_id/add_persons', function (req, res) {
 

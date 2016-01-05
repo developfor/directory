@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 var _ = require('underscore');
+var util = require('util');
 
 var crypto = require('crypto');
 var forEachAsync = require('forEachAsync').forEachAsync;
@@ -65,7 +66,6 @@ var personController = function(personService, app ){
 			var person = new Person();
 			
 			person.hub_id = mongoose.Types.ObjectId(req.params.id);
-
 	
 		    person.title = requestBody.title;
 			person.first_name = requestBody.first_name.replace(/[^a-zA-Z0-9\s]/gi, "");
@@ -78,6 +78,13 @@ var personController = function(personService, app ){
 			person.job_title = requestBody.job_title;
 			person.gender = requestBody.gender;
 			person.birthday = requestBody.birthday;
+
+			// var value = Math.random() * 0xFF | 0;
+			// var grayscale = (value << 16) | (value << 8) | value;
+			// var color = grayscale.toString(16);
+			var color = [ "222222", "333333", "444444", "555555", "666666", "777777", "888888", "999999", "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE"]
+			person.hex_color = color[Math.floor( Math.random() * ( color.length ) ) ] //(Math.random()*0xFFFFFF<<0).toString(16);
+
 
 			person.short_description = requestBody.short_description;
 			person.description = requestBody.description;
@@ -129,6 +136,9 @@ var personController = function(personService, app ){
 
 
 
+
+
+
 	// Read Persons
 	var persons = function (req, res) {
 		var readPersons = function(hub){
@@ -148,8 +158,8 @@ var personController = function(personService, app ){
 				var lastName = req.query.last_name || ""
 
 
-				firstName = firstName.replace(/[^a-zA-Z0-9\s]/gi, "")
-				lastName = lastName.replace(/[^a-zA-Z0-9\s]/gi, "")
+				firstName = firstName.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
+				lastName = lastName.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
 
 				 if(firstName.length <= 0  && lastName.length <= 0){
 				 	var sort = {sort: {update_date: -1} } 
@@ -188,6 +198,10 @@ var personController = function(personService, app ){
 
 
 
+
+
+
+
 	// Read Person
 	var person = function (req, res) {
 		var readPerson = function(hub){
@@ -208,8 +222,8 @@ var personController = function(personService, app ){
 					console.log(person);
 					// var updateDate = moment(person.update_date).format('ll @ h:mma');
 					// var creationDate = moment(person.creation_date).format('ll @ h:mma');
-					var updateDate = person.update_date
-					var creationDate = person.creation_date
+					var updateDate = person.update_date.getTime();
+					var creationDate = person.creation_date.getTime();
 
 
 
@@ -237,6 +251,10 @@ var personController = function(personService, app ){
 
 
 
+
+
+
+
 	var personInfo = function (req, res) {
 
 		var readPerson = function(hub){
@@ -253,8 +271,8 @@ var personController = function(personService, app ){
 						return console.log("err++: " + err) 	
 					}
 					console.log(person);
-					var creationDate = moment(person.creation_date).format('ll @ h:mma');
-					var updateDate = moment(person.update_date).format('ll @ h:mma');
+					var updateDate = person.update_date.getTime();
+					var creationDate = person.creation_date.getTime();
 
 
 					var ptitle = person.title || "";
@@ -278,6 +296,7 @@ var personController = function(personService, app ){
 
 		return hubchecker(req, res, readPerson)
 	}
+
 
 
 
@@ -322,9 +341,8 @@ var personController = function(personService, app ){
 								return console.log("err++: " + err) 	
 							}
 							// console.log(person);
-							var creationDate = moment(person.creation_date).format('ll @ h:mma');
-							var updateDate = moment(person.update_date).format('ll @ h:mma');
-
+							var updateDate = person.update_date.getTime();
+							var creationDate = person.creation_date.getTime();
 
 							var ptitle = person.title || "";
 							var pmiddle = person.middle_name || "";	
@@ -365,25 +383,108 @@ var personController = function(personService, app ){
 
 
 
+
+
+
+
 	var addGroups = function (req, res) {
+
 		var getGroups = function(hub){
+			
 			Group.find({hub_id: hub.id}, function(err, groups){
-				console.log(groups)
-				// res.render('person/add_groups', {  groups : groups});
-			})
+
+				forEachAsync(groups, function (next, element, index, array) {
+					PersonGroupJoin.find({hub_id: element.hub_id, group_id: element._id, person_id: req.params.person_id }, function(err, personGroup){
+
+							if(personGroup.length > 0){
+								// console.log("true")
+						  	 	groups[index].checked = true;
+						  	 	
+						  	} else {
+						  		// console.log("false")
+						  	 	groups[index].checked = false;
+						  	}
+
+						  		next()
+
+					});
+				}).then(function () {
+				    console.log('All requests have finished');
+					   // console.log(groups); 
+					   console.log(groups)
+				    res.render('person/add_groups', {groups : groups});
+				     // console.log(groups);
+
+				});
+
+			});
 
 		}
-		return hubchecker(req, res, getGroups)
+		return hubchecker(req, res, getGroups);
 	}
+
+
+
+
+
+
 
 
 
 	var addGroupsPost = function (req, res) {
-		var postGroups = function(hub){
-			
+		var groupPost = function(hub){
+
+			var personGroupJoin = new PersonGroupJoin();
+
+			personGroupJoin.hub_id = mongoose.Types.ObjectId(hub._id);
+			personGroupJoin.group_id = mongoose.Types.ObjectId(req.body.group_id);
+			personGroupJoin.person_id = mongoose.Types.ObjectId(req.params.person_id);
+
+			// console.dir(person_group_join)
+
+			personGroupJoin.save(function (err, person_group) {
+				if(err || person_group === null){ 	
+					req.flash('info', "Did not save group.")
+					res.redirect('/hub/' + req.params.id+ '/add_group');
+					return console.log("err++: " + err) 	
+				}	
+				// res.redirect('/hub/' + req.params.id+ '/groups');
+				console.log("add person <<<<<<<<<<<<<<")
+				res.send('Completed add person');
+
+			});	
 		}
-		return hubchecker(req, res, postGroups)
+		return hubchecker(req, res, groupPost);
 	}
+
+
+
+
+
+	var removeGroupPost = function(req, res){
+		
+
+		var removeGroup = function(hub){
+			PersonGroupJoin.remove( {
+
+				group_id: req.body.group_id,
+				hub_id: hub._id,
+				person_id: req.params.person_id,
+
+			}, function(err, hub){
+					console.log(hub)
+					res.send('Completed remove person');
+
+			});
+		}
+		return hubchecker(req, res, removeGroup);
+	}
+
+
+	
+
+
+
 
 
 
@@ -405,6 +506,8 @@ var personController = function(personService, app ){
 		}
 		return hubchecker(req, res, readPerson)
 	}
+
+
 
 
 
@@ -445,12 +548,12 @@ var personController = function(personService, app ){
 				    person.title = requestBody.title;
 			
 
-					person.first_name = requestBody.first_name.replace(/[^a-zA-Z0-9\s]/gi, "");
-					person.middle_name = requestBody.middle_name.replace(/[^a-zA-Z0-9\s]/gi, "");
-					person.last_name = requestBody.last_name.replace(/[^a-zA-Z0-9\s]/gi, "");
-					person.lowercase_first_name = requestBody.first_name.toLowerCase();
-					person.lowercase_middle_name = requestBody.middle_name.toLowerCase();
-					person.lowercase_last_name = requestBody.last_name.toLowerCase();
+					person.first_name = requestBody.first_name.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
+					person.middle_name = requestBody.middle_name.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
+					person.last_name = requestBody.last_name.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
+					person.lowercase_first_name = person.first_name.toLowerCase();
+					person.lowercase_middle_name = person.middle_name.toLowerCase();
+					person.lowercase_last_name = person.last_name.toLowerCase();
 
 
 					person.suffix = requestBody.suffix;
@@ -542,10 +645,10 @@ var personController = function(personService, app ){
 
 
 
+
 	var personDelete = function (req, res) {
 
 		var postPerson = function(hub){
-
 
 			var hubOwner = hub.user_owner_id
 			var user = req.user._id
@@ -553,17 +656,18 @@ var personController = function(personService, app ){
 			if(_.isEqual(user, hubOwner)){
 
 				Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
+					 if(!person) {
+				        res.statusCode = 404;
+				        return res.send({ error: 'Not found' });
+				      }
+
 
 					console.log("-----------------");
 					console.log(person.first_name);
 					console.log("-----------------");
 					deleteImgFile(person.img_foldername);
 				
-				      if(!person) {
-				        res.statusCode = 404;
-				        return res.send({ error: 'Not found' });
-				      }
-
+				     
 				      return Person.remove({_id: req.params.person_id, hub_id: hub.id}, function(err) {
 				        if(!err) {
 				          console.log('Removed person');
@@ -614,6 +718,7 @@ var personController = function(personService, app ){
 		personInfo: personInfo,
 		personGroups: personGroups,
 		addGroupsPost: addGroupsPost,
+		removeGroupPost: removeGroupPost,
 		addGroups: addGroups,
 		personUpdate: personUpdate,
 		personUpdatePost: personUpdatePost,

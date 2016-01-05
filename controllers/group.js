@@ -454,6 +454,8 @@ var groupController = function(personService, app ){
 		return hubchecker(req, res, groupPost);
 	}
 
+
+
 	var removePersonPost = function(req, res){
 		console.log(req.body.person_id)
 

@@ -71,6 +71,12 @@ module.exports = function(app) {
 	// READ ADD GROUPS
 	app.get('/hub/:id/person/:person_id/add_groups', personController.addGroups);
 
+	//**************** ADD PERSONS POST
+	app.post('/hub/:id/person/:person_id/add_groups', personController.addGroupsPost);
+	//**************** REMOVE PERSONS POST
+	app.delete('/hub/:id/person/:person_id/add_groups', personController.removeGroupPost);
+
+
 	// READ UPDATE 
 	app.get('/hub/:id/person/:person_id/update', csrfProtection, personController.personUpdate);
 	

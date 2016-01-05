@@ -1,12 +1,8 @@
 <% include ../_partials/header %>
-<%= group %>
-<hr>
 
-
-<hr>
 <form>
 	<% groups.forEach(function(name){ %>
-	<%= JSON.stringify(name) %>
+	<%= JSON.stringify(name._id) %>
 	<%  if(name.checked === true) { %>
 
 	 <input type="checkbox" name="group" value="<%= name._id %>" checked><%= name.first_name %> <%= name.last_name %> <br>
@@ -46,9 +42,4 @@ $('input:checkbox').change(
 </script>
 
 
-<!-- <form action="/add_group" method="post" accept-charset="utf-8">
-		name: <input type="text" name="name" /> <br>	
-		description: <input type="text" name="description" /><br>
 
-		<input type ="submit" value="Save">
-	</form> -->

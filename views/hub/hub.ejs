@@ -51,7 +51,7 @@
 		        				  <img style="background-color: #666; height: 60px; width: 60px;     border: 3px solid #000;" src="/uploads/img/<%= person.img_foldername %>/<%=  person.img_icon  %>"> 
 		                 <!-- <img src="/app/img/no-image.png" > -->
 		        			<% }else{  %>
-		        			 <img style="background-color: #666; height: 60px; width: 60px;     border: 3px solid #000;" >
+		        			 <img style="background-color: #<%= person.hex_color %>; height: 60px; width: 60px;      border: 3px solid #000;" src="/app/img/no-image.png" >
 		        				 <!-- <img src="/app/img/no-image.png" > -->
 		        			<% }  %>
 		        			</a>

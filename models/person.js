@@ -159,7 +159,12 @@ var Person = new Schema({
 	creation_date: {
 		type: Date,
 		default: Date.now
-	}
+	},
+	hex_color: {
+		// require: true,
+		type: String,
+		default: "363636"
+}
 });
 
 // Person.pre('save', function(next) {
