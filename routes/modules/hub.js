@@ -1,6 +1,4 @@
 "use strict";
-var secret_key = require('../../config/secret.js');
-var passport = require('../../config/passport.js');
 var  ensureAuthenticated = function(req, res, next) {
 	  if (req.isAuthenticated()) { return next(); }
 	 res.redirect('/login');
@@ -19,7 +17,7 @@ var nocache = function (req, res, next) {
 var mongoose = require('mongoose');
 var _ = require('underscore');
 
-
+var User = require('../../models/user.js');
 var Hub = require('../../models/hub.js');
 var Person = require('../../models/person.js');
 var Group = require('../../models/group.js');
@@ -29,6 +27,15 @@ module.exports = function(app) {
 
 	app.all('/hub', ensureAuthenticated, nocache);
 	app.all('/hub/*', ensureAuthenticated, nocache);
+
+
+
+
+	app.all('/@', ensureAuthenticated, nocache);
+	app.all('/@/*', ensureAuthenticated, nocache);
+
+
+
 	// app.all('/hubs', ensureAuthenticated, nocache);
 
 	// app.get('/hubs', function (req, res) {
@@ -70,6 +77,14 @@ module.exports = function(app) {
 			
 	// });
 
+
+
+	// @ routing
+	app.get('/@', function (req, res) {
+		res.redirect('/');		
+	});
+
+
 	app.get('/hub', function (req, res) {
 		res.redirect('/');		
 	});
@@ -77,7 +92,97 @@ module.exports = function(app) {
 		res.redirect('/');		
 	});
 
-	
+
+
+
+// @ test begin
+	app.get('/@/:user', function (req, res) {
+		// console.log(req.params.id)
+
+			var userLowerCase = req.params.user.toLowerCase();
+
+			User.findOne({displayname: userLowerCase}, function(err, user) {
+				
+				
+
+				if(err  || user === null){ 
+					res.send('no user by that name');
+					return console.log("err: " + err) 
+				}
+				Hub.findOne({user_owner_id: user._id}, function(err, hub){
+					console.log("user_____________")
+					console.log(user)
+					console.log("hub_____________")
+					console.log(hub)
+
+					if(_.isEqual(user._id, hub.user_owner_id)){
+					  	var sort = {sort: {update_date: -1} } 
+
+						Person.find({hub_id: hub.id}, null, sort, function(err, persons){
+							Group.find({hub_id: hub.id},  null, {}, function(err, groups){	
+								Event.find({hub_id: hub.id}, null, {}, function(err, events){
+									return res.render('hub/hub', {user: req.user, hub: hub, persons: persons, groups: groups, events: events});
+								  	console.log("equals")
+							  	}).limit(5);	
+						  	}).limit(5);
+						}).limit(5);
+
+		  
+					} else {
+						console.log("not equals");
+						// console.log(req);
+					  return res.redirect('/');
+					}
+
+				})
+
+
+
+				
+			})
+
+
+			// return Hub.findById(req.params.user, function(err, hub){
+			// 	if(err  || hub === null){ 
+			// 		res.redirect('/');
+			// 		return console.log("err: " + err) 
+			// 	}
+
+			// 	var hubOnwer = hub.user_owner_id 
+			// 	var user = req.user._id
+
+			// 	// console.log(hub.user_owner_id)
+			// 	// console.log(req.user._id)
+			// 	// console.log(_.isEqual(hub.user_owner_id, req.user._id));
+
+				
+			// 	if(_.isEqual(user, hubOnwer)){
+			// 		var sort = {sort: {update_date: -1} } 
+
+			// 		Person.find({hub_id: hub.id}, null, sort, function(err, persons){
+			// 			Group.find({hub_id: hub.id},  null, {}, function(err, groups){	
+			// 				Event.find({hub_id: hub.id}, null, {}, function(err, events){
+			// 					return res.render('hub/hub', {user: req.user, hub: hub, persons: persons, groups: groups, events: events});
+			// 				  	console.log("equals")
+			// 			  	}).limit(5);	
+			// 		  	}).limit(5);
+			// 		}).limit(5);
+
+		  
+			// 	} else {
+			// 		console.log("not equals");
+			// 		// console.log(req);
+			// 	  return res.redirect('/hubs');
+			// 	}
+			
+			// });
+	});
+
+	// @ test
+
+
+
+
 
 	app.get('/hub/:id', function (req, res) {
 		// console.log(req.params.id)

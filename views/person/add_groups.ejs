@@ -1,5 +1,6 @@
 <% include ../_partials/header %>
 
+<a class="no-style-link selected" href="/@/<%= user.displayname %>/person/<%= person_id %>/groups">person</a>
 <form>
 	<% groups.forEach(function(name){ %>
 	<%= JSON.stringify(name._id) %>

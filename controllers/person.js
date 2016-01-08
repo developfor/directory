@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 var _ = require('underscore');
-var util = require('util');
+
 
 var crypto = require('crypto');
 var forEachAsync = require('forEachAsync').forEachAsync;
@@ -10,6 +10,7 @@ var forEachAsync = require('forEachAsync').forEachAsync;
 var Person = require('../models/person.js');
 var Group = require('../models/group.js');
 var Hub = require('../models/hub.js');
+var User = require('../models/user.js');
 var PersonGroupJoin = require('../models/person_group_join.js');
 var csrf = require('csurf')
 
@@ -25,15 +26,25 @@ var moment = require('moment');
 
 // Private Functions
 var hubchecker = function(req, res, method){
-	Hub.findById(req.params.id, function(err, hub){
-		if(err){ 
-			res.redirect('/hubs');
+
+	var userLowerCase = req.params.id.toLowerCase();
+
+	User.findOne({displayname: userLowerCase}, function(err, user) {
+		console.log("checking hub")
+		if(err  || user === null){ 
+			res.send('no user by that name');
 			return console.log("err: " + err) 
 		}
-		console.log("hubchecked")
 
-		return method(hub);
+		Hub.findOne({user_owner_id: user._id}, function(err, hub){
+			if(err){ 
+				res.redirect('/hubs');
+				return console.log("err: " + err) 
+			}
+			console.log("hubchecked")
 
+			return method(hub);
+		});
 	});
 }
 
@@ -209,9 +220,10 @@ var personController = function(personService, app ){
 			
 			
 			var hubOwner = hub.user_owner_id
-			var user = req.user._id
+			var userId = req.user._id
+			var user = req.user
 
-			if(_.isEqual(user, hubOwner)){
+			if(_.isEqual(userId, hubOwner)){
 
 				return Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
 					if(err || person === null){ 	
@@ -233,7 +245,7 @@ var personController = function(personService, app ){
 
 					var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
 
-					res.render('person/person', {title: title, person : person, hub: hub, updateDate: updateDate, creationDate: creationDate   });
+					res.render('person/person', {title: title, user: user, person : person, hub: hub, updateDate: updateDate, creationDate: creationDate   });
 				})
 
 			} else {
@@ -260,9 +272,10 @@ var personController = function(personService, app ){
 		var readPerson = function(hub){
 
 			var hubOwner = hub.user_owner_id
-			var user = req.user._id
+			var userID = req.user._id
+			var user = req.user
 
-			if(_.isEqual(user, hubOwner)){
+			if(_.isEqual(userID, hubOwner)){
 
 				return Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
 					if(err || person === null){ 	
@@ -282,7 +295,7 @@ var personController = function(personService, app ){
 					var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
 
 
-					res.render('person/info', {title: title, person : person, hub: hub, updateDate: updateDate, creationDate: creationDate   });
+					res.render('person/info', {title: title, person : person, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate   });
 				})
 
 			} else {
@@ -311,9 +324,10 @@ var personController = function(personService, app ){
 		var readPerson = function(hub){
 
 			var hubOwner = hub.user_owner_id
-			var user = req.user._id
+			var userId = req.user._id
+			var user = req.user
 
-			if(_.isEqual(user, hubOwner)){
+			if(_.isEqual(userId, hubOwner)){
 
 				PersonGroupJoin.find({person_id: req.params.person_id, hub_id: hub.id}, function(err, groupJoins){		
 
@@ -349,7 +363,7 @@ var personController = function(personService, app ){
 							var psuffix = person.suffix || "";
 							console.log(groupArray);
 							var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
-							res.render('person/groups', {title: title, person : person, hub: hub, updateDate: updateDate, creationDate: creationDate, groupArray: groupArray });
+							res.render('person/groups', {title: title, person : person, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate, groupArray: groupArray });
 
 
 						})
@@ -390,6 +404,8 @@ var personController = function(personService, app ){
 	var addGroups = function (req, res) {
 
 		var getGroups = function(hub){
+			var hubOwner = hub.user_owner_id
+			var user = req.user
 			
 			Group.find({hub_id: hub.id}, function(err, groups){
 
@@ -412,7 +428,7 @@ var personController = function(personService, app ){
 				    console.log('All requests have finished');
 					   // console.log(groups); 
 					   console.log(groups)
-				    res.render('person/add_groups', {groups : groups});
+				    res.render('person/add_groups', {groups : groups, user:user, person_id: req.params.person_id});
 				     // console.log(groups);
 
 				});
@@ -651,9 +667,10 @@ var personController = function(personService, app ){
 		var postPerson = function(hub){
 
 			var hubOwner = hub.user_owner_id
-			var user = req.user._id
+			var userId = req.user._id
+			var user = req.user
 
-			if(_.isEqual(user, hubOwner)){
+			if(_.isEqual(userId, hubOwner)){
 
 				Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
 					 if(!person) {

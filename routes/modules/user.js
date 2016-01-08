@@ -104,79 +104,91 @@ module.exports = function(app) {
   app.get('/signup', function(req, res){
     // console.log(res)
     if (res.locals.login){ return res.redirect('/')}
-    res.render('signup', { user: req.user, message: req.session.messages });
-  });
+      res.render('signup', { user: req.user, message: req.session.messages });
+    });
 
   app.post('/signup', function(req, res, next){
-    console.log(req.body)
+    
     if (res.locals.login){ return res.redirect('/')}
 
 
     var user = new User(req.body);
+    // userName = user.displayname.toLowerCase();
+    user.displayname = req.body.displayname.toLowerCase();
+
+    console.log(user)
+
+    if(/^(\w){1,20}$/.test(user.displayname)){ 
+      console.log("good display name")
+      // return res.redirect('/signup' );
     
-    user.save(function(err) {
 
-      
+      user.save(function(err) {
+
+        
 
 
-      if(err) {
-        console.log(err);
-        req.session.messages =  "There was an error.";
-        if (err.code === 11000){
-           req.session.messages =  "User already exists.";
+        if(err) {
+          console.log(err);
+          // req.session.messages =  "There was an error.";
+          // if (err.code === 11000){
+          //    req.session.messages =  "User already exists.";
+          // }
+         
+
+          return res.redirect('/signup' );
+        } else {
+
+          // console.log('user: ' + user.email + " saved.");
+          // return res.redirect('/account');
+          // hub.save(function (err, person) {
+        //   if (err) return console.error(err);
+          
+        // });
+
+          
+
+
+
+          passport.authenticate('local', function(err, user, info) {
+             // console.log("this " +user)
+             
+            if (err) { return next(err) }
+            if (!user) {
+              // req.session.messages =  [info.message];
+              req.flash('info', info.message)
+              return res.redirect('/signup')
+            }
+            req.logIn(user, function(err) {
+              if (err) { return next(err); }
+                 console.log("logged in");
+                 console.log( req.user);
+                // console.log( req.body.title);
+                var hub = new Hub();
+                // hub.title = req.body.title
+                // hub.description = req.body.description
+                hub.user_owner_id = req.user._id
+
+                hub.save(function (err, person) {
+                  if (err) return console.error(err);
+                  res.redirect('/');
+                }); 
+
+          
+
+
+              // return res.redirect('/');
+             
+              
+            });
+          })(req, res, next);;
+
         }
-       
+      });
 
-        return res.redirect('/signup' );
-      } else {
-
-        // console.log('user: ' + user.email + " saved.");
-        // return res.redirect('/account');
-        // hub.save(function (err, person) {
-      //   if (err) return console.error(err);
-        
-      // });
-
-        
-
-
-
-        passport.authenticate('local', function(err, user, info) {
-           // console.log("this " +user)
-           
-          if (err) { return next(err) }
-          if (!user) {
-            // req.session.messages =  [info.message];
-            req.flash('info', info.message)
-            return res.redirect('/signup')
-          }
-          req.logIn(user, function(err) {
-            if (err) { return next(err); }
-               console.log("logged in");
-               console.log( req.user);
-              // console.log( req.body.title);
-              var hub = new Hub();
-              // hub.title = req.body.title
-              // hub.description = req.body.description
-              hub.user_owner_id = req.user._id
-
-              hub.save(function (err, person) {
-                if (err) return console.error(err);
-                res.redirect('/');
-              }); 
-
-        
-
-
-            // return res.redirect('/');
-           
-            
-          });
-        })(req, res, next);;
-
-      }
-    });
-
+    }else{
+      return res.redirect('/signup')
+    }
 
     // res.render('signup', { user: req.user });
   });

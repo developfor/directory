@@ -53,26 +53,26 @@ module.exports = function(app) {
 
 	
 	// ADD GROUP
-	app.get('/hub/:id/add_group', csrfProtection,  groupController.addGroup)
+	app.get('/@/:id/add_group', csrfProtection,  groupController.addGroup)
 
-	app.post('/hub/:id/add_group', upload.single('image'), csrfProtection, groupController.addGroupPost)
+	app.post('/@/:id/add_group', upload.single('image'), csrfProtection, groupController.addGroupPost)
 
-	app.get('/hub/:id/groups',  groupController.groups);
+	app.get('/@/:id/groups',  groupController.groups);
 
-	app.get('/hub/:id/group/:group_id', groupController.group);
+	app.get('/@/:id/group/:group_id', groupController.group);
 
-	app.delete('/hub/:id/group/:group_id', groupController.deleteGroup);
+	app.delete('/@/:id/group/:group_id', groupController.deleteGroup);
 
-	app.get('/hub/:id/group/:group_id/update',   csrfProtection,  groupController.groupUpdate);
+	app.get('/@/:id/group/:group_id/update',   csrfProtection,  groupController.groupUpdate);
 
-	app.post('/hub/:id/group/:group_id/update', upload.single('image'),  csrfProtection,  groupController.groupUpdatePost);
+	app.post('/@/:id/group/:group_id/update', upload.single('image'),  csrfProtection,  groupController.groupUpdatePost);
 				
 	//**************** ADD PERSONS **********************
-	app.get('/hub/:id/group/:group_id/add_persons',  groupController.addPerson);
+	app.get('/@/:id/group/:group_id/add_persons',  groupController.addPerson);
 	//**************** ADD PERSONS POST
-	app.post('/hub/:id/group/:group_id/add_persons', groupController.addPersonPost);
+	app.post('/@/:id/group/:group_id/add_persons', groupController.addPersonPost);
 
-	app.delete('/hub/:id/group/:group_id/add_persons',  groupController.removePersonPost);
+	app.delete('/@/:id/group/:group_id/add_persons',  groupController.removePersonPost);
 
 	// app.delete('/hub/:id/group/:group_id/add_persons', function (req, res,  next) {
 

@@ -10,6 +10,7 @@ var async = require('async')
 var Person = require('../models/person.js');
 var Group = require('../models/group.js');
 var Hub = require('../models/hub.js');
+var User = require('../models/user.js');
 var PersonGroupJoin = require('../models/person_group_join.js');
 
 var csrf = require('csurf')
@@ -26,17 +27,30 @@ var moment = require('moment');
 
 // Private Functions
 var hubchecker = function(req, res, method){
-	Hub.findById(req.params.id, function(err, hub){
-		if(err){ 
-			res.redirect('/hubs');
+
+	var userLowerCase = req.params.id.toLowerCase();
+
+	User.findOne({displayname: userLowerCase}, function(err, user) {
+		console.log("checking hub")
+		if(err  || user === null){ 
+			res.send('no user by that name');
 			return console.log("err: " + err) 
 		}
-		console.log("hubchecked")
 
-		return method(hub);
+		Hub.findOne({user_owner_id: user._id}, function(err, hub){
+			if(err){ 
+				res.redirect('/hubs');
+				return console.log("err: " + err) 
+			}
+			console.log("hubchecked")
 
+			return method(hub);
+		});
 	});
 }
+
+
+
 
 var groupController = function(personService, app ){
 
@@ -45,9 +59,10 @@ var groupController = function(personService, app ){
 		var readGroup = function(hub){
 
 			var hubOwner = hub.user_owner_id
-			var user = req.user._id
+			var userId = req.user._id
+			var user = req.user
 
-			if(_.isEqual(user, hubOwner)){
+			if(_.isEqual(userId, hubOwner)){
 
 				return Group.findOne({_id: req.params.group_id, hub_id: hub.id}, function(err, group){
 					if(err || group === null){ 	
@@ -55,7 +70,7 @@ var groupController = function(personService, app ){
 						res.redirect('/hub/' + req.params.id);
 						return console.log("err++: " + err) 	
 					}
-					res.render('group/group', {group : group, hub: hub});
+					res.render('group/group', {group : group, hub: hub, user: user});
 				})
 
 			} else {
@@ -77,9 +92,9 @@ var groupController = function(personService, app ){
 
 		var readGroup = function(hub){
 			var hubOwner = hub.user_owner_id
-			var user = req.user._id
+			var userId = req.user._id
 
-			if(_.isEqual(user, hubOwner)){
+			if(_.isEqual(userId, hubOwner)){
 
 				Group.findById( req.params.group_id , function(err, group){
 					// console.log(group);
@@ -128,13 +143,13 @@ var groupController = function(personService, app ){
 	var groups = function (req, res) {
 		var readGroups = function(hub){
 			var hubOwner = hub.user_owner_id
-			var user = req.user._id
-			
-			if(_.isEqual(user, hubOwner)){
+			var userId = req.user._id
+			var user = req.user
+			if(_.isEqual(userId, hubOwner)){
 				Group.find({hub_id: hub.id}, function(err, groups){
 					if(err){ return console.log("err: " + err) }
 					// console.log(groups);
-					res.render('group/groups', {hub: hub, groups : groups});
+					res.render('group/groups', {hub: hub, groups : groups, user: user});
 				})
 			} else {
 				console.log("not equals");
@@ -270,9 +285,9 @@ var groupController = function(personService, app ){
 		var postGroup = function(hub){
 
 			var hubOwner = hub.user_owner_id
-			var user = req.user._id
+			var userId = req.user._id
 
-			if(_.isEqual(user, hubOwner)){
+			if(_.isEqual(userId, hubOwner)){
 
 
 				Group.findOne({_id: req.params.group_id, hub_id: hub.id}, function (err, group) {

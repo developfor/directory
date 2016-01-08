@@ -31,7 +31,7 @@
           <div class="four columns">
             <div class="content-box">
             	<p class="up-title" >add a person:</p>
-            	<a  class="button button-primary" href="/hub/<%= hub.id %>/add_person">+ add person</a>
+            	<a  class="button button-primary" href="/@/<%= user.displayname %>/add_person">+ add person</a>
               <% if(persons.length > 0){ %>
           		<hr>
 
@@ -46,7 +46,7 @@
    
 		            <li style="list-style: none;">
 		                <div style="width: 68px; float: left;">
-		                	<a href="/hub/<%= hub._id %>/person/<%= person._id %>">
+		                	<a href="/@/<%= user.displayname %>/person/<%= person._id %>">
 		              <%  if(person.img_foldername && person.img_thumbnail){ %>
 		        				  <img style="background-color: #666; height: 60px; width: 60px;     border: 3px solid #000;" src="/uploads/img/<%= person.img_foldername %>/<%=  person.img_icon  %>"> 
 		                 <!-- <img src="/app/img/no-image.png" > -->
@@ -58,7 +58,7 @@
 		                
 		                </div>
 		                <div style="float: left; margin-left: 5px; width: 60%;">
-		                	<p class="title-info"  ><a href="/hub/<%= hub._id %>/person/<%= person._id %>"><%= person.title  %> <%= person.first_name  %> <%= person.middle_name  %> <%= person.last_name  %> <%= person.suffix %></a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= person.update_date %>"> </span> <%= person.update_date %></span>   -->
+		                	<p class="title-info"  ><a href="/@/<%= user.displayname %>/person/<%= person._id %>"><%= person.title  %> <%= person.first_name  %> <%= person.middle_name  %> <%= person.last_name  %> <%= person.suffix %></a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= person.update_date %>"> </span> <%= person.update_date %></span>   -->
 		                	</p>
 
 		             
@@ -73,7 +73,7 @@
               </div>
               
 
-              <a class="button button-primary" href="/hub/<%= hub.id %>/persons">view all people</a><br>
+              <a class="button button-primary" href="/@/<%= user.displayname %>/persons">view all people</a><br>
               <% } %>
 
             </div>
@@ -86,7 +86,7 @@
  		<div class="four columns">
             <div class="content-box">
             	<p class="up-title" >add a group:</p>
-            	 <a  class="button button-primary" href="/hub/<%= hub.id %>/add_group">+ add group</a>
+            	 <a  class="button button-primary" href="/@/<%= user.displayname %>/add_group">+ add group</a>
               <% if(groups.length > 0){ %>
         			<hr>
 
@@ -100,7 +100,7 @@
                   <li style="list-style: none;">
                     <div style="width: 68px; float: left;">
 
-	                    <a href="/hub/<%= hub._id %>/group/<%= group._id %>">
+	                    <a href="/@/<%= user.displayname %>/group/<%= group._id %>">
 	        			    <%  if(group.img_foldername && group.img_thumbnail){ %>
                       <img style="background-color: #666; height: 60px; width: 60px;     border: 3px solid #000;" src="/uploads/img/<%= group.img_foldername %>/<%=  group.img_icon  %>"> 
                      <!-- <img src="/app/img/no-image.png" > -->
@@ -112,7 +112,7 @@
                     	
                     </div>
                     <div style="float: left; width: 60%; margin-left: 5px;">
-                      <p class="title-info"  ><a href="/hub/<%= hub._id %>/group/<%= group._id %>"><%= group.title  %></a>
+                      <p class="title-info"  ><a href="/@/<%= user.displayname %>/group/<%= group._id %>"><%= group.title  %></a>
   
                       </p>
 
@@ -127,7 +127,7 @@
                 </ul>
               </div>
               
-              <a class="button button-primary" href="/hub/<%= hub.id %>/groups">view all groups</a><br>
+              <a class="button button-primary" href="/@/<%= user.displayname %>/groups">view all groups</a><br>
              <% } %>
             </div>
           </div>
@@ -135,7 +135,7 @@
            <div class="four columns">
             <div class="content-box">
             	<p class="up-title" >add an event:</p>
-            	 <a  class="button button-primary" href="/hub/<%= hub.id %>/add_event">+ add event</a>
+            	 <a  class="button button-primary" href="/@/<%= user.displayname %>/add_event">+ add event</a>
 
               <% if(events.length > 0){ %>
               <hr>
@@ -156,7 +156,7 @@
                     
                     </div> -->
                     <div style="float: left; width: 60%;">
-                      <p class="title-info"  ><a href="/hub/<%= hub._id %>/event/<%= event._id %>"> <%= event.title  %> </a><br>
+                      <p class="title-info"  ><a href="/@/<%= user.displayname %>/event/<%= event._id %>"> <%= event.title  %> </a><br>
   
                       </p>
 
@@ -173,7 +173,7 @@
                 </ul>
               </div>
 
-               <a class="button button-primary" href="/hub/<%= hub.id %>/events">view all events</a><br>
+               <a class="button button-primary" href="/@/<%= user.displayname %>/events">view all events</a><br>
                   <% } %>
             </div>
           </div>

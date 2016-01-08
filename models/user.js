@@ -10,13 +10,20 @@ var crypto= require('crypto')
 var userSchema = new Schema({
   displayname: { 
   	type: String, 
-  	required: true
+  	required: true,
+    lowercase: true,
+    validate: /^(\w){1,20}$/
   },
   email: { 
   	type: String, 
   	required: true, 
   	unique: true,
-    lowercase: true
+    lowercase: true,
+    validate: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    // validator: function(v) {
+    //       return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/.test(v);
+    //     },
+    //     message: '{VALUE} is not a valid email!'
   },
   password: { 
   	type: String, 

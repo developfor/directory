@@ -43,48 +43,99 @@ module.exports = function(app) {
 	    extended: true
 	}));
 
-	app.all('/hub', ensureAuthenticated, nocache);
-	app.all('/hub/*', ensureAuthenticated, nocache);
-	app.all('/hub/:id/add_person', ensureAuthenticated, nocache);
-	app.all('/hub/:id/persons',ensureAuthenticated, nocache);
-	app.all('/hub/:id/person',ensureAuthenticated, nocache);
-	app.all('/hub/:id/person/*',ensureAuthenticated, nocache);
+	// app.all('/hub', ensureAuthenticated, nocache);
+	// app.all('/hub/*', ensureAuthenticated, nocache);
+	// app.all('/hub/:id/add_person', ensureAuthenticated, nocache);
+	// app.all('/hub/:id/persons',ensureAuthenticated, nocache);
+	// app.all('/hub/:id/person',ensureAuthenticated, nocache);
+	// app.all('/hub/:id/person/*',ensureAuthenticated, nocache);
+
+
+	app.all('/@', ensureAuthenticated, nocache);
+	app.all('/@/*', ensureAuthenticated, nocache);
+	app.all('/@/:id/add_person', ensureAuthenticated, nocache);
+	app.all('/@/:id/persons',ensureAuthenticated, nocache);
+	app.all('/@/:id/person',ensureAuthenticated, nocache);
+	app.all('/@/:id/person/*',ensureAuthenticated, nocache);
+
+
+	// // READ CREATE 
+	// app.get('/hub/:id/add_person', csrfProtection, personController.add_person);
+
+	// // POST CREATE parseForm, csrfProtection,
+	// app.post('/hub/:id/add_person', upload.single('image'), csrfProtection,  personController.add_person_post);
+
+	// // READ PERSONS
+	// app.get('/hub/:id/persons', personController.persons);
+
+	// // READ PERSON
+	// app.get('/hub/:id/person/:person_id', personController.person);
+
+	// // READ INFO
+	// app.get('/hub/:id/person/:person_id/info', personController.personInfo);
+
+	// // READ GROUPS
+	// app.get('/hub/:id/person/:person_id/groups', personController.personGroups);
+
+	// // READ ADD GROUPS
+	// app.get('/hub/:id/person/:person_id/add_groups', personController.addGroups);
+
+	// //**************** ADD PERSONS POST
+	// app.post('/hub/:id/person/:person_id/add_groups', personController.addGroupsPost);
+	// //**************** REMOVE PERSONS POST
+	// app.delete('/hub/:id/person/:person_id/add_groups', personController.removeGroupPost);
+
+
+	// // READ UPDATE 
+	// app.get('/hub/:id/person/:person_id/update', csrfProtection, personController.personUpdate);
+	
+ //    // POST UPDATE
+	// app.post('/hub/:id/person/:person_id/update', upload.single('image'), csrfProtection, personController.personUpdatePost);
+
+	// // DELETE
+	// app.delete('/hub/:id/person/:person_id', personController.personDelete);
+
+
+
+
+
 
 	// READ CREATE 
-	app.get('/hub/:id/add_person', csrfProtection, personController.add_person);
+	app.get('/@/:id/add_person', csrfProtection, personController.add_person);
 
 	// POST CREATE parseForm, csrfProtection,
-	app.post('/hub/:id/add_person', upload.single('image'), csrfProtection,  personController.add_person_post);
+	app.post('/@/:id/add_person', upload.single('image'), csrfProtection,  personController.add_person_post);
 
 	// READ PERSONS
-	app.get('/hub/:id/persons', personController.persons);
+	app.get('/@/:id/persons', personController.persons);
 
 	// READ PERSON
-	app.get('/hub/:id/person/:person_id', personController.person);
+	app.get('/@/:id/person/:person_id', personController.person);
 
 	// READ INFO
-	app.get('/hub/:id/person/:person_id/info', personController.personInfo);
+	app.get('/@/:id/person/:person_id/info', personController.personInfo);
 
 	// READ GROUPS
-	app.get('/hub/:id/person/:person_id/groups', personController.personGroups);
+	app.get('/@/:id/person/:person_id/groups', personController.personGroups);
 
 	// READ ADD GROUPS
-	app.get('/hub/:id/person/:person_id/add_groups', personController.addGroups);
+	app.get('/@/:id/person/:person_id/add_groups', personController.addGroups);
 
 	//**************** ADD PERSONS POST
-	app.post('/hub/:id/person/:person_id/add_groups', personController.addGroupsPost);
+	app.post('/@/:id/person/:person_id/add_groups', personController.addGroupsPost);
+	
 	//**************** REMOVE PERSONS POST
-	app.delete('/hub/:id/person/:person_id/add_groups', personController.removeGroupPost);
-
+	app.delete('/@/:id/person/:person_id/add_groups', personController.removeGroupPost);
 
 	// READ UPDATE 
-	app.get('/hub/:id/person/:person_id/update', csrfProtection, personController.personUpdate);
+	app.get('/@/:id/person/:person_id/update', csrfProtection, personController.personUpdate);
 	
     // POST UPDATE
-	app.post('/hub/:id/person/:person_id/update', upload.single('image'), csrfProtection, personController.personUpdatePost);
+	app.post('/@/:id/person/:person_id/update', upload.single('image'), csrfProtection, personController.personUpdatePost);
 
 	// DELETE
-	app.delete('/hub/:id/person/:person_id', personController.personDelete);
+	app.delete('/@/:id/person/:person_id', personController.personDelete);
+
 
 }
 
