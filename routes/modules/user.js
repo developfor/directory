@@ -113,12 +113,12 @@ module.exports = function(app) {
 
 
     var user = new User(req.body);
-    // userName = user.displayname.toLowerCase();
-    user.displayname = req.body.displayname.toLowerCase();
+    // userName = user.username.toLowerCase();
+    user.username = req.body.username.toLowerCase();
 
     console.log(user)
 
-    if(/^(\w){1,20}$/.test(user.displayname)){ 
+    if(/^(\w){1,20}$/.test(user.username)){ 
       console.log("good display name")
       // return res.redirect('/signup' );
     

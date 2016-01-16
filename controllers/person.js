@@ -29,7 +29,7 @@ var hubchecker = function(req, res, method){
 
 	var userLowerCase = req.params.id.toLowerCase();
 
-	User.findOne({displayname: userLowerCase}, function(err, user) {
+	User.findOne({username: userLowerCase}, function(err, user) {
 		console.log("checking hub")
 		if(err  || user === null){ 
 			res.send('no user by that name');
@@ -38,7 +38,7 @@ var hubchecker = function(req, res, method){
 
 		Hub.findOne({user_owner_id: user._id}, function(err, hub){
 			if(err){ 
-				res.redirect('/hubs');
+				res.redirect('/');
 				return console.log("err: " + err) 
 			}
 			console.log("hubchecked")
@@ -68,7 +68,7 @@ var personController = function(personService, app ){
 
 	// ADD Person
 	var add_person_post = function (req, res) {
-		var postPerson = function(){
+		var postPerson = function(hub){
 
 			var token = crypto.randomBytes(8).toString('hex') + "_" +Date.now(); 
 			var randomString = token;
@@ -76,8 +76,8 @@ var personController = function(personService, app ){
 			var requestBody = req.body;
 			var person = new Person();
 			
-			person.hub_id = mongoose.Types.ObjectId(req.params.id);
-	
+			person.hub_id = hub._id;
+
 		    person.title = requestBody.title;
 			person.first_name = requestBody.first_name.replace(/[^a-zA-Z0-9\s]/gi, "");
 			person.middle_name = requestBody.middle_name.replace(/[^a-zA-Z0-9\s]/gi, "");
@@ -86,16 +86,11 @@ var personController = function(personService, app ){
 			person.lowercase_middle_name = requestBody.middle_name.toLowerCase();
 			person.lowercase_last_name = requestBody.last_name.toLowerCase();
 			person.suffix = requestBody.suffix;
+
 			person.job_title = requestBody.job_title;
 			person.gender = requestBody.gender;
-			person.birthday = requestBody.birthday;
 
-			// var value = Math.random() * 0xFF | 0;
-			// var grayscale = (value << 16) | (value << 8) | value;
-			// var color = grayscale.toString(16);
-			var color = [ "222222", "333333", "444444", "555555", "666666", "777777", "888888", "999999", "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE"]
-			person.hex_color = color[Math.floor( Math.random() * ( color.length ) ) ] //(Math.random()*0xFFFFFF<<0).toString(16);
-
+			person.birthday = new Date(requestBody.birth_month + " " + requestBody.birth_day + " " + requestBody.birth_year)
 
 			person.short_description = requestBody.short_description;
 			person.description = requestBody.description;
@@ -103,8 +98,20 @@ var personController = function(personService, app ){
 			person.email = requestBody.email;
 			person.primary_phone = requestBody.primary_phone;
 			person.mobile_phone = requestBody.mobile_phone;
-			person.address = requestBody.address;
+			person.fax = requestBody.fax;
+
+			person.street = requestBody.street;
+			person.city = requestBody.city;
+			person.state_province_region= requestBody.state_province_region;
+			person.postal_code = requestBody.postal_code;
+			person.country = requestBody.country;
+
 			person.web_address = requestBody.web_address;
+
+
+
+			var color = [ "222222", "333333", "444444", "555555", "666666", "777777", "888888", "999999", "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE"]
+			person.hex_color = color[Math.floor( Math.random() * ( color.length ) ) ] //(Math.random()*0xFFFFFF<<0).toString(16);
 
 
 			var save = function(){
@@ -114,10 +121,10 @@ var personController = function(personService, app ){
 						// res.send({ error:err });
 						// res.send();
 						req.flash('message','something went wrong');
-						return res.redirect("/hub/"+req.params.id+"/add_person" );
+						return res.redirect("/@/"+req.params.id+"/add_person" );
 					} else {
 						console.log(person)
-						return res.redirect("/hub/"+req.params.id+"/person/"+person._id );
+						return res.redirect("/@/"+req.params.id+"/person/"+person._id );
 					}	
 				});
 			}
@@ -183,7 +190,7 @@ var personController = function(personService, app ){
 
 				Person.find({hub_id: hub.id, lowercase_first_name: new RegExp('^'+firstName.toLowerCase(), "i"), lowercase_last_name: new RegExp('^'+lastName.toLowerCase(), "i")}, null, sort, function(err, persons){
 					if(err){ 
-						res.redirect('/hubs');
+						res.redirect('/');
 					    console.log("err: " + err) 
 					}
 					
@@ -196,7 +203,7 @@ var personController = function(personService, app ){
 			} else {
 				console.log("not equals");
 				// console.log(req);
-			  return res.redirect('/hubs');
+			  return res.redirect('/');
 			}		
 			
 		}
@@ -228,20 +235,19 @@ var personController = function(personService, app ){
 				return Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
 					if(err || person === null){ 	
 						req.flash('info', "Person not found.")
-						res.redirect('/hub/:id');
+						res.redirect('/@/:id');
 						return console.log("err++: " + err) 	
 					}
-					console.log(person);
-					// var updateDate = moment(person.update_date).format('ll @ h:mma');
-					// var creationDate = moment(person.creation_date).format('ll @ h:mma');
+
 					var updateDate = person.update_date.getTime();
 					var creationDate = person.creation_date.getTime();
-
-
 
 					var ptitle = person.title || "";
 					var pmiddle = person.middle_name || "";	
 					var psuffix = person.suffix || "";
+
+
+
 
 					var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
 
@@ -280,18 +286,42 @@ var personController = function(personService, app ){
 				return Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
 					if(err || person === null){ 	
 						req.flash('info', "Person not found.")
-						res.redirect('/hub/:id');
+						res.redirect('/@/:id');
 						return console.log("err++: " + err) 	
 					}
 					console.log(person);
 					var updateDate = person.update_date.getTime();
 					var creationDate = person.creation_date.getTime();
 
+					var getAge = function(dateString) {
+					    var today = new Date();
+					    var birthDate = new Date(dateString);
+					    var age = today.getFullYear() - birthDate.getFullYear();
+					    var m = today.getMonth() - birthDate.getMonth();
+					    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+					        age--;
+					    }
+					    return age;
+					}
+
+					person.age = getAge(new Date(person.birthday))
+
 
 					var ptitle = person.title || "";
 					var pmiddle = person.middle_name || "";	
 					var psuffix = person.suffix || "";
 
+
+					var commaCountry = ""
+					if(person.country !== undefined){ commaCountry = ","} 
+
+					person.address = person.street  +" "+  person.city +" "+ person.state_province_region +" "+ person.postal_code +" "+  person.country;
+
+
+					if(person.birthday){ 
+						person.birthday = moment(person.birthday).format("LL")
+					}
+					
 					var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
 
 
@@ -351,7 +381,7 @@ var personController = function(personService, app ){
 						Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
 							if(err || person === null){ 	
 								req.flash('info', "Person not found.")
-								res.redirect('/hub/:id');
+								res.redirect('/@/:id');
 								return console.log("err++: " + err) 	
 							}
 							// console.log(person);
@@ -406,31 +436,34 @@ var personController = function(personService, app ){
 		var getGroups = function(hub){
 			var hubOwner = hub.user_owner_id
 			var user = req.user
+
+			Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
 			
-			Group.find({hub_id: hub.id}, function(err, groups){
+				Group.find({hub_id: hub.id}, function(err, groups){
 
-				forEachAsync(groups, function (next, element, index, array) {
-					PersonGroupJoin.find({hub_id: element.hub_id, group_id: element._id, person_id: req.params.person_id }, function(err, personGroup){
+					forEachAsync(groups, function (next, element, index, array) {
+						PersonGroupJoin.find({hub_id: element.hub_id, group_id: element._id, person_id: req.params.person_id }, function(err, personGroup){
 
-							if(personGroup.length > 0){
-								// console.log("true")
-						  	 	groups[index].checked = true;
-						  	 	
-						  	} else {
-						  		// console.log("false")
-						  	 	groups[index].checked = false;
-						  	}
+								if(personGroup.length > 0){
+									// console.log("true")
+							  	 	groups[index].checked = true;
+							  	 	
+							  	} else {
+							  		// console.log("false")
+							  	 	groups[index].checked = false;
+							  	}
 
-						  		next()
+							  		next()
+
+						});
+					}).then(function () {
+					    console.log('All requests have finished');
+						   // console.log(groups); 
+						   console.log(groups)
+					    res.render('person/add_groups', {groups : groups, user:user, person: person});
+					     // console.log(groups);
 
 					});
-				}).then(function () {
-				    console.log('All requests have finished');
-					   // console.log(groups); 
-					   console.log(groups)
-				    res.render('person/add_groups', {groups : groups, user:user, person_id: req.params.person_id});
-				     // console.log(groups);
-
 				});
 
 			});
@@ -461,7 +494,7 @@ var personController = function(personService, app ){
 			personGroupJoin.save(function (err, person_group) {
 				if(err || person_group === null){ 	
 					req.flash('info', "Did not save group.")
-					res.redirect('/hub/' + req.params.id+ '/add_group');
+					res.redirect('/@/' + req.params.id+ '/add_group');
 					return console.log("err++: " + err) 	
 				}	
 				// res.redirect('/hub/' + req.params.id+ '/groups');
@@ -511,10 +544,17 @@ var personController = function(personService, app ){
 			return Person.findById(req.params.person_id, function(err, person){
 				if(err || person === null){ 	
 					req.flash('info', "Person not found.")
-					res.redirect('/hub/:id');
+					res.redirect('/@/:id');
 					return console.log("err++: " + err) 	
 				}	
+				
+
+				person.birth_month = moment(new Date(person.birthday)).format('MMMM').toLowerCase();
+				person.birth_day = moment(new Date( person.birthday)).format('D')
+				person.birth_year = moment(new Date(person.birthday)).format('YYYY')
+
 				console.log(person);
+
 				res.render('person/person_update', {person : person, csrfToken: req.csrfToken()});
 			})
 
@@ -545,7 +585,7 @@ var personController = function(personService, app ){
 
 					if(err || person === null){ 	
 						req.flash('info', "Person not found.");
-						res.redirect('/hub/:id/persons');
+						res.redirect('/@/:id/persons');
 						return console.log("err++: " + err);
 					}	
 
@@ -557,7 +597,7 @@ var personController = function(personService, app ){
 
 					// var person = new Person();
 					
-					person.hub_id = req.params.id;
+					person.hub_id = hub.id;
 					person.update_date = Date.now();
 
 			
@@ -575,7 +615,8 @@ var personController = function(personService, app ){
 					person.suffix = requestBody.suffix;
 					person.job_title = requestBody.job_title;
 					person.gender = requestBody.gender;
-					person.birthday = requestBody.birthday;
+					person.birthday = new Date(requestBody.birth_month + " " + requestBody.birth_day + " " + requestBody.birth_year)
+
 
 
 					person.short_description = requestBody.short_description;
@@ -584,7 +625,14 @@ var personController = function(personService, app ){
 					person.email = requestBody.email;
 					person.primary_phone = requestBody.primary_phone;
 					person.mobile_phone = requestBody.mobile_phone;
-					person.address = requestBody.address;
+					person.fax = requestBody.fax;
+
+					person.street = requestBody.street;
+					person.city = requestBody.city;
+					person.state_province_region= requestBody.state_province_region;
+					person.postal_code = requestBody.postal_code;
+					person.country = requestBody.country;
+
 					person.web_address = requestBody.web_address;
 
 					console.log("_____________________");
@@ -601,7 +649,7 @@ var personController = function(personService, app ){
 									return;
 								} else {
 									console.log("2 second call")
-									return res.redirect("/hub/"+req.params.id+"/person/"+person._id );
+									return res.redirect("/@/"+req.params.id+"/person/"+person._id );
 
 								}	
 							});
@@ -639,7 +687,7 @@ var personController = function(personService, app ){
 			} else {
 				console.log("not equals");
 				// console.log(req);
-			  return res.redirect('/hubs');
+			  return res.redirect('/');
 			}
 
 
@@ -701,7 +749,7 @@ var personController = function(personService, app ){
 			} else {
 				console.log("not equals");
 				// console.log(req);
-			  return res.redirect('/hubs');
+			  return res.redirect('/');
 			}
 
 		}

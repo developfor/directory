@@ -4,26 +4,21 @@
 <% } %>
 
 
-
-
-
-<div class="bread-crumbs">
-          
-		<%if(hub.user_owner_id.toString() === user._id.toString()){ %>
-			<span>This is your hub: <%= user.displayname %></span>
-		<% }else{ %>
-			<span>This is hub belongs to: <%= user.displayname %></span>
-		<% } %>
-        
+  <div class="bread-crumbs">
+    <div id="profile-content">
+      <img id="profile-thumb" src="/app/img/no-image.png">
+      <div id="profile-username">
+        <%= user.username %>
       </div>
-      <div class="bread-crumbs">
-      
+    </div>
+    <div> 
+      <b>Navigation: </b><a href="/@/<%= user.username %>/">Hub</a>/<a href="/@/<%= user.username %>/persons">People</a>/<a href="/@/<%= user.username %>/groups">Groups</a>/<a href="/@/<%= user.username %>/events">Events</a> 
+    </div>            
+  </div>
 
-        <span> <b>Navigation: </b><a href="/@/<%= user.displayname %>/">Hub</a>/<a href="/@/<%= user.displayname %>/persons">People</a>/<a href="/@/<%= user.displayname %>/groups">Groups</a>/<a href="/@/<%= user.displayname %><//events">Events</a> </span><br>
-      </div>
       <div class="p-content-list">
 	
-      	 <a class="button button-primary" href="/@/<%= user.displayname %>/add_person">+ add person</a>
+      	 <a class="button button-primary" href="/@/<%= user.username %>/add_person">+ add person</a>
       
 
 
@@ -46,7 +41,7 @@
 			 <div class="row">
 	            <div class="twelve columns">
 	                <input class="button-primary" type="submit" value="Submit">
-	                 <a class="button button-primary" href="/@/<%= user.displayname %>/persons"> < reset</a>
+	                 <a class="button button-primary" href="/@/<%= user.username %>/persons"> < reset</a>
 	             
 	            </div>
 	          </div>
@@ -78,7 +73,7 @@
 		
 
 			<div class="p-content">
-				<a href="/@/<%= user.displayname %>/person/<%= person._id %>">
+				<a href="/@/<%= user.username %>/person/<%= person._id %>">
 					<%  if(person.img_foldername && person.img_thumbnail){ %>
 					<img src="/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>">
 					     <!-- <img src="/app/img/no-image.png" > -->
@@ -98,7 +93,7 @@
 					</div>
 				</div> 
 
-					<a class="button button-primary" href="/@/<%= user.displayname %>/person/<%= person._id %>">More Details »</a>          
+					<a class="button button-primary" href="/@/<%= user.username %>/person/<%= person._id %>">More Details »</a>          
 			</div>
 
           

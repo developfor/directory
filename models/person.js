@@ -9,7 +9,8 @@ var Person = new Schema({
 		default: "person"
 	},
 	title: {
-		type: String
+		type: String,
+		default: ""
 	},
 	first_name: {
 		type: String,
@@ -31,7 +32,8 @@ var Person = new Schema({
 
 	},
 	middle_name: {
-		type: String
+		type: String,
+		default: ""
 	},
 	lowercase_middle_name:{
 		type: String
@@ -80,6 +82,7 @@ var Person = new Schema({
 		// default: null
 	},
 
+
 	// ----- description info -------
 	short_description: {
 		type: String,
@@ -115,10 +118,32 @@ var Person = new Schema({
 		type: String,
 		default: ""
 	},
-	address: {
+
+
+	// ----- Address info -------
+	street: {
 		type: String,
 		default: ""
 	},
+	city: {
+		type: String,
+		default: ""
+	},
+	state_province_region: {
+		type: String,
+		default: ""
+	},
+	postal_code: {
+		type: String,
+		default: ""
+	},
+	country: {
+		type: String,
+		default: ""
+	},
+
+
+
 
 	// ----- online presence info -------
 	web_address: {

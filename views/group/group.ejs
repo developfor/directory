@@ -1,7 +1,7 @@
 <% include ../_partials/header %>
 <%= group %>
-<a href="/@/<%= user.displayname %><//group/<%= group._id %>/add_persons/">add persons</a>
-<a href="/@/<%= user.displayname %><//group/<%= group._id %>/update/">update</a>
+<a href="/@/<%= user.username %>/group/<%= group._id %>/add_persons/">add persons</a>
+<a href="/@/<%= user.username %>/group/<%= group._id %>/update/">update</a>
 
 
 <form method="POST" action="?_method=DELETE">

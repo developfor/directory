@@ -1,115 +1,174 @@
 <% include ../_partials/header %>
-
- <% include ../person/_partials/profile_left.ejs %>
-
-
-          <div class="eight columns">
-            <div class="nav-right">
-              <ul>
-             
-                <li>
-                    <a class="no-style-link" href="/@/<%= user.displayname %>/person/<%= person._id %>#i">description</a>
-                </li>
-                <li>
-                    <a class="no-style-link" href="/@/<%= user.displayname %>/person/<%= person._id %>/info#i">information</a>
-                </li>
-                <li>
-                    <a class="no-style-link  selected" href="/@/<%= user.displayname %>/person/<%= person._id %>/groups#i">groups</a>
-                </li>
-                 <li>
-                    <a class="no-style-link" href="#">events</a>
-                </li>
-                <li>
-                    <a class="no-style-link" href="#">notes</a>
-                </li>
-                  <li>
-                    <a class="no-style-link" href="#">history</a>
-                </li>
-              </ul>
-              
-            </div>
-            <div class="content-groups" >
-            <!-- <div class="content-groups" id="i"> -->
-               <a class="button button-primary" href="/@/<%= user.displayname %>/person/<%= person._id %>/add_groups">add or remove groups</a><br>
-
-              <% groupArray.forEach(function(item){ %>
-
-                <% if(item !== undefined){ %>
-                  <!--   <%= item %>
-                     <a class="button button-primary" href="/hub/<%= item.hub_id %>/group/<%= item._id %>">More Details »</a>
-                     <hr> -->
-
-                  <div class="mini-p-content" >
-                    <a class="" href="/hub/<%= item.hub_id %>/group/<%= item._id %>">
-                      
-
-                      <%  if(item.img_foldername && item.img_thumbnail){ %>
-                            <img style="background-color: #666;    border: 3px solid #000;" src="/uploads/img/<%= item.img_foldername %>/<%=  item.img_thumbnail %>"> 
-                           <!-- <img src="/app/img/no-image.png" > -->
-                        <% }else{  %>
-                        <!--  <img style="background-color: #666; height: 60px; width: 60px;     border: 3px solid #000;" > -->    <img src="/app/img/no-image.png" >
-                        <% }  %>
-                    </a>
-                    <div>
-                      <div class="title-info-wrapper">
-                        <span class="title-info"><%= item.title %> </span>
-                      </div>
-                    </div> 
-                    <a class="button button-primary" href="/hub/<%= item.hub_id %>/group/<%= item._id %>">More Details »</a>
-                  </div>
-                <% } %>
-              <% }) %>
+<% if ( messages.info) { %>
+	<p><%= messages.info %></p>
+<% } %>
 
 
-            
-
-
-
-
-
-            
-
-
-
-
-            
-              
-            </div>
-          </div>
-
-
-
-
-
-      <!--  end row  -->
-        </div>
-    <!--  end container -->
+  <div class="bread-crumbs">
+    <div id="profile-content">
+      <img id="profile-thumb" src="/app/img/no-image.png">
+      <div id="profile-username">
+        <%= user.username %>
+      </div>
     </div>
-  <script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
+    <div> 
+      <b>Navigation: </b><a href="/@/<%= user.username %>/">Hub</a>/<a href="/@/<%= user.username %>/persons">People</a>/<a href="/@/<%= user.username %>/groups">Groups</a>/<a href="/@/<%= user.username %>/events">Events</a> 
+    </div>            
+  </div>
 
-    <script>
-      $('.mini-p-content').matchHeight();
+      <div class="p-content-list">
+	
+      	 <a class="button button-primary" href="/@/<%= user.username %>/add_person">+ add person</a>
+      
 
-      $("#button-profile-delete").on("click", function(){
-         
-          if (confirm("Are you sure you want to delete this entry?") == true) {
 
-              var deletePath = $(this).attr('data-delete-path');
-              var redirectPath = $(this).attr('data-redirect-path');
+	    <div class="search-things">
+	    	
+	        <form >
+	          <div class="row">
+	            <div class="six columns title-info">
+	              <label for="FirstName">First Name:</label>
+	              <input name="first_name" class="u-full-width" type="text" placeholder="First Name" id="input-first-name" value="<%= query.first_name %>">
+	            </div>
+	            <div class="six columns title-info">
+	              <label for="LastName">last Name:</label>
+	              <input name="last_name" class="u-full-width" type="text" placeholder="Last Name" id="input-lasst-name" value="<%= query.last_name %>">
+	            </div>
+	          </div>
+
+
+
+			 <div class="row">
+	            <div class="twelve columns">
+	                <input class="button-primary" type="submit" value="Submit">
+	                 <a class="button button-primary" href="/@/<%= user.username %>/persons"> < reset</a>
+	             
+	            </div>
+	          </div>
+
+	          
+       
+	        </form>
+
+	    </div>
+
+
+		  <% if(persons.length === 0){ %>
+		  			
+		  	<div class="row">
+	            <div class="twelve columns">
+		  		
+		  				<p> <b> No entries. </b> </p>
+			            
+			         
+
+			           </div>
+	          </div>
+		  <%  } %>
+
+		<% persons.forEach(function(person){ %>
+
+
+ 
+		
+
+			<div class="p-content">
+				<a href="/@/<%= user.username %>/person/<%= person._id %>">
+					<%  if(person.img_foldername && person.img_thumbnail){ %>
+					<img src="/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>">
+					     <!-- <img src="/app/img/no-image.png" > -->
+					<% }else{  %>
+						 <img style="background-color: #<%= person.hex_color %>;"  src="/app/img/no-image.png" >
+					<% }  %>
+				</a>
+				<div>
+					<div>
+						<span class="title-info"><%= person.title %> <%= person.first_name %> <%= person.middle_name %> <%= person.last_name %> <%= person.suffix %></span>
+					</div>
+					<div class="p-content-desc">
+						<span class="small-text" > <%= person.short_description %></span><br>
+					</div>
+					<div class="updated-date">
+						<b class="small-text">Edited <span  data-livestamp="<%= person.update_date %>"> </span></b><br>
+					</div>
+				</div> 
+
+					<a class="button button-primary" href="/@/<%= user.username %>/person/<%= person._id %>">More Details »</a>          
+			</div>
+
           
-              $.post(deletePath, function() {
-                window.location.href = redirectPath;
-              });
-          } else {
-              return false;
-          }
+		<% }) %>
 
-      })
+
+
+
+              
+      </div>
+
+  <script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
+  <script type="text/javascript" src="/vendor/js/URI.js"></script>
+  <script type="text/javascript" src="/vendor/js/moment.js"></script>
+  <script type="text/javascript" src="/vendor/js/livestamp.min.js"></script>
+ 
+
+
+        <div class="prev-next-buttons">
+          <div class="button button-primary prev-button"  id="previous" href="#">« Previous</div>  
+          <div class="button button-primary next-button"  id="next" href="#">Next »</div>  
+        </div>
+
+    </div>
+
+
+
+
+    <script type="text/javascript">
+      $(function() {
+          $('.p-content').matchHeight();
+
+
+			var uri = new URI(location.href)
+			var queries = uri.search(true)
+			var querySkip = parseInt(queries.skip) || 0;
+			queries.first_name = queries.first_name || "";
+			queries.last_name = queries.last_name || "";
+			var queriesPage = queries.first_name
+
+
+
+
+
+			if(querySkip === 0){
+			  $('#previous').on("click", function (e) {
+			        console.log("begining")
+			    });
+			  $('#next').on("click", function (e) {
+					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1)
+			    });
+			  
+			  // console.log("queries.page")
+			  
+			}else{
+				$('#previous').on("click", function (e) {
+					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip - 1)
+			    });
+			    $('#next').on("click", function (e) {
+					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1)
+			    });
+			   // console.log("ubhjbhjbhjed")
+			}
+
+
+			console.log(location.pathname)
+			console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + querySkip)
+			console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1))
+
+
+      });
     </script>
 
 
-<!-- footer start -->
 
-    
+
   </body>
 </html>

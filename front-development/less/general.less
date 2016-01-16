@@ -71,6 +71,21 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: 0.05em;
     font-weight: 600;
     font-size: 14px;
+    #profile-content{
+      display: inline-block;
+      #profile-thumb{
+        background-color: #000; 
+        height: 10px; 
+        width: 10px; 
+        border: 3px solid #000; 
+        float:left;
+      }
+      #profile-username{
+        float:left; 
+        margin-left: 10px
+      }
+    }
+
 }
 
 .up-title{
@@ -379,13 +394,13 @@ a:hover {
 
 
 .p-content .button:hover, .button-primary:hover , .p-content  button:hover, .p-content input[type="submit"]:hover, .p-content input[type="reset"]:hover, .p-content input[type="button"]:hover {
- text-decoration: underline;
+  text-decoration: underline;
 }
  
 
 
 .search-things  .button-primary{
-      margin-top: 24px;
+  margin-top: 24px;
 }
 
 
@@ -396,26 +411,70 @@ a:hover {
 
 
 .pagination>li:first-child>a, .pagination>li:first-child>span {
-    border-left-width: 3px;
+  border-left-width: 3px;
     
 }
 .pagination>li>a, .pagination>li>span {
-    float: left;
-    padding: 4px 12px;
-    line-height: 1.428571429;
-    text-decoration: none;
-    background-color: #fff;
-    border: 3px solid #000;
-    border-left-width: 0;
+  float: left;
+  padding: 4px 12px;
+  line-height: 1.428571429;
+  text-decoration: none;
+  background-color: #fff;
+  border: 3px solid #000;
+  border-left-width: 0;
 }
 .pagination>li {
     display: inline;
 }
 .pagination {
-    display: inline-block;
-    padding-left: 0;
-    margin: 20px 0;
-    border-radius: 4px;
+  display: inline-block;
+  padding-left: 0;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+
+
+
+
+      // border: 3px solid #000;
+
+
+/*form */
+
+.mce-tinymce{
+  border: #000 solid 3px !important;
+}
+
+.form-block{
+  input{
+        width: 100%;
+  }
+  border-bottom: 3px solid black; 
+  padding: 20px 0;
+  margin: 20px 0;
+}
+
+
+#short-description{
+  margin-bottom: 0;
+  resize: none;
+}
+
+#short-description-count{
+  margin-bottom: 20px;
+}
+
+.birthday_form select, .birthday_form input{
+  float: left;
+  margin-left: 10px;
+}
+
+.birthday_form #birth_month{
+  margin-left: 0px;
+}
+
+.birthday_form #birth_year{
+  width: 70px;
 }
 
 

@@ -101,7 +101,7 @@ module.exports = function(app) {
 
 			var userLowerCase = req.params.user.toLowerCase();
 
-			User.findOne({displayname: userLowerCase}, function(err, user) {
+			User.findOne({username: userLowerCase}, function(err, user) {
 				
 				
 
@@ -120,8 +120,11 @@ module.exports = function(app) {
 
 						Person.find({hub_id: hub.id}, null, sort, function(err, persons){
 							Group.find({hub_id: hub.id},  null, {}, function(err, groups){	
+								var funct = function(arg){return arg}
+
+
 								Event.find({hub_id: hub.id}, null, {}, function(err, events){
-									return res.render('hub/hub', {user: req.user, hub: hub, persons: persons, groups: groups, events: events});
+									return res.render('hub/hub', {funct: funct, user: req.user, hub: hub, persons: persons, groups: groups, events: events});
 								  	console.log("equals")
 							  	}).limit(5);	
 						  	}).limit(5);

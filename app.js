@@ -7,12 +7,13 @@ var express = require('express');
 
 var path = require('path');
 var app = express();
-var logger = require('morgan')
-var session = require('express-session')
-var cookieParser = require('cookie-parser')
+var logger = require('morgan');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
 var flash = require('express-flash');
-var passport = require('passport')
+var passport = require('passport');
 
+var moment = require('moment');
 
 var mongoose = require('mongoose');
 var route = require('./routes/index.js');
@@ -38,6 +39,15 @@ var passport = require('./config/passport.js');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+
+String.prototype.trunc = String.prototype.trunc || function(n){
+    return (this.length > n) ? this.substr(0,n-1)+'...' : this;
+};
+String.prototype.isEmpty = function() {
+    return (this.length === 0 || !this.trim());
+};
+
 
 // app.use(bodyParser.urlencoded({ extended: false }))
 

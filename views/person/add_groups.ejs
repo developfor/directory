@@ -1,19 +1,105 @@
 <% include ../_partials/header %>
 
-<a class="no-style-link selected" href="/@/<%= user.displayname %>/person/<%= person_id %>/groups">person</a>
-<form>
-	<% groups.forEach(function(name){ %>
-	<%= JSON.stringify(name._id) %>
-	<%  if(name.checked === true) { %>
+<!-- <a class="no-style-link selected" href="/@/<%= user.username %>/person/<%= person._id %>/groups">person</a> -->
 
-	 <input type="checkbox" name="group" value="<%= name._id %>" checked><%= name.first_name %> <%= name.last_name %> <br>
+ <div>
+    <div style="float: left;">
+	    <a href="/@/<%= user.username %>/person/<%= person._id %>/groups">
+			<%  if(person.img_foldername && person.img_thumbnail){ %>
+				<img style="background-color: #666; height: 30px; width: 30px;     border: 3px solid #000;" src="/uploads/img/<%= person.img_foldername %>/<%=  person.img_icon  %>"> 
+			<% }else{  %>
+				<img style="background-color: #<%= person.hex_color %>; height: 30px; width: 30px; border: 3px solid #000;" src="/app/img/no-image.png" >
+			<% }  %>
+		</a>
+    
+    </div>
+    <div style="margin-left: 5px; width: 60%;">
+    	<p class="title-info"  ><a href="/@/<%= user.username %>/person/<%= person._id %>/groups"><%= person.title  %> <%= person.first_name  %> <%= person.middle_name  %> <%= person.last_name  %> <%= person.suffix %></a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= person.update_date %>"> </span> <%= person.update_date %></span>   -->
+    	</p>
+
+ 
+    </div>
+
+</div>
+
+
+
+<form style="clear: both;">
+	<div class="p-content-list">
+	<% groups.forEach(function(name){ %>
+	<!-- <%= JSON.stringify(name._id) %> -->
+	<%  if(name.checked === true) { %>
+	
+     <li style="list-style: none; float:left; margin-right: 15px;">
+ 		<div style="min-height: 60px; width: 220px; border: 3px solid #000; overflow: hidden; float:left;">
+ 			<div >
+	 			<a href="/@/<%= user.username %>/group/<%= name._id %>">
+	 				<%  if(name.img_foldername && name.img_thumbnail){ %>
+			        	 <img style="background-color: #666; height: 60px; width: 60px;" src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
+	        		<% }else{  %>
+	        			 <img style="background-color: #<%= person.hex_color %>; height: 60px; width: 60px;" src="/app/img/no-image.png" >
+	        		<% }  %>
+	        	</a>
+                
+ 				<input type="checkbox" name="group" value="<%= name._id %>" checked></div>
+ 				<div style=" font-weight: 700;">
+ 					<p class="title-info"><span><%= name.title %></span>		                  
+ 					</p>
+ 				</div>
+
+ 				<div style=" font-weight: 700;">
+ 					<p class="title-info" style="
+ 					font-size: 12px;
+ 					"><span>When we add the prefix 'un' to a word, we give the word the opposite ... In the following sentences, which word beginning with 'un' is needed?</span>		                  
+ 				</p>
+ 			</div>
+ 		</div>
+ 	</li>
+
+
+
+
 
 	<%  } else { %>
 
-	<input type="checkbox" name="group" value="<%= name._id %>"><%= name.first_name %> <%= name.last_name %> <br>
+	<li style="list-style: none; float:left; margin-right: 15px;">
+ 		<div style="min-height: 60px; width: 220px; border: 3px solid #000; overflow: hidden; float:left;">
+ 			<div >
+
+ 				<%  if(name.img_foldername && name.img_thumbnail){ %>
+		        	 <img style="background-color: #666; height: 60px; width: 60px;" src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
+        		<% }else{  %>
+        			 <img style="background-color: #<%= person.hex_color %>; height: 60px; width: 60px;" src="/app/img/no-image.png" >
+        		<% }  %>
+                
+ 				<input type="checkbox" name="group" value="<%= name._id %>">
+ 			</div>
+ 				<div style=" font-weight: 700;">
+ 					<p class="title-info"><span><%= name.title %></span>		                  
+ 					</p>
+ 				</div>
+
+ 				<div style=" font-weight: 700;">
+ 					<p class="title-info" style="
+ 					font-size: 12px;
+ 					"><span>When we add the prefix 'un' to a word, we give the word the opposite ... In the following sentences, which word beginning with 'un' is needed?</span>		                  
+ 				</p>
+ 			</div>
+ 		</div>
+ 	</li>
+
+		
+
+
+
+
+
+		
 		<% } %>
 	<% }) %>
+	</div>
 </form>
+
 
 
 <script>

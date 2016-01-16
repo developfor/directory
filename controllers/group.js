@@ -30,7 +30,7 @@ var hubchecker = function(req, res, method){
 
 	var userLowerCase = req.params.id.toLowerCase();
 
-	User.findOne({displayname: userLowerCase}, function(err, user) {
+	User.findOne({username: userLowerCase}, function(err, user) {
 		console.log("checking hub")
 		if(err  || user === null){ 
 			res.send('no user by that name');
@@ -39,7 +39,7 @@ var hubchecker = function(req, res, method){
 
 		Hub.findOne({user_owner_id: user._id}, function(err, hub){
 			if(err){ 
-				res.redirect('/hubs');
+				res.redirect('/');
 				return console.log("err: " + err) 
 			}
 			console.log("hubchecked")
@@ -195,7 +195,7 @@ var groupController = function(personService, app ){
 	}
 
 	var addGroupPost = function (req, res) {
-		var postGroup = function(){
+		var postGroup = function(hub){
 
 			var token = crypto.randomBytes(8).toString('hex') + "_" + Date.now(); 
 			var randomString = token;
@@ -205,7 +205,7 @@ var groupController = function(personService, app ){
 			var requestBody = req.body;
 			var group = new Group();
 			
-			group.hub_id = mongoose.Types.ObjectId(req.params.id);
+			group.hub_id =  hub._id;
 
 	
 		    group.title = requestBody.title;
@@ -228,10 +228,10 @@ var groupController = function(personService, app ){
 						// res.send({ error:err });
 						// res.send();
 						req.flash('message','something went wrong');
-						return res.redirect("/hub/"+req.params.id+"/add_group" );
+						return res.redirect("/@/"+req.params.id+"/add_group" );
 					} else {
 						console.log(group)
-						return res.redirect("/hub/"+req.params.id+"/group/"+group._id );
+						return res.redirect("/@/"+req.params.id+"/group/"+group._id );
 					}	
 				});
 			}
@@ -283,9 +283,13 @@ var groupController = function(personService, app ){
 	var groupUpdatePost = function (req, res) {
 
 		var postGroup = function(hub){
+			console.log("=============")
+			console.log(req.params)
+			console.log("=============")
 
 			var hubOwner = hub.user_owner_id
 			var userId = req.user._id
+
 
 			if(_.isEqual(userId, hubOwner)){
 
@@ -296,7 +300,7 @@ var groupController = function(personService, app ){
 
 					if(err || group === null){ 	
 						req.flash('info', "Group not found.");
-						res.redirect('/hub/:id/groups');
+						res.redirect('/@/:id/groups');
 						return console.log("err++: " + err);
 					}	
 
@@ -308,7 +312,7 @@ var groupController = function(personService, app ){
 
 					// var group = new Group();
 					
-					group.hub_id = req.params.id;
+					// group.hub_id = req.params.id;
 					group.update_date = Date.now();
 
 			
@@ -338,7 +342,7 @@ var groupController = function(personService, app ){
 									return;
 								} else {
 									console.log("2 second call")
-									return res.redirect("/hub/"+req.params.id+"/group/"+group._id );
+									return res.redirect("/@/"+req.params.id+"/group/"+group._id );
 
 								}	
 							});
@@ -395,7 +399,7 @@ var groupController = function(personService, app ){
 		var group = function(hub){
 			var person_array = []
 			Group.findById(req.params.group_id, function (err, group) {	
-				return Person.find({hub_id: req.params.id}, null, function(err, persons){
+				return Person.find({hub_id: hub.id}, null, function(err, persons){
 				  	if(err){ return console.log("err: " + err) }
 
 
@@ -403,7 +407,7 @@ var groupController = function(personService, app ){
 					  	  var p = person.toJSON()
 					  	  p.checked = false;
 
-						  PersonGroupJoin.find({hub_id: req.params.id, person_id: person._id, group_id: req.params.group_id}, null, function(err, person_group){
+						  PersonGroupJoin.find({hub_id: hub.id, person_id: person._id, group_id: req.params.group_id}, null, function(err, person_group){
 							  	 console.log(person_group)
 							  	if(person_group.length > 0){
 									console.log("true")
@@ -424,7 +428,7 @@ var groupController = function(personService, app ){
 					}, function (err) {
 						
 					  if (err) { throw err; }
-					  return PersonGroupJoin.find({hub_id: req.params.id}, null, function(err, person_group){
+					  return PersonGroupJoin.find({hub_id: hub.id}, null, function(err, person_group){
 				   		res.render('group/add_persons', { person_group: person_group, group : group, persons : person_array});
 				  	  });
 
@@ -444,11 +448,11 @@ var groupController = function(personService, app ){
 
 
 	var addPersonPost = function (req, res) {
-		var groupPost = function(){
+		var groupPost = function(hub){
 
 			var personGroupJoin = new PersonGroupJoin();
 
-			personGroupJoin.hub_id = mongoose.Types.ObjectId(req.params.id);
+			personGroupJoin.hub_id = mongoose.Types.ObjectId(hub.id);
 			personGroupJoin.group_id = mongoose.Types.ObjectId(req.params.group_id);
 			personGroupJoin.person_id = mongoose.Types.ObjectId(req.body.person_id);
 
@@ -457,7 +461,7 @@ var groupController = function(personService, app ){
 			personGroupJoin.save(function (err, person_group) {
 				if(err || person_group === null){ 	
 					req.flash('info', "Did not save group.")
-					res.redirect('/hub/' + req.params.id+ '/add_group');
+					res.redirect('/@/' + req.params.id+ '/add_group');
 					return console.log("err++: " + err) 	
 				}	
 				// res.redirect('/hub/' + req.params.id+ '/groups');
@@ -478,7 +482,7 @@ var groupController = function(personService, app ){
 			PersonGroupJoin.remove( {
 
 				group_id: req.params.group_id,
-				hub_id: req.params.id,
+				hub_id: hub.id,
 				person_id: req.body.person_id,
 
 			}, function(err, hub){

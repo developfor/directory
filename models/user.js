@@ -8,7 +8,7 @@ var crypto= require('crypto')
 
 
 var userSchema = new Schema({
-  displayname: { 
+  username: { 
   	type: String, 
   	required: true,
     lowercase: true,

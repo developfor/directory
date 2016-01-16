@@ -42,9 +42,9 @@ module.exports = function(req, res, randomString, cb) {
 				gm(imageFilePath)
 					.resize(600,600)
 					.gravity('Center')
-					.extent(500,600)
+					.extent(600,600)
 					.background('#ffffff')
-					.crop(500,600, 0, 0)
+					.crop(600,600, 0, 0)
 					.noProfile()
 					.setFormat("jpg")
 					.write(folderName + "/" + "thumb_" + imageFileName , function (err) {
@@ -67,7 +67,7 @@ module.exports = function(req, res, randomString, cb) {
 						 }
 
 
-						var size = {width: 10000, height: 1000};
+						var size = {width: 1000, height: 1000};
 						gm(imageFilePath)
 							.resize(1000,1000)
 							.gravity('Center')

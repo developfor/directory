@@ -9,8 +9,6 @@ var Group = new Schema({
 		validate: /\S+/
 	},
 
-
-
 	group_type:{
 		type: String
 	},

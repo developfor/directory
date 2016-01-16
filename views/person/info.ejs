@@ -8,23 +8,23 @@
               <ul>
              
                 <li>
-                    <a class="no-style-link" href="/@/<%= user.displayname %>/person/<%= person._id %>#i">description</a>
+                    <a class="no-style-link" href="/@/<%= user.username %>/person/<%= person._id %>">description</a>
                 </li>
                 <li>
-                    <a class="no-style-link selected" href="/@/<%= user.displayname %>/person/<%= person._id %>/info#i">information</a>
+                    <a class="no-style-link selected" href="/@/<%= user.username %>/person/<%= person._id %>/info">information</a>
                 </li>
                 <li>
-                     <a class="no-style-link" href="/@/<%= user.displayname %>/person/<%= person._id %>/groups#i">groups</a>
+                     <a class="no-style-link" href="/@/<%= user.username %>/person/<%= person._id %>/groups">groups</a>
                 </li>
                  <li>
                     <a class="no-style-link" href="#">events</a>
                 </li>
-                <li>
+            <!--     <li>
                     <a class="no-style-link" href="#">notes</a>
                 </li>
                   <li>
                     <a class="no-style-link" href="#">history</a>
-                </li>
+                </li> -->
               </ul>
               
             </div>
@@ -35,14 +35,21 @@
 
 
               <% if(person.job_title){ %>
-	              <span class="title-info">Occupation:</span>
+	              <span class="title-info">Job Title:</span>
 	              <p><%= person.job_title %></p>
               <% } %>
 
-              <% if(person.birthday){ %>
+              <% if( isNaN( new Date( person.birthday))  === false){ %>
 	              <span class="title-info">Birthday:</span>
 	              <p><%= person.birthday %></p>
-	          <% } %>
+	             <% } %>
+
+
+              <% if( isNaN( new Date( person.birthday))  === false){ %>
+                <span class="title-info">Age:</span>
+                <p><%=  person.age %></p>
+              <% } %>
+
 
 	          <% if(person.email){ %>
 	              <span class="title-info">Email:</span>
@@ -65,8 +72,8 @@
 	              <p><%= person.fax %></p>
               <% } %>
 
-      			  <% if(person.address){ %>
-	              <span class="title-info">Address:</span>
+      			  <% if(person.address.isEmpty() === false){ %>
+	              <span class="title-info">Location:</span>
 	              <p><%= person.address %></p>
               <% } %>
 

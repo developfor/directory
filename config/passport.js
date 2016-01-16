@@ -25,7 +25,7 @@ module.exports = function(app) {
 	  	var email = email.toLowerCase();
 
 	  	// User.findOne({ email: email }, function(err, user) {
-		User.findOne({ $or:[ { email: email}, {displayname: email}]}, function(err, user) {
+		User.findOne({ $or:[ { email: email}, {username: email}]}, function(err, user) {
 			console.log(user)
 		  	if (err) { return done(err); }
 		  	if (!user) { return done(null, false, { message: 'Unknown user',  email:  email }); }
