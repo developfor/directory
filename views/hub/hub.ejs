@@ -16,9 +16,9 @@
 
 
 
-      <div>
+     <!--  <div>
         <h5>Welcome  <%= user.username %></h5>
-      </div>
+      </div> -->
 
      <!--  <div class="content-box">
 
@@ -26,6 +26,18 @@
        <p>  <%= hub.description %></p>
         <a class="up-title" href="/hub/<%= hub.id %>/update"><b>edit title</b></a>
       </div>  -->
+
+      <div class="bread-crumbs">
+        <div id="profile-content">
+          <img id="profile-thumb" src="/app/img/no-image.png">
+          <div id="profile-username">
+            <%= user.username %>
+          </div>
+        </div>
+        <div> 
+         <a href="/@/<%= user.username %>/">Hub</a>|<a href="/@/<%= user.username %>/persons">People</a>|<a href="/@/<%= user.username %>/groups">Groups</a>|<a href="/@/<%= user.username %>/events">Events</a> 
+        </div>            
+      </div>
       <div class="row hub">
 
           <div class="four columns">
@@ -96,31 +108,30 @@
 
 
                 <% groups.forEach(function(group){ %>
-   
-                  <li style="list-style: none;">
-                    <div style="width: 68px; float: left;">
+                   <li style="list-style: none;">
+                    <a href="/@/<%= user.username %>/group/<%= group._id %>"  > 
+                      <div style="min-height: 60px;  border: 3px solid #000; overflow: hidden;">
+                        <div style="height: 60px; width: 68px; float: left;">
+                          <%  if(group.img_foldername && group.img_thumbnail){ %>
+                          <img style="background-color: #666; height: 60px; width: 60px;" src="/uploads/img/<%= group.img_foldername %>/<%=  group.img_icon  %>"> 
+                          <!-- <img src="/app/img/no-image.png" > -->
+                          <% }else{  %>
+                          <img style="background-color: #<%= group.hex_color %>; height: 60px; width: 60px;" src="/app/img/no-image.png" >
+                          <!-- <img src="/app/img/no-image.png" > -->
+                          <% }  %>
+                          
+                        </div>
+                        <div style="float: left;  width: 60%; font-weight: 700;">
+                         <p class="title-info"  ><span><%= group.title  %> <%= group.first_name  %> <%= group.middle_name  %> <%= group.last_name  %> <%= group.suffix %></span>                        <!-- <span class="date-small"  > <span data-livestamp="<%= group.update_date %>"> </span> <%= group.update_date %></span>   -->
+                         </p>
+                       </div>
+                     </div>
+                   </a>
 
-	                    <a href="/@/<%= user.username %>/group/<%= group._id %>">
-	        			    <%  if(group.img_foldername && group.img_thumbnail){ %>
-                      <img style="background-color: #666; height: 60px; width: 60px;     border: 3px solid #000;" src="/uploads/img/<%= group.img_foldername %>/<%=  group.img_icon  %>"> 
-                     <!-- <img src="/app/img/no-image.png" > -->
-                  <% }else{  %>
-                   <img style="background-color: #666; height: 60px; width: 60px;     border: 3px solid #000;" >
-                     <!-- <img src="/app/img/no-image.png" > -->
-                  <% }  %>
-	        			</a>	
-                    	
-                    </div>
-                    <div style="float: left; width: 60%; margin-left: 5px;">
-                      <p class="title-info"  ><a href="/@/<%= user.username %>/group/<%= group._id %>"><%= group.title.trunc(35);    %></a>
-  
-                      </p>
-
-                 
-                    </div>
                   </li>
 
                 <% }) %>
+
 
 
 

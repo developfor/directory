@@ -1,4 +1,171 @@
 <% include ../_partials/header %>
-<% groups.forEach(function(group){ %>
-	<%= group.title %>  <a href="/@/<%= user.username %>/group/<%= group._id %>">view  group</a><br>
-<% }) %>
+<% if ( messages.info) { %>
+	<p><%= messages.info %></p>
+<% } %>
+
+
+  <div class="bread-crumbs">
+    <div id="profile-content">
+      <img id="profile-thumb" src="/app/img/no-image.png">
+      <div id="profile-username">
+        <%= user.username %>
+      </div>
+    </div>
+    <div> 
+      <a href="/@/<%= user.username %>/">Hub</a>|<a href="/@/<%= user.username %>/persons">People</a>|<a href="/@/<%= user.username %>/groups">Groups</a>|<a href="/@/<%= user.username %>/events">Events</a> 
+    </div>            
+  </div>
+
+      <div class="p-content-list">
+	
+      	 <a class="button button-primary" href="/@/<%= user.username %>/add_group">+ add group</a>
+      
+
+
+	    <div class="search-things">
+	    	
+	        <form >
+	          <div class="row">
+	            <div class="six columns title-info">
+	              <label for="GroupTitle">Group Title:</label>
+	              <input name="first_name" class="u-full-width" type="text" placeholder="Group Title" id="input-group-title" value="">
+	            </div>
+	          
+	          </div>
+
+
+
+			 <div class="row">
+	            <div class="twelve columns">
+	                <input class="button-primary" type="submit" value="Submit">
+	                 <a class="button button-primary" href="/@/<%= user.username %>/groups"> < reset</a>
+	             
+	            </div>
+	          </div>
+
+	          
+       
+	        </form>
+
+	    </div>
+
+
+		  <% if(groups.length === 0){ %>
+		  			
+		  	<div class="row">
+	            <div class="twelve columns">
+		  		
+		  				<p> <b> No entries. </b> </p>
+			            
+			         
+
+			           </div>
+	          </div>
+		  <%  } %>
+
+		<% groups.forEach(function(group){ %>
+
+
+ 
+		
+
+			<div class="p-content">
+				<a href="/@/<%= user.username %>/group/<%= group._id %>">
+					<%  if(group.img_foldername && group.img_thumbnail){ %>
+					<img src="/uploads/img/<%= group.img_foldername %>/<%= group.img_thumbnail %>">
+					     <!-- <img src="/app/img/no-image.png" > -->
+					<% }else{  %>
+						 <img style="background-color: #<%= group.hex_color %>;"  src="/app/img/no-image.png" >
+					<% }  %>
+				</a>
+				<div>
+					<div>
+						<span class="title-info"><%= group.title %> </span>
+					</div>
+					<div class="p-content-desc">
+						<span class="small-text" > <%=  group.short_description %></span><br>
+					</div>
+					<div class="updated-date">
+						<b class="small-text">Edited <span  data-livestamp="<%= group.update_date %>"> </span></b><br>
+					</div>
+				</div> 
+
+					<a class="button button-primary" href="/@/<%= user.username %>/group/<%= group._id %>">More Details »</a>          
+			</div>
+
+          
+		<% }) %>
+
+
+
+
+              
+      </div>
+
+  <script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
+  <script type="text/javascript" src="/vendor/js/URI.js"></script>
+  <script type="text/javascript" src="/vendor/js/moment.js"></script>
+  <script type="text/javascript" src="/vendor/js/livestamp.min.js"></script>
+ 
+
+
+        <div class="prev-next-buttons">
+          <div class="button button-primary prev-button"  id="previous" href="#">« Previous</div>  
+          <div class="button button-primary next-button"  id="next" href="#">Next »</div>  
+        </div>
+
+    </div>
+
+
+
+
+    <script type="text/javascript">
+      $(function() {
+          $('.p-content').matchHeight();
+
+
+			var uri = new URI(location.href)
+			var queries = uri.search(true)
+			var querySkip = parseInt(queries.skip) || 0;
+			queries.first_name = queries.first_name || "";
+			queries.last_name = queries.last_name || "";
+			var queriesPage = queries.first_name
+
+
+
+
+
+			if(querySkip === 0){
+			  $('#previous').on("click", function (e) {
+			        console.log("begining")
+			    });
+			  $('#next').on("click", function (e) {
+					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1)
+			    });
+			  
+			  // console.log("queries.page")
+			  
+			}else{
+				$('#previous').on("click", function (e) {
+					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip - 1)
+			    });
+			    $('#next').on("click", function (e) {
+					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1)
+			    });
+			   // console.log("ubhjbhjbhjed")
+			}
+
+
+			console.log(location.pathname)
+			console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + querySkip)
+			console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1))
+
+
+      });
+    </script>
+
+
+
+
+  </body>
+</html>

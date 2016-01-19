@@ -12,8 +12,16 @@
 
 
 <form method="post" action="?_csrf=<%= csrfToken %>" accept-charset="utf-8"  enctype="multipart/form-data">
+	   
 	<div class="form-block">
 		<h5>Photo</h5>
+		<div>
+          <%  if(person.img_foldername && person.img_thumbnail){ %>
+    				<img style="border: 3px solid #000; background-color: #666; height: 120px; width: 120px;" src="/uploads/img/<%= person.img_foldername %>/<%= person.img_icon %>">
+    			<% }else{  %>
+    				 <img style="border: 3px solid #000; sheight: 120px; width: 120px; background-color: #<%= person.hex_color %>;" src="/app/img/no-image.png" >
+    			<% }  %>
+        </div>
 		<input type='file' name='image'><br>
 	</div>
 	<div class="form-block">
@@ -156,7 +164,7 @@
 
 
 
-				<input size="1" type="text" name="birth_year" id="birth_year" <% if( isNaN( new Date( person.birthday))  === false){ %> value="<%= person.birth_year %> <% } %>"/>
+				<input size="1" type="text" name="birth_year" id="birth_year" <% if( isNaN( new Date( person.birthday))  === false){ %> value="<%= person.birth_year %>" <% } %> />
 			</div>
 		</div>
 	</div>
@@ -215,13 +223,13 @@
 		</div>
 		<div class="row">
 			<div class="six columns title-info">
-		 		<label for="gender">Postal Code:</label>
+		 		<label for="postal_code">Postal Code:</label>
 		 		<input class="u-full-width" type="text" name="postal_code" value="<%= person.postal_code %>"/>
 		 	</div>
 			<div class="six columns title-info">
-		 		<label for="gender">Country:</label>
+		 		<label for="country">Country:</label>
 		 		<select  name="country" class="u-full-width" >
-		 			<option  <% if (person.country == '') { %>selected<% } %> value=""></option>
+		 			<option <% if (person.country == '') { %>selected<% } %> value=""></option>
 					<option <% if (person.country == 'AFG') { %>selected<% } %> value="AFG">Afghanistan</option>
 					<option <% if (person.country == 'ALA') { %>selected<% } %> value="ALA">Åland Islands</option>
 					<option <% if (person.country == 'ALB') { %>selected<% } %> value="ALB">Albania</option>
@@ -545,6 +553,7 @@
 				paste_text_sticky : true,
 				paste_text_sticky_default: true,
 				link_assume_external_targets: true,
+				extended_valid_elements: 'a[href|target=_blank]',
 				// plugins: "autoresize",
 				// content_style: "div  {border: #000 solid 3px;}"
 

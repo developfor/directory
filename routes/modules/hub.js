@@ -119,7 +119,7 @@ module.exports = function(app) {
 					  	var sort = {sort: {update_date: -1} } 
 
 						Person.find({hub_id: hub.id}, null, sort, function(err, persons){
-							Group.find({hub_id: hub.id},  null, {}, function(err, groups){	
+							Group.find({hub_id: hub.id},  null, sort, function(err, groups){	
 								var funct = function(arg){return arg}
 
 

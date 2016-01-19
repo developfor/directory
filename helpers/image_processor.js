@@ -47,6 +47,7 @@ module.exports = function(req, res, randomString, cb) {
 					.crop(600,600, 0, 0)
 					.noProfile()
 					.setFormat("jpg")
+					.autoOrient()
 					.write(folderName + "/" + "thumb_" + imageFileName , function (err) {
 						 if(err){console.error(err)
 						 	console.log("not an image!")
@@ -77,6 +78,7 @@ module.exports = function(req, res, randomString, cb) {
 							.gravity('Center')
 							.noProfile()
 							.setFormat("jpg")
+							.autoOrient()
 							.write(folderName +"/" + "normal_" + imageFileName , function (err) {
 
 								gm(imageFilePath)
@@ -84,8 +86,10 @@ module.exports = function(req, res, randomString, cb) {
 									.setFormat("jpg")
 									.resize(200, 200)
 									.gravity('Center')
-									.extent(150,150)
-									.crop(150,150, 0, 0)
+									.extent(200,200)
+									.crop(200,200, 0, 0)
+									.setFormat("jpg")
+									.autoOrient()
 									.write(folderName +"/" + "icon_" + imageFileName , function (err) { 
 
 									// console.log("image made or something");

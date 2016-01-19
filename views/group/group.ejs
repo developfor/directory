@@ -1,9 +1,81 @@
-<% include ../_partials/header %>
-<%= group %>
-<a href="/@/<%= user.username %>/group/<%= group._id %>/add_persons/">add persons</a>
-<a href="/@/<%= user.username %>/group/<%= group._id %>/update/">update</a>
+ <% include ../_partials/header %>
+
+ <% include ../group/_partials/profile_left.ejs %>
+
+          <div class="eight columns">
+            <div class="nav-right">
+              <ul>
+            
+                <li>
+                    <a class="no-style-link selected" href="/@/<%= user.username %>/group/<%= group._id %>">description</a>
+                </li>
+                <li>
+                    <a class="no-style-link" href="/@/<%= user.username %>/group/<%= group._id %>/info">information</a>
+                </li>
+                <li>
+                    <a class="no-style-link" href="/@/<%= user.username %>/group/<%= group._id %>/persons">people</a>
+                </li>
+                <!--  <li>
+                    <a class="no-style-link" href="#">events</a>
+                </li> -->
+            <!--     <li>
+                    <a class="no-style-link" href="#">notes</a>
+                </li>
+                  <li>
+                    <a class="no-style-link" href="#">history</a>
+                </li> -->
+              </ul>
+              
+            </div>
+            <div>
+            <!-- <div id="i"> -->
+               <div>
+                <span class="title-info">Brief Description:</span><br>
+
+                <p> 
+                   <%= group.short_description %>
+                </p>
+              </div> 
+
+              <div>
+                <span class="title-info ">Detailed Description:</span><br>
+
+                <p> 
+                   <%- group.description %>
+                </p>
+              </div>
+            
+            </div>
+          </div>
+
+      <!--  end row  -->
+        </div>
+    <!--  end container -->
+    </div>
 
 
-<form method="POST" action="?_method=DELETE">
-  <button type="submit">Delete resource</button>
-</form>
+    <script>
+
+      $("#button-profile-delete").on("click", function(){
+         
+          if (confirm("Are you sure you want to delete this entry?") == true) {
+
+              var deletePath = $(this).attr('data-delete-path');
+              var redirectPath = $(this).attr('data-redirect-path');
+          
+              $.post(deletePath, function() {
+                window.location.href = redirectPath;
+              });
+          } else {
+              return false;
+          }
+
+      })
+    </script>
+
+
+<!-- footer start -->
+
+    
+  </body>
+</html>

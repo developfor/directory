@@ -70,7 +70,11 @@ var groupController = function(personService, app ){
 						res.redirect('/hub/' + req.params.id);
 						return console.log("err++: " + err) 	
 					}
-					res.render('group/group', {group : group, hub: hub, user: user});
+
+					var updateDate = group.update_date.getTime();
+					var creationDate = group.creation_date.getTime();
+
+					res.render('group/group', {group : group, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate});
 				})
 
 			} else {
@@ -146,7 +150,21 @@ var groupController = function(personService, app ){
 			var userId = req.user._id
 			var user = req.user
 			if(_.isEqual(userId, hubOwner)){
-				Group.find({hub_id: hub.id}, function(err, groups){
+
+
+
+
+
+
+				var sort = {sort: {update_date: -1} } 
+
+
+
+
+
+
+
+				Group.find({hub_id: hub.id}, null, sort, function(err, groups){
 					if(err){ return console.log("err: " + err) }
 					// console.log(groups);
 					res.render('group/groups', {hub: hub, groups : groups, user: user});
@@ -209,16 +227,35 @@ var groupController = function(personService, app ){
 
 	
 		    group.title = requestBody.title;
+		    group.lowercase_title = requestBody.title.toLowerCase();
 			
 									
 			group.short_description = requestBody.short_description;
 			group.description = requestBody.description;
 
+
+			group.industry = requestBody.industry;
+			group.group_type = requestBody.group_type;
+
+			// creation date stuff
+			group.creation_date = new Date(requestBody.creation_month + " " + requestBody.creation_day + " " + requestBody.creation_year)
+
+
 			group.email = requestBody.email;
 			group.primary_phone = requestBody.primary_phone;
-			
-			group.address = requestBody.address;
+			group.fax = requestBody.fax;
+
+			// address stuff
+			group.street = requestBody.street;
+			group.city = requestBody.city;
+			group.state_province_region= requestBody.state_province_region;
+			group.postal_code = requestBody.postal_code;
+			group.country = requestBody.country;
+
 			group.web_address = requestBody.web_address;
+
+			var color = [ "222222", "333333", "444444", "555555", "666666", "777777", "888888", "999999", "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE"]
+			group.hex_color = color[Math.floor( Math.random() * ( color.length ) ) ] //(Math.random()*0xFFFFFF<<0).toString(16);
 
 
 			var save = function(){
@@ -269,6 +306,12 @@ var groupController = function(personService, app ){
 					res.redirect('/hub/:id');
 					return console.log("err++: " + err) 	
 				}	
+
+				group.creation_month = moment(new Date(group.creation_day)).format('MMMM').toLowerCase();
+				group.creation_day = moment(new Date( group.creation_day)).format('D')
+				group.creation_year = moment(new Date(group.creation_day)).format('YYYY')
+
+
 				console.log(group);
 				res.render('group/group_update', {group : group, csrfToken: req.csrfToken()});
 			})
@@ -316,16 +359,32 @@ var groupController = function(personService, app ){
 					group.update_date = Date.now();
 
 			
-				   	group.title = requestBody.title;
-			
-									
+					group.title = requestBody.title;
+				    group.lowercase_title = requestBody.title.toLowerCase();
+					
+											
 					group.short_description = requestBody.short_description;
 					group.description = requestBody.description;
 
+
+					group.industry = requestBody.industry;
+					group.group_type = requestBody.group_type;
+
+					// creation date stuff
+					group.creation_day = new Date(requestBody.creation_month + " " + requestBody.creation_day + " " + requestBody.creation_year)
+
+
 					group.email = requestBody.email;
 					group.primary_phone = requestBody.primary_phone;
-					
-					group.address = requestBody.address;
+					group.fax = requestBody.fax;
+
+					// address stuff
+					group.street = requestBody.street;
+					group.city = requestBody.city;
+					group.state_province_region= requestBody.state_province_region;
+					group.postal_code = requestBody.postal_code;
+					group.country = requestBody.country;
+
 					group.web_address = requestBody.web_address;
 
 					console.log("_____________________");

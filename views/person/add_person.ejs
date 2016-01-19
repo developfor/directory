@@ -1,8 +1,4 @@
-
-
-	<% include ../_partials/header %>
-<%= person %>
-
+<% include ../_partials/header %>
 
 
 <!-- text editor -->
@@ -28,7 +24,7 @@
 		</div>
       	<div class="row">   
             <div class="four columns title-info">
-                <label for="FirstName">first name:<span  style="color: #E23B3B;">*</span></label>
+                <label for="FirstName">first name:<span  class="form-important" >*</span></label>
                 <input class="u-full-width" type="text" name="first_name" value="<%= person.first_name %>"/>
         	</div>
 	  
@@ -38,7 +34,7 @@
         	</div>
       
         	<div class="four columns title-info">
-                <label for="LastName">last name:<span  style="color: #E23B3B;">*</span> </label>
+                <label for="LastName">last name:<span  class="form-important">*</span> </label>
                 <input class="u-full-width" type="text" name="last_name" value="<%= person.last_name %>" />
         	</div>
         </div>
@@ -543,6 +539,8 @@
 				paste_text_sticky : true,
 				paste_text_sticky_default: true,
 				link_assume_external_targets: true,
+				extended_valid_elements: 'a[href|target=_blank]',
+
 				// plugins: "autoresize",
 				// content_style: "div  {border: #000 solid 3px;}"
 

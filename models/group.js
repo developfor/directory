@@ -9,13 +9,7 @@ var Group = new Schema({
 		validate: /\S+/
 	},
 
-	group_type:{
-		type: String
-	},
-	industry:{
-		type: String
-	},
-
+	
 
 
 	// ----- description info -------
@@ -34,25 +28,53 @@ var Group = new Schema({
 		// validate: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/,
 		// default: null
 	},
+
+	group_type:{
+		type: String
+	},
+	industry:{
+		type: String
+	},
+
+	creation_day: {
+		type: String,
+		default: ""
+	},
+
 	primary_phone: {
 		type: String,
 	},
-	mobile_phone: {
+	fax: {
 		type: String,
 	},
-	address: {
+	
+	// ----- Address info -------
+	street: {
 		type: String,
+		default: ""
+	},
+	city: {
+		type: String,
+		default: ""
+	},
+	state_province_region: {
+		type: String,
+		default: ""
+	},
+	postal_code: {
+		type: String,
+		default: ""
+	},
+	country: {
+		type: String,
+		default: ""
 	},
 
+
 	// ----- online presence info -------
-	web_address_a: {
+	web_address: {
 		type: String,
-	},
-	web_address_b: {
-		type: String,
-	},
-	web_address_c: {
-		type: String,
+		default: ""
 	},
 
 
@@ -74,20 +96,28 @@ var Group = new Schema({
 	img_normal: {
 		type: String,
 	},
+	
+	// core details
 
-
-
-
-
-	creation_date: {
-		type: Date,
-		default: Date.now
-	},
 	hub_id: {
 		type: Schema.ObjectId,
 		require: true,
 		ref: "Hub"
 	},
+	update_date: {
+		type: Date,
+		default: Date.now
+		 // default: null
+	},
+	creation_date: {
+		type: Date,
+		default: Date.now
+	},
+	hex_color: {
+		// require: true,
+		type: String,
+		default: "363636"
+	}
 });
 
 
