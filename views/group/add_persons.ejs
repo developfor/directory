@@ -1,25 +1,71 @@
 <% include ../_partials/header %>
-<%= group %>
-<hr>
 
 
+
 <hr>
-<form>
+<form class="formlist">
 	<% persons.forEach(function(name){ %>
-	<%= JSON.stringify(name) %>
+
 	<%  if(name.checked === true) { %>
 
-	 <input type="checkbox" name="person" value="<%= name._id %>" checked><%= name.first_name %> <%= name.last_name %> <br>
+
+		<li>
+	 		<div class="p-content formlist-box">
+	 			<div  class="formlist-box-inner" >
+		 			<a href="/@/<%= user.username %>/person/<%= name._id %>">
+		 				<%  if(name.img_foldername && name.img_thumbnail){ %>
+				        	 <img src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
+		        		<% }else{  %>
+		        			 <img style="background-color: #<%= name.hex_color %>;" src="/app/img/no-image.png" >
+		        		<% }  %>
+		        	</a>
+	                <br>
+	 				<input type="checkbox" name="person" value="<%= name._id %>" style="margin-bottom: 0;" checked>
+	 			</div>
+	 			<br>
+	 				<div class="formlist-title-box">
+	 					<p class="title-info"><span> <%= name.first_name %> <%= name.middle_name %> <%= name.last_name %> <%= name.suffix %></span>		                  
+	 					</p>
+	 				</div>
+	 		</div>
+	 	</li>
+
+
 
 	<%  } else { %>
 
-	<input type="checkbox" name="person" value="<%= name._id %>"><%= name.first_name %> <%= name.last_name %> <br>
+		<li>
+	 		<div class="p-content formlist-box">
+	 			<div  class="formlist-box-inner" >
+		 			<a href="/@/<%= user.username %>/person/<%= name._id %>">
+		 				<%  if(name.img_foldername && name.img_thumbnail){ %>
+				        	 <img src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
+		        		<% }else{  %>
+		        			 <img style="background-color: #<%= name.hex_color %>;" src="/app/img/no-image.png" >
+		        		<% }  %>
+		        	</a>
+	                <br>
+	 				<input type="checkbox" name="person" value="<%= name._id %>" style="margin-bottom: 0;" >
+	 			</div>
+	 			<br>
+	 				<div class="formlist-title-box">
+	 					<p class="title-info"><span> <%= name.first_name %> <%= name.middle_name %> <%= name.last_name %> <%= name.suffix %></span>		                  
+	 					</p>
+	 				</div>
+	 		</div>
+	 	</li>
+
+
 		<% } %>
 	<% }) %>
 </form>
 
+  <script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
+
 
 <script>
+ $('.formlist li').matchHeight();
+
 $('input:checkbox').change(
     function(){
        if ($(this).is(':checked')) {

@@ -54,7 +54,10 @@
                     </a>
                     <div>
                       <div class="title-info-wrapper">
-                        <span class="title-info"><%= item.name %> </span>
+                        <span class="title-info"><%= item.title %> </span>
+                      </div>
+                      <div class="p-content-desc">
+                        <span class="small-text" > <%=  item.short_description %></span><br>
                       </div>
                     </div> 
                     <a class="button button-primary" href="/@/<%= user.username %>/group/<%= item._id %>">More Details »</a>

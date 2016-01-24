@@ -87,6 +87,128 @@ var groupController = function(personService, app ){
 		return hubchecker(req, res, readGroup)
 	}
 
+	var groupInfo = function (req, res) {
+
+		var readgroup = function(hub){
+
+			var hubOwner = hub.user_owner_id
+			var userID = req.user._id
+			var user = req.user
+
+			if(_.isEqual(userID, hubOwner)){
+
+				return Group.findOne({_id: req.params.group_id, hub_id: hub.id}, function(err, group){
+					if(err || group === null){ 	
+						req.flash('info', "group not found.")
+						res.redirect('/@/:id');
+						return console.log("err++: " + err) 	
+					}
+					console.log(group);
+					var updateDate = group.update_date.getTime();
+					var creationDate = group.creation_date.getTime();
+
+					group.address = group.street  +" "+  group.city +" "+ group.state_province_region +" "+ group.postal_code +" "+  group.country;
+
+
+					if(group.creation_day){ 
+						group.creation_day = moment(new Date(group.creation_day)).format("LL")
+					}
+					
+
+
+					res.render('group/info', {group : group, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate   });
+				})
+
+			} else {
+				console.log("not equals");
+				// console.log(req);
+			  // return res.redirect('/hubs');
+			  res.send('404: Page not Found', 404);
+			}
+
+		}
+
+		return hubchecker(req, res, readgroup)
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	var groupPersons = function (req, res) {
+
+		var readGroup = function(hub){
+
+			var hubOwner = hub.user_owner_id
+			var userId = req.user._id
+			var user = req.user
+
+			if(_.isEqual(userId, hubOwner)){
+
+				PersonGroupJoin.find({group_id: req.params.group_id, hub_id: hub.id}, function(err, groupJoins){		
+					var personArray = [];
+
+
+					forEachAsync(groupJoins, function (next, element, index, array) {
+						Person.find({_id: element.person_id, hub_id: element.hub_id}, function(err, person){
+
+							personArray.push(person[0])
+		
+							next()
+						})
+
+
+					   	
+					}).then(function () {
+					    
+
+						Group.findOne({_id: req.params.group_id, hub_id: hub.id}, function(err, group){
+							if(err || group === null){ 	
+								req.flash('info', "Group not found.")
+								res.redirect('/@/:id');
+								return console.log("err++: " + err) 	
+							}
+							var updateDate = group.update_date.getTime();
+							var creationDate = group.creation_date.getTime();
+
+							group.title  = group.title || "";
+						
+							res.render('group/persons', { group : group, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate, personArray: personArray });
+
+
+						})
+
+					    console.log('All requests have finished');
+					    
+					});
+		
+					
+				})
+			} else {
+				console.log("not equals");
+			  	res.send('404: Page not Found', 404);
+			}
+
+		}
+
+		return hubchecker(req, res, readGroup)
+	}
+
+
+
+
+
+
+
+
 
 
 
@@ -457,6 +579,7 @@ var groupController = function(personService, app ){
 	var addPerson = function (req, res) {
 		var group = function(hub){
 			var person_array = []
+			var user = req.user
 			Group.findById(req.params.group_id, function (err, group) {	
 				return Person.find({hub_id: hub.id}, null, function(err, persons){
 				  	if(err){ return console.log("err: " + err) }
@@ -464,6 +587,7 @@ var groupController = function(personService, app ){
 
 				  	async.eachSeries(persons, function (person, callback) {
 					  	  var p = person.toJSON()
+					  	  
 					  	  p.checked = false;
 
 						  PersonGroupJoin.find({hub_id: hub.id, person_id: person._id, group_id: req.params.group_id}, null, function(err, person_group){
@@ -488,7 +612,7 @@ var groupController = function(personService, app ){
 						
 					  if (err) { throw err; }
 					  return PersonGroupJoin.find({hub_id: hub.id}, null, function(err, person_group){
-				   		res.render('group/add_persons', { person_group: person_group, group : group, persons : person_array});
+				   		res.render('group/add_persons', { person_group: person_group, group : group, persons : person_array, user: user});
 				  	  });
 
 					});
@@ -559,6 +683,8 @@ var groupController = function(personService, app ){
 
 	return{
 		group: group,
+		groupInfo: groupInfo,
+		groupPersons: groupPersons,
 		deleteGroup: deleteGroup,
 		groups: groups,
 		addGroup: addGroup,

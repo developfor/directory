@@ -103,12 +103,42 @@ h1, h2, h3, h4, h5, h6 {
     clear: both;
     float: left;
     width: 100%;
+    li{
+
+    }
   }
   // display: inline-block;
   li{
     clear: both;
   }
 }
+
+ .list-content{
+    li{
+      list-style: none;
+      .list-area{
+        min-height: 66px; 
+        overflow: hidden;
+        .image-block{
+          height: 60px; 
+          width: 68px; 
+          float: left; 
+          margin-right: 5px;
+          img{
+            background-color: #666; 
+            height: 60px; 
+            border: 3px solid #000; 
+            width: 60px;
+          }
+        }
+      }
+    }
+    .list-text-block{
+      float: left;  
+      width: 60%; 
+      font-weight: 700;
+    }
+  }
 
 /*profile page*/
 .nav-right{
@@ -391,7 +421,9 @@ a:hover {
 // }
 
 
-
+.info-text{
+  text-transform: capitalize;
+}
 
 .p-content .button:hover, .button-primary:hover , .p-content  button:hover, .p-content input[type="submit"]:hover, .p-content input[type="reset"]:hover, .p-content input[type="button"]:hover {
   text-decoration: underline;
@@ -494,6 +526,40 @@ a:hover {
 
 
 
+
+.formlist{
+  li{
+    list-style: none; 
+    float:left; 
+    padding-right: 1.5%;
+    .formlist-box{
+      min-height: 60px; 
+      width: 130px;
+      overflow: hidden; 
+      float:left;
+      .formlist-box-inner{
+        height: 60px; 
+        width: 60px;
+        img{
+          background-color: #666;
+          height: 60px; 
+          width: 60px;
+        }
+      }
+    }
+    .formlist-title-box{
+      font-weight: 700; 
+      margin-top:10px;
+      p{
+        padding-right: 5px;
+      }
+    }
+  }
+}
+
+
+
+
 // footer
 .footer{
   margin-top: 20px; 
@@ -505,8 +571,10 @@ a:hover {
   li{
     margin-right: 20px;
     display: inline-block;
+    background: red;
 
- 
+    
+    
   }
 }
 

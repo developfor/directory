@@ -60,6 +60,13 @@ module.exports = function(app) {
 	app.get('/@/:id/groups',  groupController.groups);
 
 	app.get('/@/:id/group/:group_id', groupController.group);
+	
+	app.get('/@/:id/group/:group_id/info', groupController.groupInfo);
+
+	// READ GROUPS
+	app.get('/@/:id/group/:group_id/persons', groupController.groupPersons);
+
+
 
 	app.delete('/@/:id/group/:group_id', groupController.deleteGroup);
 
