@@ -169,6 +169,15 @@ var Person = new Schema({
 		type: String,
 	},
 
+
+	defaultsmallThumb:{
+		type: String,
+	},
+	defaultBigThumb:{
+		type: String,
+	},
+
+
 	// core details
 
 	hub_id: {

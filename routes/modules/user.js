@@ -41,6 +41,7 @@ var flash = require('express-flash');
 
 
 
+
 // // Bcrypt middleware
 // passport.serializeUser(function(user, done) {
 //   done(null, user.id);
@@ -98,6 +99,10 @@ module.exports = function(app) {
     }
     // console.log(req.user.id)
     // res.render('index', { user: req.user });
+   //canvasThumbnail.smallTextThumb("h")
+
+
+
     res.render('index', { user: req.user, csrfToken: req.csrfToken() })
   });
 

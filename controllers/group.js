@@ -52,7 +52,7 @@ var hubchecker = function(req, res, method){
 
 
 
-var groupController = function(personService, app ){
+var groupController = function(){
 
 
 	var group =  function(req, res){

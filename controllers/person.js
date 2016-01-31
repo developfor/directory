@@ -21,6 +21,8 @@ var upload = require('./../helpers/upload.js').upload;
 var imageProcessor = require('./../helpers/image_processor.js');
 var deleteImgFile = require('./../helpers/delete_img_file.js')
 
+var canvasThumbnail = require('./../helpers/canvas_thumbnail.js');
+
 var moment = require('moment');
 
 
@@ -77,6 +79,9 @@ var personController = function(personService, app ){
 			var person = new Person();
 			
 			person.hub_id = hub._id;
+
+			person.defaultSmallThumb = canvasThumbnail(requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase()).smallTextThumb()
+			person.defaultBigThumb = canvasThumbnail(requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase()).bigTextThumb()
 
 		    person.title = requestBody.title;
 			person.first_name = requestBody.first_name.replace(/[^a-zA-Z0-9\s]/gi, "");

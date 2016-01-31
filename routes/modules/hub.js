@@ -123,7 +123,7 @@ module.exports = function(app) {
 								var funct = function(arg){return arg}
 
 
-								Event.find({hub_id: hub.id}, null, {}, function(err, events){
+								Event.find({hub_id: hub.id}, null, sort, function(err, events){
 									return res.render('hub/hub', {funct: funct, user: req.user, hub: hub, persons: persons, groups: groups, events: events});
 								  	console.log("equals")
 							  	}).limit(5);	

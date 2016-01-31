@@ -1,78 +1,65 @@
 "use strict";
 var secret_key = require('../../config/secret.js');
 var passport = require('../../config/passport.js');
-var  ensureAuthenticated = function(req, res, next) {
-	  if (req.isAuthenticated()) { return next(); }
-	 res.redirect('/login')
-  	}
+
 
 var mongoose = require('mongoose');
 var _ = require('underscore');
+
+var csrf = require('csurf')
+var csrfProtection = csrf({ cookie: true })
 
 var Hub = require('../../models/hub.js');
 var Event = require('../../models/event.js');
 var Person = require('../../models/person.js');
 
-var Person_event_join = require('../../models/person_event_join.js');
+var PersonEventJoin = require('../../models/person_event_join.js');
+
+
+var  ensureAuthenticated = function(req, res, next) {
+		if (req.isAuthenticated()) { return next(); }
+		res.redirect('/login')
+  	}
+var nocache = function (req, res, next) {
+		res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+		res.header('Expires', '-1');
+		res.header('Pragma', 'no-cache');
+		next();
+	}
 
 module.exports = function(app) {
+
+	var eventController = require('./../../controllers/event.js')(null, app)
 	// app.get('/', function (req, res) {
 	//   res.send('Hello World!');
 	// });
 
 	app.all('/hub/:id/add_event', ensureAuthenticated);
 	app.all('/hub/:id/events', ensureAuthenticated);
-	// app.all('/event', ensureAuthenticated);
+	app.all('/event', ensureAuthenticated);
 	app.all('/hub/:id/event/*', ensureAuthenticated);
 
-
-	app.get('/hub/:id/add_event', function (req, res) {
-		return Hub.findById(req.params.id, function(err, hub){
-			if(err){ 
-				res.redirect('/hubs');
-				return console.log("err: " + err) 
-			}
-			res.render('event/add_event');
-		})
-	})
-
-	app.post('/hub/:id/add_event', function (req, res) {
-		
-
-		var event_save = function(){
-
-			var event = new Event();
-
-			event.hub_id = mongoose.Types.ObjectId(req.params.id);
-			event.title = req.body.title;
-			event.description = req.body.description;
-
-			event.save(function (err, event) {
-				if(err || event === null){ 	
-					req.flash('info', "Did not save event.")
-					res.redirect('/hub/' + req.params.id+ '/add_event');
-					return console.log("err++: " + err) 	
-				}	
-				res.redirect('/hub/' + req.params.id+ '/events');
-
-			});	
-
-		}
+	app.all('/@', ensureAuthenticated, nocache);
+	app.all('/@/*', ensureAuthenticated, nocache);
 
 
-		var hubId = function(method){
+	// app.get('/@/:id/add_event', function (req, res) {
+	// 	return Hub.findById(req.params.id, function(err, hub){
+	// 		if(err){ 
+	// 			res.redirect('/hubs');
+	// 			return console.log("err: " + err) 
+	// 		}
+	// 		res.render('event/add_event');
+	// 	})
+	// })
 
-			return Hub.find(req.params.id, function(err, hub){
-					if(err || hub === null){ 	
-						req.flash('info', "Hub not found.")
-						res.redirect('/hubs');
-						return console.log("err++: " + err) 	
-					}
-					return method			
-				})	
-		}
 
-		hubId(event_save());
+
+
+
+
+
+	app.get('/@/:id/add_event', csrfProtection, eventController.addEvent)
 
 
 
@@ -81,38 +68,11 @@ module.exports = function(app) {
 
 
 
+	// app.post('/@/:id/add_group', upload.single('image'), csrfProtection, groupController.addGroupPost)
 
 
 
-
-
-		// return Hub.find(req.params.id, function(err, hub){
-		// 	if(err || hub === null){ 	
-		// 		req.flash('info', "Hub not found.")
-		// 		res.redirect('/hubs');
-		// 		return console.log("err++: " + err) 	
-		// 	}
-
-
-		// 	var event = new Event();
-
-		// 	event.hub_id = mongoose.Types.ObjectId(req.params.id);
-		// 	event.title = req.body.title;
-		// 	event.description = req.body.description;
-
-		// 	event.save(function (err, event) {
-		// 		if(err || event === null){ 	
-		// 			req.flash('info', "Did not save event.")
-		// 			res.redirect('/hub/' + req.params.id+ '/add_event');
-		// 			return console.log("err++: " + err) 	
-		// 		}	
-		// 		res.redirect('/hub/' + req.params.id+ '/events');
-
-		// 	});		
-		// })	
-
-
-	})
+	app.post('/@/:id/add_event', csrfProtection, eventController.addEventPost)
 
 	app.get('/hub/:id/events', function (req, res) {
 		return Hub.findById(req.params.id, function(err, hub){
@@ -146,47 +106,15 @@ module.exports = function(app) {
 		});
 	});
 
-	app.get('/hub/:id/event/:event_id', function (req, res) {
-		// return Event.findById(req.params.id, function(err, event){
-		// 	if(err || event === null){ 	
-		// 		req.flash('info', "Event not found.")
-		// 		res.redirect('/events');
-		// 		return console.log("err++: " + err) 	
-		// 	}	
-		// 	// console.log(event);
-		// 	res.render('event/event', {event : event});
-		// })
-
-		return Hub.findById(req.params.id, function(err, hub){
-			if(err){ 
-				res.redirect('/hubs');
-				return console.log("err: " + err) 
-			}
-
-			var hubOwner = hub.user_owner_id
-			var user = req.user._id
-
-			if(_.isEqual(user, hubOwner)){
-
-				return Event.findOne({_id: req.params.event_id, hub_id: hub.id}, function(err, event){
-					if(err || event === null){ 	
-						req.flash('info', "Event not found.")
-						res.redirect('/hub/' + req.params.id);
-						return console.log("err++: " + err) 	
-					}
-					res.render('event/event', {event : event, hub: hub});
-				})
 
 
-			} else {
-				console.log("not equals");
-				// console.log(req);
-			  // return res.redirect('/hubs');
-			  res.send('404: Page not Found', 404);
-			}
 
-		});
-	});
+	app.get('/@/:id/event/:event_id',  eventController.event);
+
+
+
+
+
 
 	app.delete('/hub/:id/event/:event_id', function (req, res) {
 
