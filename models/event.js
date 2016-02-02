@@ -35,6 +35,39 @@ var Event = new Schema({
 
 
 
+	// ----- Address info -------
+	street: {
+		type: String,
+		default: ""
+	},
+	city: {
+		type: String,
+		default: ""
+	},
+	state_province_region: {
+		type: String,
+		default: ""
+	},
+	postal_code: {
+		type: String,
+		default: ""
+	},
+	country: {
+		type: String,
+		default: ""
+	},
+
+
+
+	// ----- online presence info -------
+	web_address: {
+		type: String,
+		default: ""
+	},
+
+
+
+
 	// core details
 	hex_color: {
 		// require: true,

@@ -94,11 +94,23 @@ var eventController = function(){
 				requestBody.start_hour_time  = "AM"
 			}
 			 
-			event.start_date_time = new Date(requestBody.start_month + " " + requestBody.start_day + " " + requestBody.start_year + " " )
+			event.start_date_time = new Date( requestBody.start_month + " " + requestBody.start_day + " " + requestBody.start_year + " " + requestBody.start_hour_time + ":" + requestBody.start_minute_time + " " + requestBody.start_hour_time )
 
-			if( event.start_date_time === ""){
-				requestBody.start_hour_time  = "AM"
+			if( isNaN(event.start_date_time)){
+				event.start_date_time  = new Date()
 			}
+
+
+
+			// address stuff
+			event.street = requestBody.street;
+			event.city = requestBody.city;
+			event.state_province_region= requestBody.state_province_region;
+			event.postal_code = requestBody.postal_code;
+			event.country = requestBody.country;
+
+			event.web_address = requestBody.web_address;
+
 
 			event.save(function (err, event) {
 				if(err || event === null){ 	
@@ -138,8 +150,13 @@ var eventController = function(){
 					}
 
 
+
 					var updateDate = event.update_date.getTime();
 					var creationDate = event.creation_date.getTime();
+
+					event.start = moment(event.start_date_time).format("LL  h:mm A") 
+					event.address = event.street  +" "+  event.city +" "+ event.state_province_region +" "+ event.postal_code +" "+  event.country;
+
 
 
 					res.render('event/event', {event : event, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate});
@@ -155,7 +172,30 @@ var eventController = function(){
 		hubchecker(req, res, readEvent)
 	}
 
+	var events = function(req, res){
+		var readEvents = function(hub){
 
+			var hubOwner = hub.user_owner_id
+			var userId = req.user._id
+			var user = req.user
+			
+			if(_.isEqual(userId, hubOwner)){
+
+				Event.find({hub_id: hub.id}, function(err, events){
+					if(err){ return console.log("err: " + err) }
+					// console.log(events);
+					res.render('event/events', {hub: hub, user: user, events : events});
+				})
+
+			} else {
+				console.log("not equals");
+				// console.log(req);
+			  return res.redirect('/@');
+			}
+
+		}
+		hubchecker(req, res, readEvents)
+	}
 
 
 
@@ -163,6 +203,7 @@ var eventController = function(){
 
 	return{
 		event: event,
+		events: events,
 		addEvent: addEvent,
 		addEventPost: addEventPost	
 	}

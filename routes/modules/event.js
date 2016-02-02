@@ -74,37 +74,7 @@ module.exports = function(app) {
 
 	app.post('/@/:id/add_event', csrfProtection, eventController.addEventPost)
 
-	app.get('/hub/:id/events', function (req, res) {
-		return Hub.findById(req.params.id, function(err, hub){
-			if(err){ 
-				res.redirect('/hubs');
-				return console.log("err: " + err) 
-			}
-
-			// console.log(hub)
-			var hubOwner = hub.user_owner_id
-			var user = req.user._id
-			// console.log(hub.user_owner_id)
-			// console.log(req.user._id)
-			// console.log(_.isEqual(hub.user_owner_id, req.user._id));
-
-			
-			if(_.isEqual(user, hubOwner)){
-
-				Event.find({hub_id: hub.id}, function(err, events){
-					if(err){ return console.log("err: " + err) }
-					// console.log(events);
-					res.render('event/events', {hub: hub, events : events});
-				})
-
-			} else {
-				console.log("not equals");
-				// console.log(req);
-			  return res.redirect('/hubs');
-			}
-			
-		});
-	});
+	app.get('/@/:id/events', eventController.events);
 
 
 

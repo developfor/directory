@@ -27,38 +27,26 @@
             </div>
             <div>
           
-
             <div>
             	<span class="title-info">Starting:</span><br>
             	<p> 
-            		<%= event.start_date_time %>
-            	</p>
-            </div> 
-
-
-            <div>
-            	<span class="title-info">Ending:</span><br>
-            	<p> 
-            		<%= event.short_description %>
+            		<%= event.start %>
             	</p>
             </div> 
 
             <div>
-              <span class="title-info">Duration:</span><br>
-              <p> 
-                <%= event.short_description %>
-              </p>
-            </div> 
-
-             <div>
               <span class="title-info">Location:</span><br>
               <p> 
-                <%= event.short_description %>
+                <%= event.address %>
+              </p>
+            </div>
+
+            <div>
+              <span class="title-info">Online:</span><br>
+              <p> 
+                <%= event.online %>
               </p>
             </div> 
-
-
-            
 
             <div>
             	<span class="title-info">Brief Description:</span><br>
@@ -69,7 +57,6 @@
 
             <div>
             	<span class="title-info ">Detailed Description:</span><br>
-
             	<p> 
             		<%- event.description %>
             	</p>

@@ -31,18 +31,22 @@
             </div>
             <div>
             <!-- <div id="i"> -->
+            <% if(person.short_description){ %>
                <div>
                 <span class="title-info">Brief Description:</span><br>
-
                 <p> 
                   <%= person.short_description %>
                 </p>
               </div> 
+            <% } %>
+            
 
+            <% if(person.description){ %>
               <div>
                 <span class="title-info ">Detailed Description:</span><br>
                 <%- person.description %>
               </div>
+            <% } %>
             
             </div>
           </div>
