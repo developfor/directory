@@ -2,8 +2,8 @@
 
 
 <% if (!user) { %>
-<h5 style="max-width: 600px;">Directory is your personal directory for writing about your contacts. </h5>
-<p> Start now by logging in: </p>
+<h5 style="max-width: 600px;">Directory.is a simple to use platform for managing your contacts.</h5> 
+<p>Start Manage Your Contacts:</p>
 	<form action="/login" method="post">
 		<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 		<div>
@@ -15,11 +15,11 @@
 		<input type="password" name="password"/>
 		</div>
 		<div>
-		<input type="submit" value="Submit"/>
+		<input class="button button-primary" type="submit" value="Submit"/>
 		</div>
 	</form>
 
-	<a href="/signup">Sign Up</a>
+	<a  href="/signup">Sign Up</a>
 
 <% } else { %>
 Welcome <%= user.username %>! <br>

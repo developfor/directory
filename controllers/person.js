@@ -58,12 +58,17 @@ var personController = function(personService, app ){
 
 	var add_person = function (req, res) {
 
-		var render = function(){
-			res.render('person/add_person', {csrfToken: req.csrfToken(), person : ""})
+
+		var render = function(hub){
+			var hubOwner = hub.user_owner_id
+			var userId = req.user._id
+			var user = req.user
+
+			res.render('person/add_person', {csrfToken: req.csrfToken(), person : "", user: user, hub: hub})
 		}
 
 		// running the hubchecker
-		hubchecker(req, res, render)
+		return hubchecker(req, res, render)
 		
 	}
 
@@ -76,12 +81,13 @@ var personController = function(personService, app ){
 			var randomString = token;
 
 			var requestBody = req.body;
+			var intials = requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase() + requestBody.last_name.replace(/\s+/g, '').charAt(0).toUpperCase()
+
 			var person = new Person();
 			
 			person.hub_id = hub._id;
-
-			person.defaultSmallThumb = canvasThumbnail(requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase()).smallTextThumb()
-			person.defaultBigThumb = canvasThumbnail(requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase()).bigTextThumb()
+			person.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
+			person.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
 		    person.title = requestBody.title;
 			person.first_name = requestBody.first_name.replace(/[^a-zA-Z0-9\s]/gi, "");
@@ -165,14 +171,14 @@ var personController = function(personService, app ){
 	// Read Persons
 	var persons = function (req, res) {
 		var readPersons = function(hub){
-			console.log("persons")
+			// console.log("persons")
 
 			var hubOwner = hub.user_owner_id
 			var userId = req.user._id
 			var user = req.user
 
-			console.log(req.query.first_name)
-			console.log(req.query.last_name)
+			// console.log(req.query.first_name)
+			// console.log(req.query.last_name)
 
 			
 			if(_.isEqual(userId, hubOwner)){
@@ -256,7 +262,7 @@ var personController = function(personService, app ){
 
 					var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
 
-					res.render('person/person', {title: title, user: user, person : person, hub: hub, updateDate: updateDate, creationDate: creationDate   });
+					res.render('person/person', {title: title, user: user, person: person, hub: hub, updateDate: updateDate, creationDate: creationDate   });
 				})
 
 			} else {
@@ -440,6 +446,7 @@ var personController = function(personService, app ){
 
 		var getGroups = function(hub){
 			var hubOwner = hub.user_owner_id
+			var userId = req.user._id
 			var user = req.user
 
 			Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
@@ -526,7 +533,9 @@ var personController = function(personService, app ){
 				person_id: req.params.person_id,
 
 			}, function(err, hub){
-					console.log(hub)
+					// console.log(hub)
+					console.log("remove person <<<<<<<<<<<<<<")
+
 					res.send('Completed remove person');
 
 			});
@@ -546,6 +555,10 @@ var personController = function(personService, app ){
 	var personUpdate = function (req, res) {
 
 		var readPerson = function(hub){
+			var hubOwner = hub.user_owner_id
+			var userId = req.user._id
+			var user = req.user
+
 			return Person.findById(req.params.person_id, function(err, person){
 				if(err || person === null){ 	
 					req.flash('info', "Person not found.")
@@ -560,7 +573,7 @@ var personController = function(personService, app ){
 
 				console.log(person);
 
-				res.render('person/person_update', {person : person, csrfToken: req.csrfToken()});
+				res.render('person/person_update', {person : person, csrfToken: req.csrfToken(), user: user, hub: hub});
 			})
 
 
@@ -597,6 +610,9 @@ var personController = function(personService, app ){
 					var token = crypto.randomBytes(8).toString('hex') + "_" +Date.now(); 
 					var randomString = token;
 					var requestBody = req.body;
+
+					var intials = requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase() + requestBody.last_name.replace(/\s+/g, '').charAt(0).toUpperCase()
+
 					
 
 
@@ -608,6 +624,8 @@ var personController = function(personService, app ){
 			
 				    person.title = requestBody.title;
 			
+					person.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
+					person.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
 					person.first_name = requestBody.first_name.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
 					person.middle_name = requestBody.middle_name.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");

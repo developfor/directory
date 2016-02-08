@@ -21,7 +21,7 @@ var User = require('../../models/user.js');
 var Hub = require('../../models/hub.js');
 var Person = require('../../models/person.js');
 var Group = require('../../models/group.js');
-var Event = require('../../models/event.js');
+
 
 module.exports = function(app) {
 
@@ -123,10 +123,10 @@ module.exports = function(app) {
 								var funct = function(arg){return arg}
 
 
-								Event.find({hub_id: hub.id}, null, sort, function(err, events){
-									return res.render('hub/hub', {funct: funct, user: req.user, hub: hub, persons: persons, groups: groups, events: events});
+								// Event.find({hub_id: hub.id}, null, sort, function(err, events){
+									return res.render('hub/hub', {funct: funct, user: req.user, hub: hub, persons: persons, groups: groups});
 								  	console.log("equals")
-							  	}).limit(5);	
+							  	// }).limit(5);	
 						  	}).limit(5);
 						}).limit(5);
 

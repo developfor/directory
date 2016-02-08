@@ -9,7 +9,7 @@ var thumbnailGenerator = function(t) {
 
 		ctx.font = '400px Courier';
 
-		ctx.fillStyle = "#E23B3B";
+		ctx.fillStyle = "#000";
 		ctx.textAlign = 'center';
 		ctx.fillText(t, 300, 400);
 		console.log("bigTextThumb")
@@ -25,7 +25,7 @@ var thumbnailGenerator = function(t) {
 
 	    ctx.font = '150px Courier';
 
-	    ctx.fillStyle = "#E23B3B";
+	    ctx.fillStyle = "#000";
 	    ctx.textAlign = 'center';
 	    ctx.fillText(t, 100, 140);
 		console.log("smallTextThumb")

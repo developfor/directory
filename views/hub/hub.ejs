@@ -1,5 +1,7 @@
 <% include ../_partials/header %>
 
+
+<% include ../_partials/user_navigation.ejs %>
 <!-- <p>admin: <%= user.username %></p>
 <p>You are in: <%= hub.title %></p>
 <p>Description: <%= hub.description %></p><br>
@@ -27,17 +29,6 @@
         <a class="up-title" href="/hub/<%= hub.id %>/update"><b>edit title</b></a>
       </div>  -->
 
-      <div class="bread-crumbs">
-        <div id="profile-content">
-          <img id="profile-thumb" src="/app/img/no-image.png">
-          <div id="profile-username">
-            <%= user.username %>
-          </div>
-        </div>
-        <div> 
-         <a href="/@/<%= user.username %>/">Hub</a>|<a href="/@/<%= user.username %>/persons">People</a>|<a href="/@/<%= user.username %>/groups">Groups</a>|<a href="/@/<%= user.username %>/events">Events</a> 
-        </div>            
-      </div>
       <div class="row hub">
 
           <div class="four columns">
@@ -62,7 +53,7 @@
       		              <%  if(person.img_foldername && person.img_thumbnail){ %>
       		        				  <img src="/uploads/img/<%= person.img_foldername %>/<%=  person.img_icon  %>"> 
       		        			<% }else{  %>
-      		        			 <img style="background-color: #<%= person.hex_color %>;" src="/app/img/no-image.png" >
+                            <img style="background-color: #EEEEEE" src="<%= person.defaultBigThumb %>" >
       		        			<% }  %>
       		                
       		                </div>
@@ -114,7 +105,7 @@
                           <%  if(group.img_foldername && group.img_thumbnail){ %>
                               <img src="/uploads/img/<%= group.img_foldername %>/<%=  group.img_icon  %>"> 
                           <% }else{  %>
-                           <img style="background-color: #<%= group.hex_color %>;" src="/app/img/no-image.png" >
+                           <img style="background-color: #EEEEEE" src="<%= group.defaultBigThumb %>" >
                           <% }  %>
                             
                             </div>
@@ -136,51 +127,7 @@
             </div>
           </div>
 
-           <div class="four columns">
-            <div class="content-box">
-            	<p class="up-title" >add an event:</p>
-            	 <a  class="button button-primary" href="/@/<%= user.username %>/add_event">+ add event</a>
-
-              <% if(events.length > 0){ %>
-              <hr>
-              <p class="up-title" >recently updated events:</p>
-              <div class="list-content">
-                <ul>
-
-
-
-				 <% events.forEach(function(event){ %>
-   
-                  <li style="list-style: none;">
-                <!--     <div style="width: 68px; float: left;">
-
-	                    
-	        			 <img style="background-color: #666; height: 60px; width: 60px;" >
-	        				
-                    
-                    </div> -->
-                    <div style="float: left; width: 60%;">
-                      <p class="title-info"  ><a href="/@/<%= user.username %>/event/<%= event._id %>"> <%= event.title  %> </a><br>
-  
-                      </p>
-
-                 
-                    </div>
-                  </li>
-
-                  <% }) %>
-
-
-                   
-
-
-                </ul>
-              </div>
-
-               <a class="button button-primary" href="/@/<%= user.username %>/events">view all events</a><br>
-                  <% } %>
-            </div>
-          </div>
+      
 
           
 

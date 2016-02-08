@@ -4,17 +4,8 @@
 <% } %>
 
 
-  <div class="bread-crumbs">
-    <div id="profile-content">
-      <img id="profile-thumb" src="/app/img/no-image.png">
-      <div id="profile-username">
-        <%= user.username %>
-      </div>
-    </div>
-    <div> 
-      <a href="/@/<%= user.username %>/">Hub</a>|<a href="/@/<%= user.username %>/persons">People</a>|<a href="/@/<%= user.username %>/groups">Groups</a>|<a href="/@/<%= user.username %>/events">Events</a> 
-    </div>            
-  </div>
+  <% include ../_partials/user_navigation.ejs %>
+
 
       <div class="p-content-list">
 	
@@ -28,7 +19,7 @@
 	          <div class="row">
 	            <div class="six columns title-info">
 	              <label for="GroupTitle">Group Title:</label>
-	              <input name="first_name" class="u-full-width" type="text" placeholder="Group Title" id="input-group-title" value="">
+	              <input name="title" class="u-full-width" type="text" placeholder="Group Title" id="input-group-title" value="">
 	            </div>
 	          
 	          </div>
@@ -75,7 +66,8 @@
 					<img src="/uploads/img/<%= group.img_foldername %>/<%= group.img_thumbnail %>">
 					     <!-- <img src="/app/img/no-image.png" > -->
 					<% }else{  %>
-						 <img style="background-color: #<%= group.hex_color %>;"  src="/app/img/no-image.png" >
+					 <img style="background-color: #EEEEEE" src="<%= group.defaultBigThumb %>" >
+
 					<% }  %>
 				</a>
 				<div>
@@ -127,38 +119,38 @@
 			var uri = new URI(location.href)
 			var queries = uri.search(true)
 			var querySkip = parseInt(queries.skip) || 0;
-			queries.first_name = queries.first_name || "";
-			queries.last_name = queries.last_name || "";
-			var queriesPage = queries.first_name
+			queries.title = queries.title || "";
+			var queriesPage = queries.title
 
-
+			if( !($(".p-content").length > 20) ){
+				$('#next').css("display", "none")
+			}
 
 
 
 			if(querySkip === 0){
-			  $('#previous').on("click", function (e) {
-			        console.log("begining")
-			    });
-			  $('#next').on("click", function (e) {
-					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1)
+			  // $('#previous').on("click", function (e) {
+			  //       console.log("begining")
+			  //   });
+		      	$('#previous').css("display", "none")
+			  	$('#next').on("click", function (e) {
+					window.location.href = location.origin  + location.pathname + "?title=" + queries.title +  "&skip=" + (querySkip + 1)
 			    });
 			  
-			  // console.log("queries.page")
 			  
 			}else{
 				$('#previous').on("click", function (e) {
-					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip - 1)
+					window.location.href = location.origin  + location.pathname + "?title=" + queries.title + "&skip=" + (querySkip - 1)
 			    });
 			    $('#next').on("click", function (e) {
-					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1)
+					window.location.href = location.origin  + location.pathname + "?title=" + queries.title + "&skip=" + (querySkip + 1)
 			    });
-			   // console.log("ubhjbhjbhjed")
 			}
 
 
-			console.log(location.pathname)
-			console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + querySkip)
-			console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1))
+			// console.log(location.pathname)
+			// console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + querySkip)
+			// console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1))
 
 
       });

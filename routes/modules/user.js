@@ -93,7 +93,8 @@ module.exports = function(app) {
     if(req.isAuthenticated()){
       Hub.find({user_owner_id: req.user.id}, function(err, hub){
         console.log(hub)
-        return res.render('index', { hub: hub, user: req.user, csrfToken: req.csrfToken() })
+        res.redirect("/@/" + req.user.username)
+        // return res.render('index', { hub: hub, user: req.user, csrfToken: req.csrfToken() })
       })
       return
     }

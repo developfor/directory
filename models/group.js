@@ -97,8 +97,19 @@ var Group = new Schema({
 		type: String,
 	},
 	
-	// core details
 
+
+
+	defaultsmallThumb:{
+		type: String,
+	},
+	defaultBigThumb:{
+		type: String,
+	},
+
+
+
+	// core details
 	hub_id: {
 		type: Schema.ObjectId,
 		require: true,

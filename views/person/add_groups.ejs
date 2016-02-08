@@ -35,35 +35,45 @@
  <!-- border: 3px solid #000; -->
 
 <form style="clear: both;">
-	<div class="p-content-list">
+	<div class="p-content-list check-element">
 	<% groups.forEach(function(name){ %>
 	<!-- <%= JSON.stringify(name._id) %> -->
 	<%  if(name.checked === true) { %>
 	
-     <li style="list-style: none; float:left; margin-right: 15px;">
- 		<div style="min-height: 60px; width: 150px; overflow: hidden; float:left;" class="p-content">
+     <li style="">
+ 		<div class="check-element-box p-content">
  			<div >
 	 			<a href="/@/<%= user.username %>/group/<%= name._id %>">
 	 				<%  if(name.img_foldername && name.img_thumbnail){ %>
-			        	 <img style="background-color: #666; height: 60px; width: 60px;" src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
+			        	 <img src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
 	        		<% }else{  %>
-	        			 <img style="background-color: #<%= person.hex_color %>; height: 60px; width: 60px;" src="/app/img/no-image.png" >
+	        			 <img src="<%= name.defaultBigThumb %>">
 	        		<% }  %>
 	        	</a>
+
+
+
+
+
+    			<label>
+		            <div class="Checkbox Module fancyToggle on styledToggle">
+			            <div class="slider"></div>
+			            <p class="onText status">&#10004;</p>
+			            <p class="offText status">&#10006;</p>
+		 				<input type="checkbox" name="group" value="<%= name._id %>" checked></div>
+		            </div>
+		        </label>
+
+
+
+
+
                 
- 				<input type="checkbox" name="group" value="<%= name._id %>" checked></div>
- 				<div style=" font-weight: 700;">
+ 				<div >
  					<p class="title-info"><span><%= name.title %></span>		                  
  					</p>
  				</div>
 
- 				<div style=" font-weight: 700;">
- 					<p class="title-info" style="
- 					font-size: 12px;
- 					">
- 					<!-- <span><%= name.short_description %></span>		                   -->
- 				</p>
- 			</div>
  		</div>
  	</li>
 
@@ -78,13 +88,27 @@
  			<div >
  				<a href="/@/<%= user.username %>/group/<%= name._id %>">
  				<%  if(name.img_foldername && name.img_thumbnail){ %>
-		        	 <img style="background-color: #666; height: 60px; width: 60px;" src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
+		        	 <img style="background-color: #EEEEEE; height: 60px; width: 60px;" src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
         		<% }else{  %>
-        			 <img style="background-color: #<%= person.hex_color %>; height: 60px; width: 60px;" src="/app/img/no-image.png" >
+        			 <img style="background-color: #EEEEEE; height: 60px; width: 60px;" src="<%= name.defaultBigThumb %>">
         		<% }  %>
     			</a>
                 
- 				<input type="checkbox" name="group" value="<%= name._id %>">
+
+
+    			<label>
+		            <div class="Checkbox Module fancyToggle styledToggle">
+			            <div class="slider"></div>
+			            <p class="onText status">&#10004;</p>
+			            <p class="offText status">&#10006;</p>
+			            <input type="checkbox" name="group" value="<%= name._id %>">
+		            </div>
+		        </label>
+
+
+
+
+ 				
  			</div>
  				<div style=" font-weight: 700;">
  					<p class="title-info"><span><%= name.title %></span>		                  
@@ -117,34 +141,81 @@
   <script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
 
 
-<script>
-
- $('.p-content').matchHeight(".p-content-list");
 
 
-$('input:checkbox').change(
-    function(){
-       if ($(this).is(':checked')) {
-       		$.ajax({
-			  type: "POST",
-			  url: location.pathname,
-			  data: {'group_id': this.value},
-			  success: "success",
-			  dataType: "dataType"
-			});
-           return console.log("add " + this.value);
-        }
-       if ($(this).not(':checked')) {
-       		$.ajax({
-			  type: "DELETE",
-			  url: location.pathname,
-			  data: {'group_id': this.value},
-			  success: "success",
-			  dataType: "dataType"
-			});
-           return console.log("remove " + this.value);
-        }
-    });
+  <script>
+
+   $(".p-content-list li").matchHeight();
+	$(".fancyToggle").on("click", function(e) {
+	       $( this ).toggleClass("on");
+	  
+	    if ($(this).children('input').is(':checked')){
+	    	$.ajax({
+				  type: "DELETE",
+				  url: location.pathname,
+				  data: {'group_id': this.getElementsByTagName("input")[0].defaultValue},
+				  success: "success",
+				  dataType: "dataType"
+				});
+
+	      // console.log("unchecked");
+		    $(this).children('input').prop( "checked", false );
+	     //  console.log( this.getElementsByTagName("input")[0].defaultValue);
+	     return false;
+
+
+	    }else{
+
+	    	$.ajax({
+				  type: "POST",
+				  url: location.pathname,
+				  data: {'group_id': this.getElementsByTagName("input")[0].defaultValue},
+				  success: "success",
+				  dataType: "dataType"
+				});
+
+	    	
+	       // console.log("checked"); 
+	       $(this).children('input').prop( "checked", true );
+	       return false;
+
+	    }
+
+	  // e.preventDefault();
+	  //   e.stopPropagation();
+	   return false;
+
+	});
+
+
+
+    
+
+	
+
+
+	// $('input:checkbox').change(function(){
+	// 	   if ($(this).is(':checked')) {
+	// 	   		$.ajax({
+	// 			  type: "POST",
+	// 			  url: location.pathname,
+	// 			  data: {'group_id': this.value},
+	// 			  success: "success",
+	// 			  dataType: "dataType"
+	// 			});
+	// 	       return console.log("add " + this.value);
+	// 	    }
+	// 	   if ($(this).not(':checked')) {
+	// 	   		$.ajax({
+	// 			  type: "DELETE",
+	// 			  url: location.pathname,
+	// 			  data: {'group_id': this.value},
+	// 			  success: "success",
+	// 			  dataType: "dataType"
+	// 			});
+	// 	       return console.log("remove " + this.value);
+	// 	    }
+	// });
 
 
 </script>

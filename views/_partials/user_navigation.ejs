@@ -1,0 +1,13 @@
+<% if (login){ %>
+	<div class="bread-crumbs">
+	    <div id="profile-content">
+	      <img id="profile-thumb" src="/app/img/no-image.png">
+	      <div id="profile-username">
+	        <%= user.username %>
+	      </div>
+	    </div>
+	    <div> 
+	      <a href="/@/<%= user.username %>/">Hub</a>|<a href="/@/<%= user.username %>/persons">People</a>|<a href="/@/<%= user.username %>/groups">Groups</a> 
+	    </div>            
+	 </div>
+<% } %>

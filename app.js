@@ -12,6 +12,7 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var flash = require('express-flash');
 var passport = require('passport');
+var auth = require('basic-auth')
 
 var moment = require('moment');
 
@@ -28,6 +29,8 @@ var methodOverride = require('method-override');
 // var LocalStrategy = require('passport-local').Strategy;
 // var cookieParser = require('cookie-parser');
 var multer  = require('multer');
+
+
 
 var db = require('./config/db');
 var secret_key = require('./config/secret.js');
@@ -130,6 +133,10 @@ app.use(function (err, req, res, next) {
 // Handle 500
 app.use(function(error, req, res, next) {
  // res.send('500: Internal Server Error', 500);
+
+
+
+ 
  
  res.send('Uh-oh :(', 500);
 });

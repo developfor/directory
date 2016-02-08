@@ -21,6 +21,8 @@ var bodyParser = require('body-parser')
 var upload = require('./../helpers/upload.js').upload;
 var imageProcessor = require('./../helpers/image_processor.js');
 var deleteImgFile = require('./../helpers/delete_img_file.js')
+var canvasThumbnail = require('./../helpers/canvas_thumbnail.js');
+
 
 var moment = require('moment');
 
@@ -273,24 +275,29 @@ var groupController = function(){
 			var user = req.user
 			if(_.isEqual(userId, hubOwner)){
 
+				var title = req.query.title || ""
+
+
+				title = title.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
+
+				 if(title.length <= 0){
+				 	var sort = {sort: {update_date: -1} } 
+				 	console.log("empty")
+				 }else{
+				 	var sort = {sort: { title: 1}} 
+					console.log("full")
+				 }
 
 
 
 
 
-				var sort = {sort: {update_date: -1} } 
 
-
-
-
-
-
-
-				Group.find({hub_id: hub.id}, null, sort, function(err, groups){
+				Group.find({hub_id: hub.id, title: new RegExp('^'+title.toLowerCase(), "i")}, null, sort, function(err, groups){
 					if(err){ return console.log("err: " + err) }
 					// console.log(groups);
 					res.render('group/groups', {hub: hub, groups : groups, user: user});
-				})
+				}).limit(20).skip(req.query.skip*20);
 			} else {
 				console.log("not equals");
 		
@@ -328,8 +335,13 @@ var groupController = function(){
 
 
 	var addGroup = function (req, res) {
-		var render = function(){
-			res.render('group/add_group', {csrfToken: req.csrfToken()});
+		var render = function(hub){
+			var hubOwner = hub.user_owner_id
+			var userId = req.user._id
+			var user = req.user
+
+
+			res.render('group/add_group', {csrfToken: req.csrfToken(), user: user, hub: hub});
 		}
 		hubchecker(req, res, render)
 	}
@@ -343,9 +355,19 @@ var groupController = function(){
 			console.log(req.body)
 
 			var requestBody = req.body;
+			var intials = requestBody.title.replace(/\s+/g, '').charAt(0).toUpperCase()
+
+
+
+
 			var group = new Group();
 			
 			group.hub_id =  hub._id;
+
+
+
+			group.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
+			group.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
 	
 		    group.title = requestBody.title;
@@ -422,6 +444,12 @@ var groupController = function(){
 	var groupUpdate = function (req, res) {
 
 		var readGroup = function(hub){
+
+			var hubOwner = hub.user_owner_id
+			var userId = req.user._id
+			var user = req.user
+
+
 			return Group.findById(req.params.group_id, function(err, group){
 				if(err || group === null){ 	
 					req.flash('info', "Group not found.")
@@ -435,7 +463,7 @@ var groupController = function(){
 
 
 				console.log(group);
-				res.render('group/group_update', {group : group, csrfToken: req.csrfToken()});
+				res.render('group/group_update', {group : group, csrfToken: req.csrfToken(), hub: hub, user: user});
 			})
 
 
@@ -458,6 +486,19 @@ var groupController = function(){
 
 			if(_.isEqual(userId, hubOwner)){
 
+				// var title = req.query.title || ""
+
+
+				// title = title.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
+
+				//  if(title.length <= 0){
+				//  	var sort = {sort: {update_date: -1} } 
+				//  	console.log("empty")
+				//  }else{
+				//  	var sort = {sort: { title: 1}} 
+				// 	console.log("full")
+				//  }
+
 
 				Group.findOne({_id: req.params.group_id, hub_id: hub.id}, function (err, group) {
 					console.log(group.img_foldername)
@@ -472,8 +513,11 @@ var groupController = function(){
 					var token = crypto.randomBytes(8).toString('hex') + "_" +Date.now(); 
 					var randomString = token;
 					var requestBody = req.body;
-					
+					var intials = requestBody.title.replace(/\s+/g, '').charAt(0).toUpperCase()
 
+					
+					group.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
+					group.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
 					// var group = new Group();
 					
