@@ -12,7 +12,7 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var flash = require('express-flash');
 var passport = require('passport');
-var auth = require('basic-auth')
+// var auth = require('basic-auth')
 
 var moment = require('moment');
 
@@ -136,7 +136,7 @@ app.use(function(error, req, res, next) {
 
 
 
- 
+
  
  res.send('Uh-oh :(', 500);
 });
@@ -144,6 +144,8 @@ app.use(function(error, req, res, next) {
 var server = app.listen(3000, function () {
   var host = server.address().address;
   var port = server.address().port;
+
+  
 
   console.log('App listening at http://%s:%s', host, port);
 });

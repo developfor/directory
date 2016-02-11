@@ -41,6 +41,28 @@ var flash = require('express-flash');
 
 
 
+var basicAuth = require('basic-auth');
+
+var auth = function (req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.send(401);
+  };
+
+  var user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  };
+
+  if (user.name === '1' && user.pass === '1') {
+    return next();
+  } else {
+    return unauthorized(res);
+  };
+};
+
+
 
 // // Bcrypt middleware
 // passport.serializeUser(function(user, done) {
@@ -105,9 +127,10 @@ module.exports = function(app) {
 
 
     res.render('index', { user: req.user, csrfToken: req.csrfToken() })
+
   });
 
-  app.get('/signup', function(req, res){
+  app.get('/signup', auth, function(req, res){
     // console.log(res)
     if (res.locals.login){ return res.redirect('/')}
       res.render('signup', { user: req.user, message: req.session.messages });

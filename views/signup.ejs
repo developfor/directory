@@ -19,3 +19,15 @@
 	<input type="submit" value="Submit"/>
 	</div>
 </form>
+
+<br>
+<div id="clear-autho" style="cursor: pointer;">clear autho</div>
+
+
+
+<script type="text/javascript">
+	$("#clear-autho").on("click", function(){
+		var p = window.location.protocol + '//'
+		window.location = window.location.href.replace(p, p + 'logout:password@')
+	})
+</script>

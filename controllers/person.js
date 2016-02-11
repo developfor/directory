@@ -451,7 +451,7 @@ var personController = function(personService, app ){
 
 			Person.findOne({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
 			
-				Group.find({hub_id: hub.id}, function(err, groups){
+				Group.find({hub_id: hub.id}, null,  {sort: {update_date: -1} },  function(err, groups){
 
 					forEachAsync(groups, function (next, element, index, array) {
 						PersonGroupJoin.find({hub_id: element.hub_id, group_id: element._id, person_id: req.params.person_id }, function(err, personGroup){

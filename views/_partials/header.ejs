@@ -58,21 +58,53 @@
 	          <a class="no-style-link" href="/">directory</a>
 	        </div>
 	        <div class="header-right">
+
 				<ul>
+
 					<% if (login){ %>
 						<li> <a href="/logout">logout</a></li>
 					<% } else { %>
 						<li> <a href="/login">login</a></li>
-						<li> <a class="no-style-link" href="/signup">sign up</a></li>
+						<!-- <li> <a class="no-style-link" href="/signup">sign up</a></li> -->
 					<% } %>
+
+					<li ><div id="nav-icon">
+						  <span></span>
+						  <span></span>
+						  <span></span>
+						  <span></span>
+						</div>
+					</li>
 				</ul>
+
+				<div class="menu">
+					<ul>
+						<li ><a href="#"><div class="menu-link-text">item</div></a></li>
+						<li ><a href="#"><div class="menu-link-text">item</div></a></li>
+						<li ><a href="#"><div class="menu-link-text">item</div></a></li>
+						<li ><a href="#"><div class="menu-link-text">item</div></a></li>
+						<li ><a href="#"><div class="menu-link-text">item</div></a></li>
+						<li ><a href="#"><div class="menu-link-text">item</div></a></li>
+						
+					</ul>
+				</div>
 	          
 	        </div>
 	      </div>
 
 
 		
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#nav-icon").on("click touch",function(){
 
+		// console.log("")
+		$(this).toggleClass("open");
+		$(".menu").toggleClass("show-menu")
+	});
+});
+
+</script>
 	      
 
 

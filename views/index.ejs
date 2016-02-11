@@ -3,7 +3,7 @@
 
 <% if (!user) { %>
 <h5 style="max-width: 600px;">Directory.is a simple to use platform for managing your contacts.</h5> 
-<p>Start Manage Your Contacts:</p>
+<p>Start managing your contacts.</p>
 	<form action="/login" method="post">
 		<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 		<div>
@@ -28,3 +28,5 @@ Welcome <%= user.username %>! <br>
 
 
 <% } %>
+
+

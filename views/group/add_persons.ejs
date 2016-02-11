@@ -1,32 +1,67 @@
 <% include ../_partials/header %>
 
+  <% include ../_partials/user_navigation.ejs %>
 
 
-<hr>
-<form class="formlist">
+ 
+ <div>
+    <div style="float: left;">
+	    <a href="/@/<%= user.username %>/group/<%= group._id %>/persons">
+			<%  if(group.img_foldername && group.img_thumbnail){ %>
+				<img style="background-color: #666; height: 30px; width: 30px;     border: 3px solid #000;" src="/uploads/img/<%= group.img_foldername %>/<%=  group.img_icon  %>"> 
+			<% }else{  %>
+				<img style="background-color: #<%= group.hex_color %>; height: 30px; width: 30px; border: 3px solid #000;" src="/app/img/no-image.png" >
+			<% }  %>
+		</a>
+    
+    </div>
+    <div style="margin-left: 5px; width: 60%;">
+    	<p class="title-info"  ><a href="/@/<%= user.username %>/group/<%= group._id %>/persons"><%= group.title  %> </a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= group.update_date %>"> </span> <%= group.update_date %></span>   -->
+    	</p>
+
+ 
+    </div>
+
+</div>
+
+
+<form style="clear: both;">
+	<div class="p-content-list check-element">
 	<% persons.forEach(function(name){ %>
 
 	<%  if(name.checked === true) { %>
 
 
-		<li>
-	 		<div class="p-content formlist-box">
-	 			<div  class="formlist-box-inner" >
+		<li style="">
+	 		<div class="check-element-box p-content">
+	 			<div >
 		 			<a href="/@/<%= user.username %>/person/<%= name._id %>">
 		 				<%  if(name.img_foldername && name.img_thumbnail){ %>
 				        	 <img src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
 		        		<% }else{  %>
-		        			 <img style="background-color: #<%= name.hex_color %>;" src="/app/img/no-image.png" >
+		        			 <img src="<%= name.defaultBigThumb %>">
 		        		<% }  %>
 		        	</a>
-	                <br>
-	 				<input type="checkbox" name="person" value="<%= name._id %>" style="margin-bottom: 0;" checked>
-	 			</div>
-	 			<br>
-	 				<div class="formlist-title-box">
-	 					<p class="title-info"><span> <%= name.first_name %> <%= name.middle_name %> <%= name.last_name %> <%= name.suffix %></span>		                  
+
+
+
+
+
+	    			<label>
+			            <div class="Checkbox Module fancyToggle on styledToggle">
+				            <div class="slider"></div>
+				            <p class="onText status">&#10004;</p>
+				            <p class="offText status">&#10006;</p>
+			 				<input type="checkbox" name="group" value="<%= name._id %>" checked></div>
+			            </div>
+			        </label>
+
+	        
+	 				<div >
+	 					<p class="title-info"><span><%= name.first_name %> <%= name.middle_name %> <%= name.last_name %> <%= name.suffix %></span>		                  
 	 					</p>
 	 				</div>
+
 	 		</div>
 	 	</li>
 
@@ -34,61 +69,96 @@
 
 	<%  } else { %>
 
-		<li>
-	 		<div class="p-content formlist-box">
-	 			<div  class="formlist-box-inner" >
+		<li style="">
+	 		<div class="check-element-box p-content">
+	 			<div >
 		 			<a href="/@/<%= user.username %>/person/<%= name._id %>">
 		 				<%  if(name.img_foldername && name.img_thumbnail){ %>
 				        	 <img src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
 		        		<% }else{  %>
-		        			 <img style="background-color: #<%= name.hex_color %>;" src="/app/img/no-image.png" >
+		        			 <img src="<%= name.defaultBigThumb %>">
 		        		<% }  %>
 		        	</a>
-	                <br>
-	 				<input type="checkbox" name="person" value="<%= name._id %>" style="margin-bottom: 0;" >
-	 			</div>
-	 			<br>
-	 				<div class="formlist-title-box">
-	 					<p class="title-info"><span> <%= name.first_name %> <%= name.middle_name %> <%= name.last_name %> <%= name.suffix %></span>		                  
+
+
+
+
+
+	    			<label>
+			            <div class="Checkbox Module fancyToggle styledToggle">
+				            <div class="slider"></div>
+				            <p class="onText status">&#10004;</p>
+				            <p class="offText status">&#10006;</p>
+			 				<input type="checkbox" name="group" value="<%= name._id %>" ></div>
+			            </div>
+			        </label>
+
+	        
+	 				<div >
+	 					<p class="title-info"><span><%= name.first_name %> <%= name.middle_name %> <%= name.last_name %> <%= name.suffix %></span>		                  
 	 					</p>
 	 				</div>
+
 	 		</div>
 	 	</li>
 
 
+
 		<% } %>
 	<% }) %>
+	</div>
 </form>
 
   <script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
 
+  <script>
 
-<script>
- $('.formlist li').matchHeight();
+   $(".p-content-list li").matchHeight();
+	$(".fancyToggle").on("click", function(e) {
+	       $( this ).toggleClass("on");
+	  
+	    if ($(this).children('input').is(':checked')){
+	    	$.ajax({
+				  type: "DELETE",
+				  url: location.pathname,
+				  data: {'person_id': this.getElementsByTagName("input")[0].defaultValue},
+				  success: "success",
+				  dataType: "dataType"
+				});
 
-$('input:checkbox').change(
-    function(){
-       if ($(this).is(':checked')) {
-       		$.ajax({
-			  type: "POST",
-			  url: location.pathname,
-			  data: {'person_id': this.value},
-			  success: "success",
-			  dataType: "dataType"
-			});
-           return console.log("add " + this.value);
-        }
-       if ($(this).not(':checked')) {
-       		$.ajax({
-			  type: "DELETE",
-			  url: location.pathname,
-			  data: {'person_id': this.value},
-			  success: "success",
-			  dataType: "dataType"
-			});
-           return console.log("remove " + this.value);
-        }
-    });
+	      // console.log("unchecked");
+		    $(this).children('input').prop( "checked", false );
+	     //  console.log( this.getElementsByTagName("input")[0].defaultValue);
+	     return false;
+
+
+	    }else{
+
+	    	$.ajax({
+				  type: "POST",
+				  url: location.pathname,
+				  data: {'person_id': this.getElementsByTagName("input")[0].defaultValue},
+				  success: "success",
+				  dataType: "dataType"
+				});
+
+	    	
+	       // console.log("checked"); 
+	       $(this).children('input').prop( "checked", true );
+	       return false;
+
+	    }
+
+	  // e.preventDefault();
+	  //   e.stopPropagation();
+	   return false;
+
+	});
+
+
+
+ 
+
 </script>
 
 

@@ -115,6 +115,13 @@
 
 
 
+
+
+
+
+
+
+
     <script type="text/javascript">
       $(function() {
           $('.p-content').matchHeight();
@@ -127,11 +134,14 @@
 			queries.last_name = queries.last_name || "";
 			var queriesPage = queries.first_name
 
-
-
+			if( !($(".p-content").length >= 20) ){
+				$('#next').css("display", "none")
+			}
 
 
 			if(querySkip === 0){
+
+				$('#previous').css("display", "none")
 			  $('#previous').on("click", function (e) {
 			        console.log("begining")
 			    });
@@ -152,9 +162,9 @@
 			}
 
 
-			console.log(location.pathname)
-			console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + querySkip)
-			console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1))
+			// console.log(location.pathname)
+			// console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + querySkip)
+			// console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1))
 
 
       });
