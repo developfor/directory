@@ -5,6 +5,8 @@ var _ = require('underscore');
 
 
 var crypto = require('crypto');
+
+
 var forEachAsync = require('forEachAsync').forEachAsync;
 
 var Person = require('../models/person.js');
@@ -20,6 +22,7 @@ var bodyParser = require('body-parser')
 var upload = require('./../helpers/upload.js').upload;
 var imageProcessor = require('./../helpers/image_processor.js');
 var deleteImgFile = require('./../helpers/delete_img_file.js')
+var sanitize = require('./../helpers/sanitizer.js');
 
 var canvasThumbnail = require('./../helpers/canvas_thumbnail.js');
 
@@ -89,35 +92,36 @@ var personController = function(personService, app ){
 			person.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
 			person.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
-		    person.title = requestBody.title;
-			person.first_name = requestBody.first_name.replace(/[^a-zA-Z0-9\s]/gi, "");
-			person.middle_name = requestBody.middle_name.replace(/[^a-zA-Z0-9\s]/gi, "");
-			person.last_name = requestBody.last_name.replace(/[^a-zA-Z0-9\s]/gi, "");
-			person.lowercase_first_name = requestBody.first_name.toLowerCase();
-			person.lowercase_middle_name = requestBody.middle_name.toLowerCase();
-			person.lowercase_last_name = requestBody.last_name.toLowerCase();
-			person.suffix = requestBody.suffix;
+		    person.title = sanitize(requestBody.title).noTagsCleanedHTML();
+			person.first_name = sanitize(requestBody.first_name).cleanedHTMLCHAR();
+			person.middle_name = sanitize(requestBody.middle_name).cleanedHTMLCHAR();
+			person.last_name = sanitize(requestBody.last_name).cleanedHTMLCHAR();
+			person.lowercase_first_name = sanitize(requestBody.first_name.toLowerCase()).cleanedHTMLCHAR();
+			person.lowercase_middle_name = sanitize(requestBody.middle_name.toLowerCase()).cleanedHTMLCHAR();
+			person.lowercase_last_name = sanitize(requestBody.last_name.toLowerCase()).cleanedHTMLCHAR();
+			person.suffix = sanitize(requestBody.suffix).cleanedHTMLCHAR();
 
-			person.job_title = requestBody.job_title;
-			person.gender = requestBody.gender;
+			person.job_title = sanitize(requestBody.job_title).noTagsCleanedHTML();
+			person.gender = sanitize(requestBody.gender).cleanedHTMLCHAR();
 
 			person.birthday = new Date(requestBody.birth_month + " " + requestBody.birth_day + " " + requestBody.birth_year)
 
-			person.short_description = requestBody.short_description;
-			person.description = requestBody.description;
+			person.short_description = sanitize(requestBody.short_description).noTagsCleanedHTML();
+			person.description = sanitize(requestBody.description).cleanedHTML();
 
-			person.email = requestBody.email;
-			person.primary_phone = requestBody.primary_phone;
-			person.mobile_phone = requestBody.mobile_phone;
-			person.fax = requestBody.fax;
+			person.email = sanitize(requestBody.email).noTagsCleanedHTML();
 
-			person.street = requestBody.street;
-			person.city = requestBody.city;
-			person.state_province_region= requestBody.state_province_region;
-			person.postal_code = requestBody.postal_code;
-			person.country = requestBody.country;
+			person.primary_phone = sanitize(requestBody.primary_phone).noTagsCleanedHTML();
+			person.mobile_phone = sanitize(requestBody.mobile_phone).noTagsCleanedHTML();
+			person.fax = sanitize(requestBody.fax).noTagsCleanedHTML();
 
-			person.web_address = requestBody.web_address;
+			person.street = sanitize(requestBody.street).noTagsCleanedHTML();
+			person.city = sanitize(requestBody.city).noTagsCleanedHTML();
+			person.state_province_region = sanitize(requestBody.state_province_region).noTagsCleanedHTML();
+			person.postal_code = sanitize(requestBody.postal_code).noTagsCleanedHTML();
+			person.country = sanitize(requestBody.country).noTagsCleanedHTML();
+
+			person.web_address = sanitize(requestBody.web_address).noTagsCleanedHTML();
 
 
 
@@ -622,45 +626,43 @@ var personController = function(personService, app ){
 					person.update_date = Date.now();
 
 			
-				    person.title = requestBody.title;
+				    
 			
-					person.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
-					person.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
-
-					person.first_name = requestBody.first_name.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
-					person.middle_name = requestBody.middle_name.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
-					person.last_name = requestBody.last_name.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
-					person.lowercase_first_name = person.first_name.toLowerCase();
-					person.lowercase_middle_name = person.middle_name.toLowerCase();
-					person.lowercase_last_name = person.last_name.toLowerCase();
+					person.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb();
+					person.defaultBigThumb = canvasThumbnail(intials).bigTextThumb();
 
 
-					person.suffix = requestBody.suffix;
-					person.job_title = requestBody.job_title;
-					person.gender = requestBody.gender;
+					person.title = sanitize(requestBody.title).noTagsCleanedHTML();
+					person.first_name = sanitize(requestBody.first_name).cleanedHTMLCHAR();
+					person.middle_name = sanitize(requestBody.middle_name).cleanedHTMLCHAR();
+					person.last_name = sanitize(requestBody.last_name).cleanedHTMLCHAR();
+					person.lowercase_first_name = sanitize(requestBody.first_name.toLowerCase()).cleanedHTMLCHAR();
+					person.lowercase_middle_name = sanitize(requestBody.middle_name.toLowerCase()).cleanedHTMLCHAR();
+					person.lowercase_last_name = sanitize(requestBody.last_name.toLowerCase()).cleanedHTMLCHAR();
+					person.suffix = sanitize(requestBody.suffix).cleanedHTMLCHAR();
+
+					person.job_title = sanitize(requestBody.job_title).noTagsCleanedHTML();
+					person.gender = sanitize(requestBody.gender).cleanedHTMLCHAR();
+
 					person.birthday = new Date(requestBody.birth_month + " " + requestBody.birth_day + " " + requestBody.birth_year)
 
+					person.short_description = sanitize(requestBody.short_description).noTagsCleanedHTML();
+					person.description = sanitize(requestBody.description).cleanedHTML();
+
+					person.email = sanitize(requestBody.email).noTagsCleanedHTML();
+					person.primary_phone = sanitize(requestBody.primary_phone).noTagsCleanedHTML();
+					person.mobile_phone = sanitize(requestBody.mobile_phone).noTagsCleanedHTML();
+					person.fax = sanitize(requestBody.fax).noTagsCleanedHTML();
 
 
-					person.short_description = requestBody.short_description;
-					person.description = requestBody.description;
+					person.street = sanitize(requestBody.street).noTagsCleanedHTML();
+					person.city = sanitize(requestBody.city).noTagsCleanedHTML();
+					person.state_province_region = sanitize(requestBody.state_province_region).noTagsCleanedHTML();
+					person.postal_code = sanitize(requestBody.postal_code).noTagsCleanedHTML();
+					person.country = sanitize(requestBody.country).noTagsCleanedHTML();
 
-					person.email = requestBody.email;
-					person.primary_phone = requestBody.primary_phone;
-					person.mobile_phone = requestBody.mobile_phone;
-					person.fax = requestBody.fax;
-
-					person.street = requestBody.street;
-					person.city = requestBody.city;
-					person.state_province_region= requestBody.state_province_region;
-					person.postal_code = requestBody.postal_code;
-					person.country = requestBody.country;
-
-					person.web_address = requestBody.web_address;
-
-					console.log("_____________________");
-					console.log(requestBody);
-					console.log("_____________________");
+					person.web_address = sanitize(requestBody.web_address).noTagsCleanedHTML();
+					
 					
 					var save = function(){
 

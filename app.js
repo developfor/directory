@@ -151,5 +151,19 @@ var server = app.listen(3000, function () {
 });
 
 
+// var sanitizeHtml = require('sanitize-html');
+// var dirty =  '<script> alert("virus")</script>This is <p style="font-size: 3000px;"><a href="http://www.linux.org"></a><br/>Linux</p>';
 
+// var clean = sanitizeHtml(dirty, {
+//     allowedTags: [ ],
+
+//   // allowedTags: [ "p", "ul", "li", "a", "em", "strong" ],
+//   // allowedClasses: {
+//   //   'p': [ 'fancy', 'simple' ]
+//   // }
+// });
+
+// var clean = sanitizeHtml(dirty);
+
+// console.log(clean)
 

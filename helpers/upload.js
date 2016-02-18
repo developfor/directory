@@ -5,7 +5,7 @@ module.exports = {
 			dest: './public/tmp/',
 			limits: {
 				 // fieldNameSize: 100,
-			      fileSize: 5242880,
+			      fileSize: 9242880,
 			      // fileSize: 428,
 			      // files: 1,
 			      //  fields: 100

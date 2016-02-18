@@ -50,6 +50,13 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none;
 }
 
+
+footer{ 
+  margin-bottom: 30px; 
+  margin-top: 20px; 
+  border-top: 3px solid black;
+}
+
 .example-grid .column, .example-grid .columns {
     background: #EEE;
     text-align: center;
@@ -373,7 +380,7 @@ a:hover {
     white-space: normal;
     background-color: #E23B3B;
     border-color: #000000;
-    color: white;
+    color: white;111
     height: auto;
     padding: 0px;
     // margin-top: 10px;
@@ -382,6 +389,8 @@ a:hover {
 
 .prev-next-buttons{
   margin-top: 10px;
+  display: inline-block;
+  width: 100%;
   .next-button{
     float: right;
   }
@@ -476,7 +485,11 @@ a:hover {
 
 .mce-tinymce{
   border: #000 solid 3px !important;
+  .mce-edit-area{
+    padding: 10px;
+  }
 }
+
 
 .form-block{
   input{

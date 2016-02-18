@@ -22,6 +22,7 @@ var upload = require('./../helpers/upload.js').upload;
 var imageProcessor = require('./../helpers/image_processor.js');
 var deleteImgFile = require('./../helpers/delete_img_file.js')
 var canvasThumbnail = require('./../helpers/canvas_thumbnail.js');
+var sanitize = require('./../helpers/sanitizer.js');
 
 
 var moment = require('moment');
@@ -370,33 +371,33 @@ var groupController = function(){
 			group.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
 	
-		    group.title = requestBody.title;
-		    group.lowercase_title = requestBody.title.toLowerCase();
+		    group.title = sanitize(requestBody.title).noTagsCleanedHTML();
+		    group.lowercase_title = sanitize(requestBody.title.toLowerCase()).noTagsCleanedHTML();
 			
 									
-			group.short_description = requestBody.short_description;
-			group.description = requestBody.description;
+			group.short_description = sanitize(requestBody.short_description).noTagsCleanedHTML();
+			group.description = sanitize(requestBody.description).cleanedHTML();
 
 
-			group.industry = requestBody.industry;
-			group.group_type = requestBody.group_type;
+			group.industry = sanitize(requestBody.industry).noTagsCleanedHTML();
+			group.group_type = sanitize(requestBody.group_type).cleanedHTMLCHAR()
 
 			// creation date stuff
 			group.creation_date = new Date(requestBody.creation_month + " " + requestBody.creation_day + " " + requestBody.creation_year)
 
 
-			group.email = requestBody.email;
-			group.primary_phone = requestBody.primary_phone;
-			group.fax = requestBody.fax;
+			group.email = sanitize(requestBody.email).noTagsCleanedHTML();
+			group.primary_phone = sanitize(requestBody.primary_phone).noTagsCleanedHTML();
+			group.fax = sanitize(requestBody.fax).noTagsCleanedHTML();
 
 			// address stuff
-			group.street = requestBody.street;
-			group.city = requestBody.city;
-			group.state_province_region= requestBody.state_province_region;
-			group.postal_code = requestBody.postal_code;
-			group.country = requestBody.country;
+			group.street = sanitize(requestBody.street).noTagsCleanedHTML();
+			group.city = sanitize(requestBody.city).noTagsCleanedHTML();
+			group.state_province_region= sanitize(requestBody.state_province_region).noTagsCleanedHTML();
+			group.postal_code = sanitize(requestBody.postal_code).noTagsCleanedHTML();
+			group.country = sanitize(requestBody.country).noTagsCleanedHTML();
 
-			group.web_address = requestBody.web_address;
+			group.web_address = sanitize(requestBody.web_address).noTagsCleanedHTML();
 
 			var color = [ "222222", "333333", "444444", "555555", "666666", "777777", "888888", "999999", "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE"]
 			group.hex_color = color[Math.floor( Math.random() * ( color.length ) ) ] //(Math.random()*0xFFFFFF<<0).toString(16);
@@ -516,42 +517,44 @@ var groupController = function(){
 					var intials = requestBody.title.replace(/\s+/g, '').charAt(0).toUpperCase()
 
 					
-					group.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
-					group.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
-
+				
 					// var group = new Group();
 					
 					// group.hub_id = req.params.id;
 					group.update_date = Date.now();
 
 			
-					group.title = requestBody.title;
-				    group.lowercase_title = requestBody.title.toLowerCase();
+					group.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
+					group.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
+			
+				    group.title = sanitize(requestBody.title).noTagsCleanedHTML();
+				    group.lowercase_title = sanitize(requestBody.title.toLowerCase()).noTagsCleanedHTML();
 					
 											
-					group.short_description = requestBody.short_description;
-					group.description = requestBody.description;
+					group.short_description = sanitize(requestBody.short_description).noTagsCleanedHTML();
+					group.description = sanitize(requestBody.description).cleanedHTML();
 
 
-					group.industry = requestBody.industry;
-					group.group_type = requestBody.group_type;
+					group.industry = sanitize(requestBody.industry).noTagsCleanedHTML();
+					group.group_type = sanitize(requestBody.group_type).cleanedHTMLCHAR()
 
 					// creation date stuff
-					group.creation_day = new Date(requestBody.creation_month + " " + requestBody.creation_day + " " + requestBody.creation_year)
+					group.creation_date = new Date(requestBody.creation_month + " " + requestBody.creation_day + " " + requestBody.creation_year)
 
 
-					group.email = requestBody.email;
-					group.primary_phone = requestBody.primary_phone;
-					group.fax = requestBody.fax;
+					group.email = sanitize(requestBody.email).noTagsCleanedHTML();
+					group.primary_phone = sanitize(requestBody.primary_phone).noTagsCleanedHTML();
+					group.fax = sanitize(requestBody.fax).noTagsCleanedHTML();
 
 					// address stuff
-					group.street = requestBody.street;
-					group.city = requestBody.city;
-					group.state_province_region= requestBody.state_province_region;
-					group.postal_code = requestBody.postal_code;
-					group.country = requestBody.country;
+					group.street = sanitize(requestBody.street).noTagsCleanedHTML();
+					group.city = sanitize(requestBody.city).noTagsCleanedHTML();
+					group.state_province_region= sanitize(requestBody.state_province_region).noTagsCleanedHTML();
+					group.postal_code = sanitize(requestBody.postal_code).noTagsCleanedHTML();
+					group.country = sanitize(requestBody.country).noTagsCleanedHTML();
 
-					group.web_address = requestBody.web_address;
+					group.web_address = sanitize(requestBody.web_address).noTagsCleanedHTML();
+
 
 					console.log("_____________________");
 					console.log(requestBody);

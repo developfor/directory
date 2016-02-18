@@ -1,6 +1,5 @@
 "use strict";
 
-// 
 // var secret_key = require('../../config/secret.js');
 // var passport = require('../../config/passport.js');
 // passport = require('passport')
