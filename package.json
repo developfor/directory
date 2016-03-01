@@ -20,6 +20,7 @@
     "ejs": "^2.3.3",
     "express": "^4.13.3",
     "express-brute": "^0.6.0",
+    "express-session": "^1.13.0",
     "forEachAsync": "^3.0.0",
     "gm": "^1.21.1",
     "imagemagick": "^0.1.3",

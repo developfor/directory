@@ -1,20 +1,21 @@
   <% include ../../_partials/user_navigation.ejs %>
-
+<div style=" font-size: 24px;margin-bottom: 20px;"> Person </div>
   <div class="row">
    
       <div class="four columns profile-content-left">
         
-        <!-- <img style="width: 85%; background:#363636; max-height: 4000px; max-width: 250px;" src="http://placehold.it/200x300" ></br> -->
+ 
         <div>
           <%  if(person.img_foldername && person.img_thumbnail){ %>
-    				<img src="/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>">
-             <!-- <img src="/app/img/no-image.png" > -->
+       
+            <img class="profile-image" style=" background-image: url(/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>); " src="/app/img/no-image_clear.png">
+    	
     			<% }else{  %>
-    				 <!-- <img style="background-color: #<%= person.hex_color %>;" src="/app/img/no-image.png" > -->
-             <img style="background-color: #EEEEEE" src="<%= person.defaultBigThumb %>" >
+ 
+             <img class="profile-image" style="background-color: #EEEEEE; background-image: url(<%= person.defaultBigThumb %>); " src="/app/img/no-image_clear.png" >
     			<% }  %>
         </div>
-        <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Nina_Simone_1965.jpg/503px-Nina_Simone_1965.jpg" > -->
+    
 
         <div  class="profile-content-left-info">
           <p>

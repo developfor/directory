@@ -6,10 +6,12 @@
 
   <% include ../_partials/user_navigation.ejs %>
 
-
+<div style="margin-bottom: 20px; float: left;">
+ 	<a class="button button-primary" href="/@/<%= user.username %>/add_group">+ add group</a>
+</div>
       <div class="p-content-list">
 	
-      	 <a class="button button-primary" href="/@/<%= user.username %>/add_group">+ add group</a>
+      	
       
 
 
@@ -17,22 +19,23 @@
 	    	
 	        <form >
 	          <div class="row">
-	            <div class="six columns title-info">
-	              <label for="GroupTitle">Group Title:</label>
-	              <input name="title" class="u-full-width" type="text" placeholder="Group Title" id="input-group-title" value="">
+	            <div class="columns title-info">
+	              <label for="GroupTitle">Search By Group Title:</label>
+	              <input id="p-search" name="title" class="u-full-width" type="text" placeholder="Group Title" id="input-group-title" value="">
+	              <input id="p-search-button" class="button-primary" type="submit" value="S">
 	            </div>
 	          
 	          </div>
 
 
 
-			 <div class="row">
+			<!--  <div class="row">
 	            <div class="twelve columns">
-	                <input class="button-primary" type="submit" value="Submit">
+	                
 	                 <a class="button button-primary" href="/@/<%= user.username %>/groups"> < reset</a>
 	             
 	            </div>
-	          </div>
+	          </div> -->
 
 	          
        
@@ -70,19 +73,20 @@
 
 					<% }  %>
 				</a>
+				<a class="button button-primary" href="/@/<%= user.username %>/group/<%= group._id %>">More Details »</a> 
 				<div>
 					<div>
-						<span class="title-info"><%= group.title %> </span>
+						<span class="title-info"><%= group.title.trunc(30) %> </span>
 					</div>
 					<div class="p-content-desc">
-						<span class="small-text" > <%=  group.short_description %></span><br>
+						<span class="small-text" > <%=  `${group.short_description}`.trunc(70) %> </span><br>
 					</div>
 					<div class="updated-date">
 						<b class="small-text">Edited <span  data-livestamp="<%= group.update_date %>"> </span></b><br>
 					</div>
 				</div> 
 
-					<a class="button button-primary" href="/@/<%= user.username %>/group/<%= group._id %>">More Details »</a>          
+					         
 			</div>
 
           

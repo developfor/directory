@@ -49,14 +49,17 @@
 		            <li>
                   <a href="/@/<%= user.username %>/person/<%= person._id %>"  > 
                     <div class="list-area">
-      		                <div class="image-block">
+      		                
       		              <%  if(person.img_foldername && person.img_thumbnail){ %>
-      		        				  <img src="/uploads/img/<%= person.img_foldername %>/<%=  person.img_icon  %>"> 
+                           <div class="image-block" style=" background-image: url(/uploads/img/<%= person.img_foldername %>/<%=  person.img_icon  %>); ">
+                           </div>
       		        			<% }else{  %>
-                            <img style="background-color: #EEEEEE" src="<%= person.defaultBigThumb %>" >
+
+                        <div class="image-block" style=" background-color: #EEEEEE; background-image: url(<%= person.defaultBigThumb %>); ">
+                           </div>
       		        			<% }  %>
       		                
-      		                </div>
+      		                
       		                <div class="list-text-block">
       		                	<p class="title-info"  ><span><%= (person.title + " " +person.first_name+ " " +person.middle_name + " " + person.last_name + " " + person.suffix ).trunc(25) %></span>		                  	
       		                	</p>
@@ -101,18 +104,21 @@
                   <li>
                     <a href="/@/<%= user.username %>/group/<%= group._id %>"  > 
                       <div class="list-area">
-                            <div class="image-block">
-                          <%  if(group.img_foldername && group.img_thumbnail){ %>
-                              <img src="/uploads/img/<%= group.img_foldername %>/<%=  group.img_icon  %>"> 
-                          <% }else{  %>
-                           <img style="background-color: #EEEEEE" src="<%= group.defaultBigThumb %>" >
-                          <% }  %>
-                            
-                            </div>
-                            <div class="list-text-block">
-                              <p class="title-info"  ><span><%= (group.title).trunc(25)  %></span>                      
-                              </p>
-                            </div>
+                            <%  if(group.img_foldername && group.img_thumbnail){ %>
+                           <div class="image-block" style=" background-image: url(/uploads/img/<%= group.img_foldername %>/<%=  group.img_icon  %>); ">
+                           </div>
+                        <% }else{  %>
+
+                        <div class="image-block" style=" background-color: #EEEEEE; background-image: url(<%= group.defaultBigThumb %>); ">
+                           </div>
+                        <% }  %>
+
+                         <div class="list-text-block">
+                            <p class="title-info"  ><span><%= (group.title).trunc(25) %></span>                        
+                            </p>
+                          </div>
+
+
                        </div>
                     </a>
 

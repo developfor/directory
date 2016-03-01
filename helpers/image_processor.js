@@ -42,9 +42,10 @@ module.exports = function(req, res, randomString, cb) {
 				gm(imageFilePath)
 					.resize(600,600)
 					.gravity('Center')
-					.extent(600,600)
 					.background('#ffffff')
-					.crop(600,600, 0, 0)
+					.out("-flatten")
+					.crop(600, 600, 0, 0)
+					.gravity('Center')
 					.noProfile()
 					.setFormat("jpg")
 					.autoOrient()
@@ -68,13 +69,12 @@ module.exports = function(req, res, randomString, cb) {
 						 }
 
 
-						var size = {width: 1000, height: 1000};
 						gm(imageFilePath)
 							.resize(1000,1000)
 							.gravity('Center')
 							.background('#ffffff')
 							.out("-flatten")
-							.crop(size.width, size.height, 0, 0)
+							.crop(1000, 1000, 0, 0)
 							.gravity('Center')
 							.noProfile()
 							.setFormat("jpg")
@@ -82,12 +82,13 @@ module.exports = function(req, res, randomString, cb) {
 							.write(folderName +"/" + "normal_" + imageFileName , function (err) {
 
 								gm(imageFilePath)
-									.background('#ffffff')
-									.setFormat("jpg")
-									.resize(200, 200)
+									.resize(200,200)
 									.gravity('Center')
-									.extent(200,200)
-									.crop(200,200, 0, 0)
+									.background('#ffffff')
+									.out("-flatten")
+									.crop(200, 200, 0, 0)
+									.gravity('Center')
+									.noProfile()
 									.setFormat("jpg")
 									.autoOrient()
 									.write(folderName +"/" + "icon_" + imageFileName , function (err) { 

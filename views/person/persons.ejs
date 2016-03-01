@@ -56,43 +56,51 @@
 			           </div>
 	          </div>
 		  <%  } %>
-
+<div>
 		<% persons.forEach(function(person){ %>
 
-
- 
-		
 
 			<div class="p-content">
 				<a href="/@/<%= user.username %>/person/<%= person._id %>">
 					<%  if(person.img_foldername && person.img_thumbnail){ %>
-						<img src="/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>">
-					     <!-- <img src="/app/img/no-image.png" > -->
-					<% }else{  %>
-					    <img style="background-color: #EEEEEE" src="<%= person.defaultBigThumb %>" >
 
-						 <!-- <img style="background-color: #<%= person.hex_color %>;"  src="/app/img/no-image.png" > -->
+					 <img class="profile-image" style=" background-image: url(/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>); " src="/app/img/no-image_clear.png">
+
+					<!-- <div  class="background-img" style="    background-image: url(/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>); ">
+						<img style="opacity: 0;" src="/app/img/no-image_clear.png">
+					</div> -->
+
+					<% }else{  %>
+		
+					    <div class="image-block" style=" background-image: url(/uploads/img/<%= person.img_foldername %>/<%=  person.defaultBigThumb  %>); "></div>
+
+					    <div style="    background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;background-image: url(<%= person.defaultBigThumb %>); border: 3px solid #000;width: auto;padding: 0;margin-bottom: 9px;line-height: 0;">
+							<img style="opacity: 0;" src="/app/img/no-image_clear.png">
+						</div>
+
+						 
 					<% }  %>
 				</a>
+					<a class="button button-primary" href="/@/<%= user.username %>/person/<%= person._id %>">More Details »</a>   
 				<div>
 					<div>
-						<span class="title-info"><%= person.title %> <%= person.first_name %> <%= person.middle_name %> <%= person.last_name %> <%= person.suffix %></span>
+						<span class="title-info"><%= person.title + " "+  person.first_name + " " + person.middle_name %> <%= person.last_name %> <%= person.suffix %></span>
 					</div>
 					<div class="p-content-desc">
-						<span class="small-text" > <%= person.short_description %></span><br>
+						<span class="small-text" > <%= person.short_description.trunc(70) %></span><br>
 					</div>
 					<div class="updated-date">
 						<b class="small-text">Edited <span  data-livestamp="<%= person.update_date %>"> </span></b><br>
 					</div>
 				</div> 
 
-					<a class="button button-primary" href="/@/<%= user.username %>/person/<%= person._id %>">More Details »</a>          
+				       
 			</div>
 
           
 		<% }) %>
 
-
+</div>
 
 
               

@@ -12,7 +12,8 @@
 <form method="post" action="?_csrf=<%= csrfToken %>" accept-charset="utf-8"  enctype="multipart/form-data">
 	<div class="form-block">
 		<h5>Photo</h5>
-		<input type='file' name='image'><br>
+		<img id="preview-img" src="#" alt="your image" />
+		<input type='file' name='image' id='image-file' ><br>
 	</div>
 	<div class="form-block">
 		<!-- name info -->
@@ -54,7 +55,7 @@
 		 <div class="row">
 		 	<div class=" columns title-info">
 		 		<label for="gender">Short Description:</label>
-		 		<textarea class="u-full-width" id="short-description" type="text" name="short_description" /><%= person.short_description %></textarea>
+		 		<textarea  contenteditable="true" spellcheck="true" class="u-full-width" id="short-description" type="text" name="short_description" /><%= person.short_description %></textarea>
 		 		<div id="short-description-count"></div>
 		 	</div>
 		</div>
@@ -62,7 +63,7 @@
 		<div class="row">
 		 	<div class=" columns title-info">
 		 		<label for="gender">Detailed Description:</label>
-		 		<textarea class="u-full-width"  id="description" type="text" name="description"  ><%= person.description %></textarea>
+		 		<textarea contenteditable="true" spellcheck="true" class="u-full-width"  id="description" type="text" name="description"  ><%= person.description %></textarea>
 		 		
 		 	</div>
 		</div>
@@ -516,6 +517,27 @@
 
 
    <script>
+
+   	function readURL(input) {
+
+	    if (input.files && input.files[0]) {
+	        var reader = new FileReader();
+
+	        reader.onload = function (e) {
+	            $('#preview-img').attr('src', e.target.result);
+	        }
+
+	        reader.readAsDataURL(input.files[0]);
+	    } else{
+	    		$('#preview-img').attr('src', "http://g-ecx.images-amazon.com/images/G/01/img15/pet-products/small-tiles/23695_pets_vertical_store_dogs_small_tile_8._CB312176604_.jpg");
+	    }
+	}
+
+	$("#image-file").change(function(){
+	    readURL(this);
+	});
+
+
 	 $(function(){
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 			var showToolbar = false
@@ -541,6 +563,7 @@
 				paste_text_sticky_default: true,
 				link_assume_external_targets: true,
 				extended_valid_elements: 'a[href|target=_blank]',
+				browser_spellcheck: true,
 
 				// plugins: "autoresize",
 				// content_style: "div  {border: #000 solid 3px;}"
@@ -574,7 +597,7 @@
 
        $('#short-description').keyup(function () {
        	
-			var max = 160;
+			var max = 70;
 			var len = $(this).val().length;
 
 			v = $(this).val().substring(0,160)
