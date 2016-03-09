@@ -271,13 +271,13 @@ var groupController = function(){
 
 	var groups = function (req, res) {
 		var readGroups = function(hub){
+			console.log(req.query)
 			var hubOwner = hub.user_owner_id
 			var userId = req.user._id
 			var user = req.user
 			if(_.isEqual(userId, hubOwner)){
 
 				var title = req.query.title || ""
-
 
 				title = title.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
 
@@ -290,14 +290,10 @@ var groupController = function(){
 				 }
 
 
-
-
-
-
 				Group.find({hub_id: hub.id, title: new RegExp('^'+title.toLowerCase(), "i")}, null, sort, function(err, groups){
 					if(err){ return console.log("err: " + err) }
 					// console.log(groups);
-					res.render('group/groups', {hub: hub, groups : groups, user: user});
+					res.render('group/groups', {hub: hub, groups : groups, user: user, query: req.query });
 				}).limit(20).skip(req.query.skip*20);
 			} else {
 				console.log("not equals");

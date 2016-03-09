@@ -31,32 +31,32 @@ var Person = new Schema({
 	     message: '{VALUE} is not a valid name!'
 
 	},
-	middle_name: {
-		type: String,
-		default: ""
-	},
-	lowercase_middle_name:{
-		type: String
-	},
-	last_name: {
-		type: String,
-		require: true,
-		validate: /\S+$/,
-		validator: function(v) {
-	        return /\S+$/.test(v);
-	      },
-	      message: '{VALUE} is not a valid name!'
-	},
-	lowercase_last_name:{
-		type: String,
-		require: true,
-		validate: /\S+$/,
-		validator: function(v) {
-	        return /\S+$/.test(v);
-	      },
-	     message: '{VALUE} is not a valid name!'
+	// middle_name: {
+	// 	type: String,
+	// 	default: ""
+	// },
+	// lowercase_middle_name:{
+	// 	type: String
+	// },
+	// last_name: {
+	// 	type: String,
+	// 	require: true,
+	// 	validate: /\S+$/,
+	// 	validator: function(v) {
+	//         return /\S+$/.test(v);
+	//       },
+	//       message: '{VALUE} is not a valid name!'
+	// },
+	// lowercase_last_name:{
+	// 	type: String,
+	// 	require: true,
+	// 	validate: /\S+$/,
+	// 	validator: function(v) {
+	//         return /\S+$/.test(v);
+	//       },
+	//      message: '{VALUE} is not a valid name!'
 
-	},
+	// },
 	suffix: {
 		type: String,
 		default: ""

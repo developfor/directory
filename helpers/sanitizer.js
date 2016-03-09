@@ -1,5 +1,3 @@
-
-
 var sanitizeHtml = require('sanitize-html');
 
 var sanitize = function(dirty) {
@@ -28,6 +26,13 @@ var sanitize = function(dirty) {
 		// })
 	}
 
+	var personEntity = function(){
+		if( dirty !== "person" && dirty !== "entity"){
+			return ("person")
+		}
+		var cleaned = dirty
+		return cleaned
+	}
 
 	// var namefieldclean = function(){
 
@@ -40,7 +45,8 @@ var sanitize = function(dirty) {
 	return{
 		cleanedHTML: cleanedHTML,
 		noTagsCleanedHTML: noTagsCleanedHTML,
-		cleanedHTMLCHAR: cleanedHTMLCHAR
+		cleanedHTMLCHAR: cleanedHTMLCHAR,
+		personEntity: personEntity
 	}
 }
 

@@ -89,6 +89,9 @@ var personController = function(personService, app ){
 			var person = new Person();
 			
 			person.hub_id = hub._id;
+
+			person.obj_type = sanitize(requestBody.obj_type).personEntity();
+
 			person.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
 			person.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
@@ -615,7 +618,7 @@ var personController = function(personService, app ){
 					var randomString = token;
 					var requestBody = req.body;
 
-					var intials = requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase() + requestBody.last_name.replace(/\s+/g, '').charAt(0).toUpperCase()
+					var intials = requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase() //+ requestBody.last_name.replace(/\s+/g, '').charAt(0).toUpperCase()
 
 					
 
@@ -631,14 +634,16 @@ var personController = function(personService, app ){
 					person.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb();
 					person.defaultBigThumb = canvasThumbnail(intials).bigTextThumb();
 
+					person.obj_type = sanitize(requestBody.obj_type).personEntity();
 
-					person.title = sanitize(requestBody.title).noTagsCleanedHTML();
+
+					// person.title = sanitize(requestBody.title).noTagsCleanedHTML();
 					person.first_name = sanitize(requestBody.first_name).cleanedHTMLCHAR();
-					person.middle_name = sanitize(requestBody.middle_name).cleanedHTMLCHAR();
-					person.last_name = sanitize(requestBody.last_name).cleanedHTMLCHAR();
+					// person.middle_name = sanitize(requestBody.middle_name).cleanedHTMLCHAR();
+					// person.last_name = sanitize(requestBody.last_name).cleanedHTMLCHAR();
 					person.lowercase_first_name = sanitize(requestBody.first_name.toLowerCase()).cleanedHTMLCHAR();
-					person.lowercase_middle_name = sanitize(requestBody.middle_name.toLowerCase()).cleanedHTMLCHAR();
-					person.lowercase_last_name = sanitize(requestBody.last_name.toLowerCase()).cleanedHTMLCHAR();
+					// person.lowercase_middle_name = sanitize(requestBody.middle_name.toLowerCase()).cleanedHTMLCHAR();
+					// person.lowercase_last_name = sanitize(requestBody.last_name.toLowerCase()).cleanedHTMLCHAR();
 					person.suffix = sanitize(requestBody.suffix).cleanedHTMLCHAR();
 
 					person.job_title = sanitize(requestBody.job_title).noTagsCleanedHTML();

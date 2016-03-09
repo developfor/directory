@@ -4,18 +4,35 @@
 <% } %>
 <% include ../_partials/user_navigation.ejs %>
 
+<div class="button-area space-up">
+ 	 <a class="button button-primary" href="/@/<%= user.username %>/add_person">+ add person</a>
+</div>
 
 
 
       <div class="p-content-list">
 	
-      	 <a class="button button-primary" href="/@/<%= user.username %>/add_person">+ add person</a>
+      	
       
 
 
 	    <div class="search-things">
+	    	<form >
+	          <div class="row">
+	            <div class="columns title-info">
+	              <label for="GroupTitle">Search By Name:</label>
+	              <input id="p-search" name="first_name" class="u-full-width" type="text" placeholder="Contact Name" id="input-group-title" value="<%= query.first_name %>">
+
+	              <button id="p-search-button" class="button-primary" type="submit"><img src="/app/img/magnifying_glass_icon.png" > </button>
+
+
+	            </div>
+	          
+	          </div>
+       
+	        </form>
 	    	
-	        <form >
+	        <!-- <form >
 	          <div class="row">
 	            <div class="six columns title-info">
 	              <label for="FirstName">First Name:</label>
@@ -39,7 +56,7 @@
 
 	          
        
-	        </form>
+	        </form> -->
 
 	    </div>
 
@@ -71,17 +88,13 @@
 					</div> -->
 
 					<% }else{  %>
-		
-					    <div class="image-block" style=" background-image: url(/uploads/img/<%= person.img_foldername %>/<%=  person.defaultBigThumb  %>); "></div>
 
-					    <div style="    background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;background-image: url(<%= person.defaultBigThumb %>); border: 3px solid #000;width: auto;padding: 0;margin-bottom: 9px;line-height: 0;">
-							<img style="opacity: 0;" src="/app/img/no-image_clear.png">
-						</div>
-
+						 <img class="profile-image" style="background-color:white; background-image: url(<%= person.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+	
 						 
 					<% }  %>
 				</a>
-					<a class="button button-primary" href="/@/<%= user.username %>/person/<%= person._id %>">More Details »</a>   
+					<a class="button button-primary" href="/@/<%= user.username %>/person/<%= person._id %>">Details »</a>   
 				<div>
 					<div>
 						<span class="title-info"><%= person.title + " "+  person.first_name + " " + person.middle_name %> <%= person.last_name %> <%= person.suffix %></span>

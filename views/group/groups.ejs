@@ -6,38 +6,25 @@
 
   <% include ../_partials/user_navigation.ejs %>
 
-<div style="margin-bottom: 20px; float: left;">
+<div class="button-area space-up">
  	<a class="button button-primary" href="/@/<%= user.username %>/add_group">+ add group</a>
 </div>
-      <div class="p-content-list">
+      <div class="p-content-list ">
 	
-      	
-      
-
-
 	    <div class="search-things">
 	    	
 	        <form >
 	          <div class="row">
 	            <div class="columns title-info">
 	              <label for="GroupTitle">Search By Group Title:</label>
-	              <input id="p-search" name="title" class="u-full-width" type="text" placeholder="Group Title" id="input-group-title" value="">
-	              <input id="p-search-button" class="button-primary" type="submit" value="S">
+	              <input id="p-search" name="title" class="u-full-width" type="text" placeholder="Group Title" id="input-group-title" value="<%= query.title %>">
+
+	              <button id="p-search-button" class="button-primary" type="submit"><img src="/app/img/magnifying_glass_icon.png" > </button>
+
+
 	            </div>
 	          
 	          </div>
-
-
-
-			<!--  <div class="row">
-	            <div class="twelve columns">
-	                
-	                 <a class="button button-primary" href="/@/<%= user.username %>/groups"> < reset</a>
-	             
-	            </div>
-	          </div> -->
-
-	          
        
 	        </form>
 
