@@ -67,6 +67,7 @@ app.use(session({ secret: secret_key.secret }));
 app.use(flash());
 
 app.use(express.static(__dirname + '/public'));
+// application.use("/public", express.static(path.join(__dirname, 'public')));
 
 
 
