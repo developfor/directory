@@ -5,17 +5,18 @@
           <div class="eight columns">
             <div class="nav-right">
               <ul>
-                <li> 
+                 <li> 
                   <b>group:</b>
                 </li>
+            
                 <li>
-                    <a class="no-style-link " href="/@/<%= user.username %>/group/<%= group._id %>">description</a>
+                    <a class="no-style-link selected" href="/@/<%= user.username %>/group/<%= group._id %>">people</a>
                 </li>
                 <li>
                     <a class="no-style-link" href="/@/<%= user.username %>/group/<%= group._id %>/info">information</a>
                 </li>
                 <li>
-                    <a class="no-style-link selected" href="/@/<%= user.username %>/group/<%= group._id %>/persons">people</a>
+                    <a class="no-style-link" href="/@/<%= user.username %>/group/<%= group._id %>/description">description</a>
                 </li>
               
               </ul>
@@ -55,7 +56,7 @@
 
 
                       </div> 
-                      <a class="button button-primary" href="/@/<%= user.username %>/person/<%= item._id %>">More Details »</a>
+                      <a class="button button-primary" href="/@/<%= user.username %>/person/<%= item._id %>">Details</a>
                     </div>
                   
                   <% } %>
@@ -89,6 +90,8 @@
           }
 
       })
+
+      
     </script>
 
 

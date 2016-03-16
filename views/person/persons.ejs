@@ -20,10 +20,38 @@
 	    	<form >
 	          <div class="row">
 	            <div class="columns title-info">
-	              <label for="GroupTitle">Search By Name:</label>
+	             <!--  <label for="GroupTitle">Search:</label> -->
+
+
+	        <tr>
+                <td>
+                    <input type="radio" name="obj_type" id="radio4" class="css-checkbox" value="all" <% if(query.obj_type === "all" || query.obj_type === undefined){ %> checked <% } %>  />
+                    <label for="radio4" class="css-label radGroup2">All</label>
+                </td>
+                <td>
+                    <input type="radio" name="obj_type" id="radio5" class="css-checkbox"  value="people" <% if(query.obj_type === "people"){ %> checked <% } %> />
+                    <label for="radio5" class="css-label radGroup2">People</label>
+                </td>
+                <td>
+                    <input type="radio" name="obj_type" id="radio6" class="css-checkbox" value="entities" <% if(query.obj_type === "entities"){ %> checked <% } %> />
+                    <label for="radio6" class="css-label radGroup2">Entities</label>
+                </td>
+            </tr>
+            <div>
 	              <input id="p-search" name="first_name" class="u-full-width" type="text" placeholder="Contact Name" id="input-group-title" value="<%= query.first_name %>">
 
 	              <button id="p-search-button" class="button-primary" type="submit"><img src="/app/img/magnifying_glass_icon.png" > </button>
+	               <div>   
+	        <div> 
+	    </div> 
+
+	   
+
+
+
+          
+
+
 
 
 	            </div>
@@ -94,10 +122,10 @@
 						 
 					<% }  %>
 				</a>
-					<a class="button button-primary" href="/@/<%= user.username %>/person/<%= person._id %>">Details »</a>   
+					<a class="button button-primary" href="/@/<%= user.username %>/person/<%= person._id %>">Details</a>   
 				<div>
 					<div>
-						<span class="title-info"><%= person.title + " "+  person.first_name + " " + person.middle_name %> <%= person.last_name %> <%= person.suffix %></span>
+						<span class="title-info"><%=  person.first_name %></span>
 					</div>
 					<div class="p-content-desc">
 						<span class="small-text" > <%= person.short_description.trunc(70) %></span><br>
@@ -182,6 +210,10 @@
 			   // console.log("ubhjbhjbhjed")
 			}
 
+			$(".search-things input[type=radio]").on("change", function(){
+		        console.log("submit")
+		        $(this).closest("form").submit();
+		      });
 
 			// console.log(location.pathname)
 			// console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + querySkip)

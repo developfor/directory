@@ -58,7 +58,7 @@ var hubchecker = function(req, res, method){
 var groupController = function(){
 
 
-	var group =  function(req, res){
+	var groupDescription =  function(req, res){
 		var readGroup = function(hub){
 
 			var hubOwner = hub.user_owner_id
@@ -77,7 +77,7 @@ var groupController = function(){
 					var updateDate = group.update_date.getTime();
 					var creationDate = group.creation_date.getTime();
 
-					res.render('group/group', {group : group, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate});
+					res.render('group/description', {group : group, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate});
 				})
 
 			} else {
@@ -725,7 +725,7 @@ var groupController = function(){
 
 
 	return{
-		group: group,
+		groupDescription: groupDescription,
 		groupInfo: groupInfo,
 		groupPersons: groupPersons,
 		deleteGroup: deleteGroup,

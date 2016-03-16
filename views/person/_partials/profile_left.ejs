@@ -9,19 +9,20 @@
           <%  if(person.img_foldername && person.img_thumbnail){ %>
        
             <img class="profile-image" style=" background-image: url(/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>); " src="/app/img/no-image_clear.png">
-    	
+
     			<% }else{  %>
- 
+
              <img class="profile-image" style="background-color: #EEEEEE; background-image: url(<%= person.defaultBigThumb %>); " src="/app/img/no-image_clear.png" >
+             
     			<% }  %>
         </div>
     
 
         <div  class="profile-content-left-info">
           <p>
-            <span ><span class="title-info">person name:</span></br> <%= person.title %> <%= person.first_name %> <%= person.middle_name %> <%= person.last_name %> <%= person.suffix %></span></br>
+           <%= person.first_name %>
           </p>
-          <p>
+          <!-- <p>
             <span class="title-info">updated on: </span></br>
             <span class="small-text" id="updated-date" data-date="<%= updateDate %>">  </span><br>
           </p>
@@ -30,7 +31,7 @@
            <p>
             <span class="title-info">created on: </span></br>
             <span class="small-text" id="creation-date" data-date="<%= creationDate %>">  </span><br>
-          </p>
+          </p> -->
 
         </div>
         <div class="button-profile-wrapper">

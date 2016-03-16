@@ -35,7 +35,7 @@ var hubchecker = function(req, res, method){
 	var userLowerCase = req.params.id.toLowerCase();
 
 	User.findOne({username: userLowerCase}, function(err, user) {
-		console.log("checking hub")
+		// console.log("checking hub")
 		if(err  || user === null){ 
 			res.send('no user by that name');
 			return console.log("err: " + err) 
@@ -46,7 +46,7 @@ var hubchecker = function(req, res, method){
 				res.redirect('/');
 				return console.log("err: " + err) 
 			}
-			console.log("hubchecked")
+			// console.log("hubchecked")
 
 			return method(hub);
 		});
@@ -84,7 +84,7 @@ var personController = function(personService, app ){
 			var randomString = token;
 
 			var requestBody = req.body;
-			var intials = requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase() + requestBody.last_name.replace(/\s+/g, '').charAt(0).toUpperCase()
+			var intials = requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase()
 
 			var person = new Person();
 			
@@ -95,14 +95,10 @@ var personController = function(personService, app ){
 			person.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
 			person.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
-		    person.title = sanitize(requestBody.title).noTagsCleanedHTML();
+		  
 			person.first_name = sanitize(requestBody.first_name).cleanedHTMLCHAR();
-			person.middle_name = sanitize(requestBody.middle_name).cleanedHTMLCHAR();
-			person.last_name = sanitize(requestBody.last_name).cleanedHTMLCHAR();
+			
 			person.lowercase_first_name = sanitize(requestBody.first_name.toLowerCase()).cleanedHTMLCHAR();
-			person.lowercase_middle_name = sanitize(requestBody.middle_name.toLowerCase()).cleanedHTMLCHAR();
-			person.lowercase_last_name = sanitize(requestBody.last_name.toLowerCase()).cleanedHTMLCHAR();
-			person.suffix = sanitize(requestBody.suffix).cleanedHTMLCHAR();
 
 			person.job_title = sanitize(requestBody.job_title).noTagsCleanedHTML();
 			person.gender = sanitize(requestBody.gender).cleanedHTMLCHAR();
@@ -183,37 +179,114 @@ var personController = function(personService, app ){
 			var hubOwner = hub.user_owner_id
 			var userId = req.user._id
 			var user = req.user
-
-			// console.log(req.query.first_name)
-			// console.log(req.query.last_name)
-
 			
 			if(_.isEqual(userId, hubOwner)){
 
 				var firstName = req.query.first_name || ""
-				var lastName = req.query.last_name || ""
 
+				var objType = req.query.obj_type  || ""
 
-				firstName = firstName.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
-				lastName = lastName.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
-
-				 if(firstName.length <= 0  && lastName.length <= 0){
-				 	var sort = {sort: {update_date: -1} } 
-				 	console.log("empty")
-				 }else{
-				 	var sort = {sort: { lowercase_last_name: 1, lowercase_first_name: 1}} 
-					console.log("full")
+				if(objType === "all" ){
+				 	objType = ""
 				 }
 
+				 if(objType === "people" ){
+				 	objType = "person"
+				 }
 
-				Person.find({hub_id: hub.id, lowercase_first_name: new RegExp('^'+firstName.toLowerCase(), "i"), lowercase_last_name: new RegExp('^'+lastName.toLowerCase(), "i")}, null, sort, function(err, persons){
+				 if(objType === "entities" ){
+				 	objType = "entity"
+				 }
+
+				console.log(objType)
+				// firstName = firstName.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
+
+				 // if(req.query.obj_type != undefined){
+				 // 	console.log("all")
+				 // 	req.query.obj_type =  ""
+				 // }
+
+				 if(firstName.length <= 0){
+				 	if( objType === "" ){
+				 		var findText = {
+					 		hub_id: hub.id, 
+					 		first_name: new RegExp('^'+firstName.toLowerCase(), "i")
+				 		} // , obj_type: "entity"
+					 }else{
+				 		var findText = {
+					 		hub_id: hub.id, 
+					 		first_name: new RegExp('^'+firstName.toLowerCase(), "i"), 
+					 		obj_type: objType  
+				 		}
+
+					 	}
+				 	var sort = {sort: {update_date: -1} } 
+				 	// console.log("empty")
+				 }else{
+				 	// var findText =  {hub_id: hub.id, first_name:{    $regex : ".*"+firstName+"*"}} //firstName.toLowerCase() }
+				 	// var findText =  {hub_id: hub.id, first_name:{ $text: { $search: firstName } }}
+				 	if(objType === "" ){
+					 	var findText =  {
+					 		hub_id: hub.id, 
+					 		$text : { $search: "\"" +firstName.toLowerCase() +"\""  }
+					        }
+					}else{
+						var findText =  {
+					 		hub_id: hub.id, 
+					 		$text : { $search: "\"" +firstName.toLowerCase() +"\""  },
+					 		obj_type: objType
+					        }
+
+					}
+				 	var sort = {sort: {lowercase_first_name: 1}} 
+					// console.log("full")
+				 }
+
+				if(objType === "" ){
+					var findTextAgain = {
+						hub_id: hub.id, 
+						first_name : new RegExp('^'+firstName.toLowerCase(), "i")
+						// $text :/.* firstName .*/
+					}
+				}else{
+					var findTextAgain = {
+						hub_id: hub.id, 
+						first_name : new RegExp('^'+firstName.toLowerCase(), "i"),
+						obj_type: objType 
+					}
+				}
+				// if(req.query.obj_type === "all" ){
+				 // 	console.log("all")
+
+
+				 // }
+
+				
+				 console.log(res)
+
+				// Person.find({hub_id: hub.id, lowercase_first_name: new RegExp('^'+firstName.toLowerCase(), "i")}, null, sort, function(err, persons){
+				Person.find(findText, null, sort, function(err, persons){
+					console.log(persons.length === 0)
+
 					if(err){ 
 						res.redirect('/');
 					    console.log("err: " + err) 
 					}
+
+					if(persons.length === 0){
+
+
+						// Person.find( {hub_id: hub.id, lowercase_first_name:  new RegExp('^'+firstName.toLowerCase(), "i") }, null, sort, function(err, persons){
+						Person.find( findTextAgain, null, sort, function(err, persons){
+						    // console.log("}}}}}}}}}}}}}}}}}}}}}}}}}length")
+						    return res.render('person/persons', {hub: hub, persons: persons, query: req.query, user: user});
+						})
+					}else{
+						return res.render('person/persons', {hub: hub, persons: persons, query: req.query, user: user});
+
+					}
 					
-					return res.render('person/persons', {hub: hub, persons: persons, query: req.query, user: user});
-					console.log(person) 
+					// console.log(person) 
 				}).limit(20).skip(req.query.skip*20);
 				return;
 
@@ -264,10 +337,7 @@ var personController = function(personService, app ){
 					var pmiddle = person.middle_name || "";	
 					var psuffix = person.suffix || "";
 
-
-
-
-					var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
+					var title = person.first_name;
 
 					res.render('person/person', {title: title, user: user, person: person, hub: hub, updateDate: updateDate, creationDate: creationDate   });
 				})
@@ -340,7 +410,7 @@ var personController = function(personService, app ){
 						person.birthday = moment(person.birthday).format("LL")
 					}
 					
-					var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
+					var title = person.first_name;
 
 
 					res.render('person/info', {title: title, person : person, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate   });
@@ -410,7 +480,7 @@ var personController = function(personService, app ){
 							var pmiddle = person.middle_name || "";	
 							var psuffix = person.suffix || "";
 							console.log(groupArray);
-							var title = ptitle  +" "+  person.first_name +" "+ pmiddle +" "+ person.last_name +" "+ psuffix;
+							var title = person.first_name;
 							res.render('person/groups', {title: title, person : person, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate, groupArray: groupArray });
 
 
@@ -618,12 +688,9 @@ var personController = function(personService, app ){
 					var randomString = token;
 					var requestBody = req.body;
 
-					var intials = requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase() //+ requestBody.last_name.replace(/\s+/g, '').charAt(0).toUpperCase()
+					var intials = requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase()
 
-					
-
-
-					// var person = new Person();
+				
 					
 					person.hub_id = hub.id;
 					person.update_date = Date.now();
@@ -637,14 +704,8 @@ var personController = function(personService, app ){
 					person.obj_type = sanitize(requestBody.obj_type).personEntity();
 
 
-					// person.title = sanitize(requestBody.title).noTagsCleanedHTML();
 					person.first_name = sanitize(requestBody.first_name).cleanedHTMLCHAR();
-					// person.middle_name = sanitize(requestBody.middle_name).cleanedHTMLCHAR();
-					// person.last_name = sanitize(requestBody.last_name).cleanedHTMLCHAR();
 					person.lowercase_first_name = sanitize(requestBody.first_name.toLowerCase()).cleanedHTMLCHAR();
-					// person.lowercase_middle_name = sanitize(requestBody.middle_name.toLowerCase()).cleanedHTMLCHAR();
-					// person.lowercase_last_name = sanitize(requestBody.last_name.toLowerCase()).cleanedHTMLCHAR();
-					person.suffix = sanitize(requestBody.suffix).cleanedHTMLCHAR();
 
 					person.job_title = sanitize(requestBody.job_title).noTagsCleanedHTML();
 					person.gender = sanitize(requestBody.gender).cleanedHTMLCHAR();

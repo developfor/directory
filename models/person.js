@@ -15,19 +15,20 @@ var Person = new Schema({
 	first_name: {
 		type: String,
 		require: true,
-		validate: /\S+$/,
-		validator: function(v) {
-	        return /\S+$/.test(v);
-	      },
+		index : "text",
+		// validate: /\S+$/,
+		// validator: function(v) {
+	 //        return /\S+$/.test(v);
+	 //      },
 	     message: '{VALUE} is not a valid name!'
 	},
 	lowercase_first_name:{
 		type: String,
 		require: true,
-		validate: /\S+$/,
-		validator: function(v) {
-	        return /\S+$/.test(v);
-	      },
+		// validate: /\S+$/,
+		// validator: function(v) {
+	 //        return /\S+$/.test(v);
+	 //      },
 	     message: '{VALUE} is not a valid name!'
 
 	},

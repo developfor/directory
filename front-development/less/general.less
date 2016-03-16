@@ -193,6 +193,11 @@ footer{
   font-weight: bold;
   font-size: 16px;
   text-transform: uppercase;
+
+  textarea{
+    min-height: 40px;
+        height: auto;
+  }
 }
 
 
@@ -312,6 +317,9 @@ a:hover {
 .profile-content-left-info{
   margin-top: 0px;
   margin-bottom: 20px;
+  p{
+     font-size: 25px;
+  }
 }
 
 #p-search{
@@ -577,7 +585,12 @@ a:hover {
 
 
 /*form */
-
+#tinymce{
+  min-width: 0;
+   // max-height: 300px;
+   // height: auto;
+   
+}
 .mce-tinymce{
   border: #000 solid 3px !important;
   .mce-edit-area{
@@ -589,6 +602,7 @@ a:hover {
 .form-block{
   input{
         width: 100%;
+
   }
   border-bottom: 3px solid black; 
   padding: 20px 0;
@@ -665,7 +679,6 @@ a:hover {
     }
   }
 }
-
 
 
 

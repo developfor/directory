@@ -14,8 +14,19 @@
 
 <form method="post" action="?_csrf=<%= csrfToken %>" accept-charset="utf-8"  enctype="multipart/form-data">
 
-	<input type="radio" name="obj_type" value="person" checked> person<br>
-	<input type="radio" name="obj_type" value="entity" > entity<br>
+
+
+	 <tr>
+     
+                <td>
+                    <input type="radio" name="obj_type" id="radio5" class="css-checkbox"  value="person"  <% if (person.obj_type == 'person') { %> checked <% } %> />
+                    <label for="radio5" class="css-label radGroup2">Person</label>
+                </td>
+                <td>
+                    <input type="radio" name="obj_type" id="radio6" class="css-checkbox" value="entity" <% if (person.obj_type == 'entity') { %> checked <% } %> />
+                    <label for="radio6" class="css-label radGroup2">Entity</label>
+                </td>
+            </tr>
 	   
 	<div class="form-block">
 		<h5>Photo</h5>
@@ -534,18 +545,48 @@
    <script>
 	 $(function(){
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-			var showToolbar = false
-		}else{
+			// var showToolbar = false
 			var showToolbar = [
-		    "undo redo | bold italic | bullist numlist | link | removeformat"
+		    "undo redo | bold italic | bullist numlist | removeformat"
 		  ]
-		}
-
-		    tinymce.init({
+		  tinymce.init({
 		    
 				selector: "#description",
 				// content_style: "div{ border: #000 solid 3px}",
-				plugins : "paste autolink link lists charmap preview",
+				 plugins : "paste autolink lists charmap preview",
+				toolbar: showToolbar,
+				 menubar: false,
+				statusbar: false,
+				content_css : "/app/css/style.css",
+				default_link_target: "_blank",
+				target_list: false,
+				link_title: false,
+				paste_as_text: true,
+				paste_text_sticky : true,
+				paste_text_sticky_default: true,
+				link_assume_external_targets: true,
+				extended_valid_elements: 'a[href|target=_blank]',
+				browser_spellcheck: true,
+
+				theme_advanced_resizing: false,
+				 plugins: "autoresize",
+				 resize: false,
+				// content_style: "div  {border: #000 solid 3px;}"
+
+				 height: "300"
+
+		    });
+		}else{
+			var showToolbar = [
+		    "undo redo | bold italic | bullist numlist | removeformat"
+		  ]
+
+
+		  tinymce.init({
+		    
+				selector: "#description",
+				// content_style: "div{ border: #000 solid 3px}",
+				plugins : "paste autolink lists charmap preview",
 				toolbar: showToolbar,
 				menubar: false,
 				statusbar: false,
@@ -559,12 +600,16 @@
 				link_assume_external_targets: true,
 				extended_valid_elements: 'a[href|target=_blank]',
 				browser_spellcheck: true,
+				// theme_advanced_resizing: false,
 				// plugins: "autoresize",
 				// content_style: "div  {border: #000 solid 3px;}"
 
 				height: "300",
 
 		    });
+		}
+
+		    
 
       
 

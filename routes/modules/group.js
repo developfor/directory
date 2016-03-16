@@ -57,14 +57,14 @@ module.exports = function(app) {
 
 	app.post('/@/:id/add_group', upload.single('image'), csrfProtection, groupController.addGroupPost)
 
-	app.get('/@/:id/groups',  groupController.groups);
+	app.get('/@/:id/groups',  groupController.groups); //groupController.groupDescription
 
-	app.get('/@/:id/group/:group_id', groupController.group);
+	app.get('/@/:id/group/:group_id', groupController.groupPersons);
 	
 	app.get('/@/:id/group/:group_id/info', groupController.groupInfo);
 
 	// READ GROUPS
-	app.get('/@/:id/group/:group_id/persons', groupController.groupPersons);
+	app.get('/@/:id/group/:group_id/description', groupController.groupDescription);
 
 
 

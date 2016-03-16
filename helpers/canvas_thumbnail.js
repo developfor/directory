@@ -1,5 +1,6 @@
 var thumbnailGenerator = function(t) {
 	// var text = text;
+	// console.log(">>>" +t)
 
 	var bigTextThumb = function(){
 		var Canvas = require('canvas')

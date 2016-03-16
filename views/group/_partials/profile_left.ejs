@@ -5,7 +5,7 @@
       <div class="four columns profile-content-left">
         <div>
           <%  if(group.img_foldername && group.img_thumbnail){ %>
-    				<img src="/uploads/img/<%= group.img_foldername %>/<%= group.img_thumbnail %>">
+    				<img class="profile-image" style=" background-image: url(/uploads/img/<%= group.img_foldername %>/<%= group.img_thumbnail %>); " src="/app/img/no-image_clear.png">
     			<% }else{  %>
              <img style="background-color: #EEEEEE" src="<%= group.defaultBigThumb %>" >
     			<% }  %>
@@ -13,9 +13,9 @@
 
         <div  class="profile-content-left-info">
           <p>
-            <span ><span class="title-info">group name:</span></br> <%= group.title %></span></br>
+             <%= group.title %>
           </p>
-          <p>
+         <!--  <p>
             <span class="title-info">updated on: </span></br>
             <span class="small-text" id="updated-date" data-date="<%= updateDate %>">  </span><br>
           </p>
@@ -24,7 +24,7 @@
            <p>
             <span class="title-info">created on: </span></br>
             <span class="small-text" id="creation-date" data-date="<%= creationDate %>">  </span><br>
-          </p>
+          </p> -->
 
         </div>
         <div class="button-profile-wrapper">

@@ -56,14 +56,24 @@
 
 	      <div class="header-bar  border-bottom">
 	        <div class="header-left">
-	          <a class="no-style-link" href="/">directory</a>
+	        	<% try{ %>
+				<% if (login){ %>
+					  <a class="no-style-link" href="/">@<%= user.username %></a>
+				<%}else{ %>
+					 <a class="no-style-link" href="/">directory</a>
+				<% }%>
+			<% } catch(e){ %>
+				 <a class="no-style-link" href="/">directory</a>
+			<% } %>
+
+	         
 	        </div>
 	        <div class="header-right">
 
 				<ul>
 
 					<% if (login){ %>
-						<li> <a href="/logout">logout</a></li>
+						<!-- <li> <a href="/logout">logout</a></li> -->
 
 
 					<% } else { %>

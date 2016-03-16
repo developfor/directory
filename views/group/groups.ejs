@@ -53,14 +53,15 @@
 			<div class="p-content">
 				<a href="/@/<%= user.username %>/group/<%= group._id %>">
 					<%  if(group.img_foldername && group.img_thumbnail){ %>
-					<img src="/uploads/img/<%= group.img_foldername %>/<%= group.img_thumbnail %>">
+					<img class="profile-image" style=" background-image: url(/uploads/img/<%= group.img_foldername %>/<%= group.img_thumbnail %>); " src="/app/img/no-image_clear.png">
 					     <!-- <img src="/app/img/no-image.png" > -->
 					<% }else{  %>
-					 <img style="background-color: #EEEEEE" src="<%= group.defaultBigThumb %>" >
-
+					 <!-- <img style="background-color: #EEEEEE" src="<%= group.defaultBigThumb %>" > -->
+ 					<img class="profile-image" style="background-color:white; background-image: url(<%= group.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+	
 					<% }  %>
 				</a>
-				<a class="button button-primary" href="/@/<%= user.username %>/group/<%= group._id %>">More Details »</a> 
+				<a class="button button-primary" href="/@/<%= user.username %>/group/<%= group._id %>">Details</a> 
 				<div>
 					<div>
 						<span class="title-info"><%= group.title.trunc(30) %> </span>

@@ -16,7 +16,8 @@ var sanitize = function(dirty) {
 	var cleanedHTMLCHAR = function(){
 		return sanitizeHtml(dirty, {
 		  allowedTags: [],
-		}).replace(/[^a-zA-Z0-9,.-\s]/gi, "")
+		})
+		// .replace(/[^a-zA-Z0-9,.-\s]/gi, "")
 		  .replace(/^\s+|\s+$/g, "")
 		  .replace(/^\.+/g, "")
 		  .replace(/^\-+|\-+$/g, "")
