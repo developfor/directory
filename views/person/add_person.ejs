@@ -10,6 +10,19 @@
 
 
 <form method="post" action="?_csrf=<%= csrfToken %>" accept-charset="utf-8"  enctype="multipart/form-data">
+
+	<tr>
+     
+        <td>
+            <input type="radio" name="obj_type" id="radio5" class="css-checkbox"  value="person"  checked  />
+            <label for="radio5" class="css-label radGroup2">Person</label>
+        </td>
+        <td>
+            <input type="radio" name="obj_type" id="radio6" class="css-checkbox" value="entity" />
+            <label for="radio6" class="css-label radGroup2">Entity</label>
+        </td>
+    </tr>
+
 	<div class="form-block">
 		<h5>Photo</h5>
 		<img id="preview-img" src="#" alt="your image" />

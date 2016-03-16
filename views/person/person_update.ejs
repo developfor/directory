@@ -16,7 +16,10 @@
 
 
 
-	 <tr>
+	
+	   
+	<div class="form-block">
+		 <tr>
      
                 <td>
                     <input type="radio" name="obj_type" id="radio5" class="css-checkbox"  value="person"  <% if (person.obj_type == 'person') { %> checked <% } %> />
@@ -27,8 +30,6 @@
                     <label for="radio6" class="css-label radGroup2">Entity</label>
                 </td>
             </tr>
-	   
-	<div class="form-block">
 		<h5>Photo</h5>
 		<div>
           <%  if(person.img_foldername && person.img_thumbnail){ %>
