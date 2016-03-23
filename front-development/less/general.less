@@ -192,7 +192,7 @@ footer{
 .title-info{
   font-weight: bold;
   font-size: 16px;
-  text-transform: uppercase;
+  text-transform: capitalize;
 
   textarea{
     min-height: 40px;
@@ -285,7 +285,31 @@ a:hover {
   margin-bottom: 20px;
   }
 
-.profile-content-left, .p-content-list{
+// .p-content{
+//   .button-primary{
+//     margin-top: 0px;
+//   }
+// }
+
+.p-content-list{
+  // margin-bottom: 20px;
+
+ 
+
+  .profile-image{
+    background-position: 50% 50%; 
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: inset 0px 0px 0px 3px #000;
+    width: 100%;
+    padding: 0;
+    // margin-bottom: 9px;
+    line-height: 0; 
+    border: none;
+  }
+}
+
+.profile-content-left{
   margin-bottom: 20px;
 
  
@@ -300,8 +324,6 @@ a:hover {
     margin-bottom: 9px;
     line-height: 0; 
     border: none;
-
-
   }
 }
 
@@ -390,9 +412,10 @@ a:hover {
 .p-content-info{
   margin-bottom: 20px;
 }
-.p-content .small-text{
-  font-size: 14px;
-  line-height: 14.6px;
+.small-text{
+  display: block;
+  font-size: 12px;
+  line-height: 1.2;
 }
 
 
@@ -435,6 +458,18 @@ a:hover {
   margin-right: 2%;
   white-space: normal;
   word-wrap: break-word;
+  .profile-image{
+    background-position: 50% 50%; 
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: inset 0px 0px 0px 3px #000;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 9px;
+    line-height: 0; 
+    border: none;
+
+  }
   .title-info-wrapper{
     margin: 10px 0;
   }
@@ -454,7 +489,7 @@ a:hover {
   margin-bottom: 20px;
 }
 .mini-p-content .small-text{
-  font-size: 14px;
+  font-size: 12px;
   line-height: 14.6px;
 }
 
@@ -538,7 +573,7 @@ a:hover {
  
 
 
-.search-things  {
+.search-things{
   input{
     margin-bottom: 0;
   }

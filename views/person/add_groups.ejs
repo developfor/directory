@@ -16,7 +16,7 @@
     
     </div>
     <div style="margin-left: 5px; width: 60%;">
-    	<p class="title-info"  ><a href="/@/<%= user.username %>/person/<%= person._id %>/groups"><%= person.title  %> <%= person.first_name  %> <%= person.middle_name  %> <%= person.last_name  %> <%= person.suffix %></a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= person.update_date %>"> </span> <%= person.update_date %></span>   -->
+    	<p class="title-info"  ><a href="/@/<%= user.username %>/person/<%= person._id %>/groups"><%= person.first_name  %></a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= person.update_date %>"> </span> <%= person.update_date %></span>   -->
     	</p>
 
  
@@ -36,9 +36,9 @@
  			<div >
 	 			<a href="/@/<%= user.username %>/group/<%= name._id %>">
 	 				<%  if(name.img_foldername && name.img_thumbnail){ %>
-			        	 <img src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
+			        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
 	        		<% }else{  %>
-	        			 <img src="<%= name.defaultBigThumb %>">
+	        			 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
 	        		<% }  %>
 	        	</a>
 
@@ -49,15 +49,16 @@
     			<label>
 		            <div class="Checkbox Module fancyToggle on styledToggle">
 			            <div class="slider"></div>
-			            <p class="onText status">&#10004;</p>
-			            <p class="offText status">&#10006;</p>
+			            <div class="onText status"></div>
+			            <div class="offText status"></div>
 		 				<input type="checkbox" name="group" value="<%= name._id %>" checked></div>
 		            </div>
 		        </label>
 
         
  				<div >
- 					<p class="title-info"><span><%= name.title %></span>		                  
+ 					<p class="title-info"><span><%= name.title %></span></p>
+ 					<p class="small-text" style="font-size: 12px;"><span> <%= name.short_description %></span>		                  
  					</p>
  				</div>
 
@@ -76,9 +77,11 @@
  			<div >
 	 			<a href="/@/<%= user.username %>/group/<%= name._id %>">
 	 				<%  if(name.img_foldername && name.img_thumbnail){ %>
-			        	 <img src="/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>"> 
+	 				<img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
+
+			        	 
 	        		<% }else{  %>
-	        			 <img src="<%= name.defaultBigThumb %>">
+	        		<img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
 	        		<% }  %>
 	        	</a>
 
@@ -89,8 +92,8 @@
     			<label>
 		            <div class="Checkbox Module fancyToggle styledToggle">
 			            <div class="slider"></div>
-			            <p class="onText status">&#10004;</p>
-			            <p class="offText status">&#10006;</p>
+			            <div class="onText status"></div>
+			            <div class="offText status"></div>
 		 				<input type="checkbox" name="group" value="<%= name._id %>" ></div>
 		            </div>
 		        </label>
@@ -98,6 +101,9 @@
         
  				<div >
  					<p class="title-info"><span><%= name.title %></span>		                  
+ 					</p>
+
+ 					<p class="small-text" style="font-size: 12px;"><span> <%= name.short_description %></span>		                  
  					</p>
  				</div>
 

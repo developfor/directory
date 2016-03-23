@@ -42,7 +42,7 @@
 
 	              <button id="p-search-button" class="button-primary" type="submit"><img src="/app/img/magnifying_glass_icon.png" > </button>
 	               <div>   
-	        <div> 
+	        </div> 
 	    </div> 
 
 	   
@@ -120,7 +120,7 @@
 						 <img class="profile-image" style="background-color:white; background-image: url(<%= person.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
 	
 						 
-					<% }  %>
+					<% } %>
 				</a>
 					<a class="button button-primary" href="/@/<%= user.username %>/person/<%= person._id %>">Details</a>   
 				<div>
@@ -128,10 +128,10 @@
 						<span class="title-info"><%=  person.first_name %></span>
 					</div>
 					<div class="p-content-desc">
-						<span class="small-text" > <%= person.short_description.trunc(70) %></span><br>
+						<span class="small-text" > <%= person.short_description.trunc(70) %></span>
 					</div>
 					<div class="updated-date">
-						<b class="small-text">Edited <span  data-livestamp="<%= person.update_date %>"> </span></b><br>
+						<b class="small-text">Edited <span  data-livestamp="<%= person.update_date %>"> </span></b>
 					</div>
 				</div> 
 

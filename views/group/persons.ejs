@@ -34,7 +34,7 @@
                     <div class="mini-p-content" >
                       <a class="" href="/@/<%= user.username %>/person/<%= item._id %>">
                         <%  if(item.img_foldername && item.img_thumbnail){ %>
-                        <img style="background-color: #666;    border: 3px solid #000;" src="/uploads/img/<%= item.img_foldername %>/<%=  item.img_thumbnail %>"> 
+                        <img class="profile-image" style=" background-image: url(/uploads/img/<%= item.img_foldername %>/<%= item.img_thumbnail %>); " src="/app/img/no-image_clear.png"> 
                         <% }else{  %>
                            <img src="/app/img/no-image.png" >
                         <% }  %>
@@ -46,10 +46,10 @@
 
 
                         <div>
-                          <span class="title-info"><%= item.title %> <%= item.first_name %> <%= item.middle_name %> <%= item.last_name %> <%= item.suffix %></span>
+                          <span class="title-info"><%= item.first_name %></span>
                         </div>
                         <div class="p-content-desc">
-                          <span class="small-text" > <%= item.short_description %></span><br>
+                          <span class="small-text" > <%= item.short_description %></span>
                         </div>
                               
 
