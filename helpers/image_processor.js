@@ -47,6 +47,7 @@ module.exports = function(req, res, randomString, cb) {
 					.crop(600, 600, 0, 0)
 					.gravity('Center')
 					.noProfile()
+					.interlace("Plane")
 					.setFormat("jpg")
 					.autoOrient()
 					.write(folderName + "/" + "thumb_" + imageFileName , function (err) {
@@ -77,6 +78,7 @@ module.exports = function(req, res, randomString, cb) {
 							.crop(1000, 1000, 0, 0)
 							.gravity('Center')
 							.noProfile()
+							.interlace("Plane")
 							.setFormat("jpg")
 							.autoOrient()
 							.write(folderName +"/" + "normal_" + imageFileName , function (err) {
@@ -89,6 +91,7 @@ module.exports = function(req, res, randomString, cb) {
 									.crop(200, 200, 0, 0)
 									.gravity('Center')
 									.noProfile()
+									.interlace("Plane")
 									.setFormat("jpg")
 									.autoOrient()
 									.write(folderName +"/" + "icon_" + imageFileName , function (err) { 

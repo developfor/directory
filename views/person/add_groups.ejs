@@ -34,27 +34,22 @@
      <li style="">
  		<div class="check-element-box p-content">
  			<div >
-	 			<a href="/@/<%= user.username %>/group/<%= name._id %>">
+	 			<!-- <a href="/@/<%= user.username %>/group/<%= name._id %>"> -->
+	 			<div class="fancy-toggle-button">
 	 				<%  if(name.img_foldername && name.img_thumbnail){ %>
 			        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
 	        		<% }else{  %>
 	        			 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
 	        		<% }  %>
-	        	</a>
-
-
-
-
-
-    			<label>
+	        	
+	        	<!-- </a> -->
 		            <div class="Checkbox Module fancyToggle on styledToggle">
 			            <div class="slider"></div>
 			            <div class="onText status"></div>
 			            <div class="offText status"></div>
 		 				<input type="checkbox" name="group" value="<%= name._id %>" checked></div>
 		            </div>
-		        </label>
-
+		    </div>
         
  				<div >
  					<p class="title-info"><span><%= name.title %></span></p>
@@ -75,28 +70,31 @@
      <li style="">
  		<div class="check-element-box p-content">
  			<div >
-	 			<a href="/@/<%= user.username %>/group/<%= name._id %>">
+	 			<!-- <a href="/@/<%= user.username %>/group/<%= name._id %>"> -->
+	 			<div class="fancy-toggle-button">
 	 				<%  if(name.img_foldername && name.img_thumbnail){ %>
-	 				<img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
-
-			        	 
+			        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
 	        		<% }else{  %>
-	        		<img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+	        			 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
 	        		<% }  %>
-	        	</a>
-
-
-
-
-
-    			<label>
-		            <div class="Checkbox Module fancyToggle styledToggle">
+	        	
+	        	<!-- </a> -->
+		            <div class="Checkbox Module fancyToggle  styledToggle">
 			            <div class="slider"></div>
 			            <div class="onText status"></div>
 			            <div class="offText status"></div>
 		 				<input type="checkbox" name="group" value="<%= name._id %>" ></div>
 		            </div>
-		        </label>
+		    </div>
+
+
+
+
+
+
+
+
+
 
         
  				<div >
@@ -131,6 +129,12 @@
   <script>
 
    $(".p-content-list li").matchHeight();
+
+   	$(".fancy-toggle-button").on("click", function(){
+   		console.log("click")
+   		$( this ).children( ".fancyToggle" ).click();
+   	});
+
 	$(".fancyToggle").on("click", function(e) {
 	       $( this ).toggleClass("on");
 	  

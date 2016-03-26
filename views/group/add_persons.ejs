@@ -34,30 +34,23 @@
 
 		<li style="">
 	 		<div class="check-element-box p-content">
-	 			<div >
-		 			<a href="/@/<%= user.username %>/person/<%= name._id %>">
-		 				<%  if(name.img_foldername && name.img_thumbnail){ %>
-				        
-
+	 			<div>
+						<div class="fancy-toggle-button">
+							<%  if(name.img_foldername && name.img_thumbnail){ %>
 				        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
-
-		        		<% }else{  %>
-		        			 <img src="<%= name.defaultBigThumb %>">
-		        		<% }  %>
-		        	</a>
-
-
-
-
-
-	    			<label>
-			            <div class="Checkbox Module fancyToggle on styledToggle">
+						<% }else{  %>
+							 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+						<% }  %>
+					
+				        <div class="Checkbox Module fancyToggle on styledToggle">
 				            <div class="slider"></div>
 				            <div class="onText status"></div>
 				            <div class="offText status"></div>
-			 				<input type="checkbox" name="group" value="<%= name._id %>" checked></div>
-			            </div>
-			        </label>
+								<input type="checkbox" name="group" value="<%= name._id %>" checked></div>
+				        </div>
+				</div>
+
+
 
 	        
 	 				<div >
@@ -74,27 +67,39 @@
 
 		<li style="">
 	 		<div class="check-element-box p-content">
-	 			<div >
-		 			<a href="/@/<%= user.username %>/person/<%= name._id %>">
-		 				<%  if(name.img_foldername && name.img_thumbnail){ %>
-				        	  <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
-		        		<% }else{  %>
-		        			 <img src="<%= name.defaultBigThumb %>">
-		        		<% }  %>
-		        	</a>
-
-
-
-
-
-	    			<label>
-			            <div class="Checkbox Module fancyToggle styledToggle">
+	 		
+	 			<div>
+						<div class="fancy-toggle-button">
+							<%  if(name.img_foldername && name.img_thumbnail){ %>
+				        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
+						<% }else{  %>
+							 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+						<% }  %>
+					
+				        <div class="Checkbox Module fancyToggle styledToggle">
 				            <div class="slider"></div>
 				            <div class="onText status"></div>
 				            <div class="offText status"></div>
-			 				<input type="checkbox" name="group" value="<%= name._id %>" ></div>
-			            </div>
-			        </label>
+								<input type="checkbox" name="group" value="<%= name._id %>"></div>
+				        </div>
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	        
 	 				<div >
@@ -116,7 +121,14 @@
 
   <script>
 
-   $(".p-content-list li").matchHeight();
+   	$(".p-content-list li").matchHeight();
+
+    $(".fancy-toggle-button").on("click", function(){
+   		console.log("click")
+   		$( this ).children( ".fancyToggle" ).click();
+   	});
+
+
 	$(".fancyToggle").on("click", function(e) {
 	       $( this ).toggleClass("on");
 	  
