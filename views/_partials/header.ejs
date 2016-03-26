@@ -55,7 +55,7 @@
 
 	      <div class="header-bar  border-bottom">
 	        <div class="header-left">
-	        	<% try{ %>
+	        <% try{ %>
 				<% if (login){ %>
 					  <a class="no-style-link" href="/">@<%= user.username %></a>
 				<%}else{ %>
@@ -72,8 +72,6 @@
 				<ul>
 
 					<% if (login){ %>
-						<!-- <li> <a href="/logout">logout</a></li> -->
-
 
 					<% } else { %>
 						<li> <a href="/login">login</a></li>
@@ -95,9 +93,9 @@
 				<% if (login){ %>
 					<div class="menu">
 						<ul>
-							<li ><a href="#"><div class="menu-link-text">about</div></a></li>
-							<li ><a href="#"><div class="menu-link-text">help</div></a></li>
-
+							<li ><a href="/account"><div class="menu-link-text">account</div></a></li>
+							<!-- <li ><a href="#"><div class="menu-link-text">help</div></a></li>
+ -->
 							<li> <a href="/logout"><div class="menu-link-text">logout</div></a></li>
 							
 						</ul>
@@ -108,8 +106,8 @@
 								
 								<li> <a href="/signup"><div class="menu-link-text">signup</div></a></li>
 								<li> <a href="/login"><div class="menu-link-text">login</div></a></li>
-								<li ><a href="#"><div class="menu-link-text">about</div></a></li>
-								<li ><a href="#"><div class="menu-link-text">help</div></a></li>
+								<!-- <li ><a href="#"><div class="menu-link-text">about</div></a></li>
+								<li ><a href="#"><div class="menu-link-text">help</div></a></li> -->
 								
 							</ul>
 						</div>
