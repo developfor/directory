@@ -4,10 +4,10 @@
  <% include ../person/_partials/profile_left.ejs %>
 
           <div class="eight columns">
-            <div class="nav-right">
+            <div class="nav-right" >
               <ul>
                 <li> 
-                  <b>person:</b>
+                  <b><%= person.obj_type%></b>
                 </li>
                 <li>
                     <a class="no-style-link selected" href="/@/<%= user.username %>/person/<%= person._id %>">description</a>
