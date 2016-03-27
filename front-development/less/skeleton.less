@@ -1,3 +1,5 @@
+@import "theme.less";
+
 /*
 * Skeleton V2.0.4
 * Copyright 2014, Dave Gamache
@@ -214,7 +216,7 @@ p {
 /* Links
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 /*a {
-  color: #E23B3B; }
+  color: @themeColor; }
 a:hover {
   color: #0088B3; }*/
 
@@ -266,8 +268,8 @@ input[type="submit"].button-primary,
 input[type="reset"].button-primary,
 input[type="button"].button-primary {
   color: #FFF;
-  background-color: #E23B3B;
-  // border-color: #E23B3B;
+  background-color: @themeColor;
+  // border-color: @themeColor;
   border: 3px solid #000;
    }
 /*.button.button-primary:hover,

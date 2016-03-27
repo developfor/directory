@@ -8,7 +8,7 @@ var thumbnailGenerator = function(t) {
 		      , canvas = new Canvas(600,600)
 		      , ctx = canvas.getContext('2d');
 
-		ctx.font = '400px Courier';
+		ctx.font = '400px Helvetica';
 
 		ctx.fillStyle = "#000";
 		ctx.textAlign = 'center';
@@ -24,7 +24,7 @@ var thumbnailGenerator = function(t) {
 	      , canvas = new Canvas(200,200)
 	      , ctx = canvas.getContext('2d');
 
-	    ctx.font = '150px Courier';
+	    ctx.font = '150px Helvetica';
 
 	    ctx.fillStyle = "#000";
 	    ctx.textAlign = 'center';

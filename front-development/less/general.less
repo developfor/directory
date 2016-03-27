@@ -1,3 +1,5 @@
+@import "theme.less";
+
 /*more custom*/
 h1, h2, h3, h4, h5, h6 {
 
@@ -169,6 +171,10 @@ footer{
 .nav-right ul{
   border-top: 3px solid #000;
   border-bottom: 3px solid #000;
+  .nav-right-obj-type{
+    background: #000;
+    color: #FFF;
+  }
 }
 .nav-right li{
   list-style-type: square;
@@ -190,7 +196,7 @@ footer{
 
 .title-info{
   font-weight: bold;
-  font-size: 16px;
+  font-size: 18px;
   text-transform: capitalize;
 
   textarea{
@@ -210,8 +216,8 @@ footer{
   margin-bottom: 0px;
   font-size: 14px;
   text-decoration: none;
-  fill: #E23B3B;
-  color: #E23B3B;
+  fill: @themeColor;
+  color: @themeColor;
   cursor: pointer;
 }
 .button-profile:hover{
@@ -231,12 +237,12 @@ a:hover{
 
 a{
   text-decoration: none;
-  fill: #E23B3B;
-  color: #E23B3B;
+  fill: @themeColor;
+  color: @themeColor;
 }
 a:hover {
-  fill: #E23B3B;
-  color:#E23B3B;
+  fill: @themeColor;
+  color:@themeColor;
 
 }
 
@@ -340,6 +346,8 @@ a:hover {
   margin-bottom: 20px;
   p{
      font-size: 25px;
+     font-weight: bold;
+     text-transform: capitalize;
   }
 }
 
@@ -350,7 +358,7 @@ a:hover {
     max-width: 350px;
 }
 #p-search-button{
-      background-color: #E23B3B;
+      background-color: @themeColor;
     max-width: 63px;
     margin-top: 0;
     border: 3px solid #000;
@@ -435,8 +443,8 @@ a:hover {
     box-sizing: border-box;
     width: 100%;
     white-space: normal;
-    background-color: #E23B3B;
-    // border-color: #E23B3B;
+    background-color: @themeColor;
+    // border-color: @themeColor;
     color: white;
     height: auto;
     padding: 0px;
@@ -509,7 +517,7 @@ a:hover {
     box-sizing: border-box;
     width: 100%;
     white-space: normal;
-    background-color: #E23B3B;
+    background-color: @themeColor;
     border-color: #000000;
     color: white;111
     height: auto;
@@ -552,8 +560,8 @@ a:hover {
 //     box-sizing: border-box;
 //     width: 200px;
 //     white-space: normal;
-//     background-color: #E23B3B;
-//     border-color: #E23B3B;
+//     background-color: @themeColor;
+//     border-color: @themeColor;
 //     color: white;
 //     height: auto;
 //     padding: 0px;
@@ -643,7 +651,7 @@ a:hover {
   margin: 20px 0;
 }
 .form-important{
-  color: #E23B3B;
+  color: @themeColor;
 }
 
 #short-description{
