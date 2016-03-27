@@ -12,7 +12,7 @@ var thumbnailGenerator = function(t) {
 
 		ctx.fillStyle = "#000";
 		ctx.textAlign = 'center';
-		ctx.fillText(t, 300, 400);
+		ctx.fillText(t, 350, 400);
 		console.log("bigTextThumb")
 
 		return canvas.toDataURL();
