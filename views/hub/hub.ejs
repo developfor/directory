@@ -61,8 +61,11 @@
       		                
       		                
       		                <div class="list-text-block">
-      		                	<p class="title-info"  ><span><%= (person.first_name).trunc(25) %></span>		                  	
+      		                	<p   ><span><%= (person.first_name).trunc(25) %></span>		                  	
       		                	</p>
+                           <p class="edited"> Edited <span  data-livestamp="<%= person.update_date %>"> </span><p>
+                          <p > In 13 Groups <p>
+                            
       		                </div>
                      </div>
                   </a>
@@ -114,7 +117,7 @@
                         <% }  %>
 
                          <div class="list-text-block">
-                            <p class="title-info"  ><span><%= (group.title).trunc(25) %></span>                        
+                            <p ><span><%= (group.title).trunc(25) %></span>                        
                             </p>
                           </div>
 
@@ -177,6 +180,11 @@
 
 
   <!-- footer start -->
+
+  <script type="text/javascript" src="/vendor/js/moment.js"></script>
+  <script type="text/javascript" src="/vendor/js/livestamp.min.js"></script>
+
+
 
 
 <% include ../_partials/footer %>
