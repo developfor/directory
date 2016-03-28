@@ -50,13 +50,10 @@
                       <% } %>
                     </a>
 
-
-
-
                       <a class="button button-primary" href="/@/<%= user.username %>/group/<%= item._id %>">Details</a>   
                       <div>
                         <div>
-                          <span class="title-info"><%=  item.title %></span>
+                          <span class="title-info"><%=  item.first_name %></span>
                         </div>
                         <div class="p-content-desc">
                           <span class="small-text" > <%= item.short_description.trunc(70) %></span>
