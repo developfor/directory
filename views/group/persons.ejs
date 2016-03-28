@@ -32,31 +32,42 @@
                   <% if(item !== undefined){ %>
 
                     <div class="mini-p-content" >
-                      <a class="" href="/@/<%= user.username %>/person/<%= item._id %>">
-                        <%  if(item.img_foldername && item.img_thumbnail){ %>
-                        <img class="profile-image" style=" background-image: url(/uploads/img/<%= item.img_foldername %>/<%= item.img_thumbnail %>); " src="/app/img/no-image_clear.png"> 
-                        <% }else{  %>
-                           <img src="/app/img/no-image.png" >
-                        <% }  %>
-                      </a>
+
+
+
+                    <a class="" href="/@/<%= user.username %>/person/<%= item._id %>">
+                      <%  if(item.img_foldername && item.img_thumbnail){ %>
+
+                       <img class="profile-image" style=" background-image: url(/uploads/img/<%= item.img_foldername %>/<%= item.img_thumbnail %>); " src="/app/img/no-image_clear.png">
+
+              
+
+                      <% }else{  %>
+
+                         <img class="profile-image" style="background-color:white; background-image: url(<%= item.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+              
+                         
+                      <% } %>
+                    </a>
+
+
+
+
+                      <a class="button button-primary" href="/@/<%= user.username %>/group/<%= item._id %>">Details</a>   
                       <div>
-                        <div class="title-info-wrapper">
-                          <span class="title-info"><%= item.name %> </span>
-                        </div>
-
-
                         <div>
-                          <span class="title-info"><%= item.first_name %></span>
+                          <span class="title-info"><%=  item.title %></span>
                         </div>
                         <div class="p-content-desc">
-                          <span class="small-text" > <%= item.short_description %></span>
+                          <span class="small-text" > <%= item.short_description.trunc(70) %></span>
                         </div>
+                       
+                      </div> 
                               
 
 
 
-                      </div> 
-                      <a class="button button-primary" href="/@/<%= user.username %>/person/<%= item._id %>">Details</a>
+                      
                     </div>
                   
                   <% } %>
