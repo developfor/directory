@@ -64,8 +64,8 @@
       		                	<p   ><span><%= (person.first_name).trunc(25) %></span>		                  	
       		                	</p>
                            <p class="edited"> Edited <span  data-livestamp="<%= person.update_date %>"> </span><p>
-                          <p > In 13 Groups <p>
-                            
+                          <p style="color: black; "> <%= person.groupCount %> Groups  <p>
+
       		                </div>
                      </div>
                   </a>
@@ -119,6 +119,11 @@
                          <div class="list-text-block">
                             <p ><span><%= (group.title).trunc(25) %></span>                        
                             </p>
+
+                             <p class="edited"> Edited <span  data-livestamp="<%= group.update_date %>"> </span><p>
+                          <p style="color: black; "> <%= group.groupCount %> people  <p>
+
+
                           </div>
 
 

@@ -13,14 +13,17 @@ var nocache = function (req, res, next) {
 
 
 
+var forEachAsync = require('forEachAsync').forEachAsync;
 
 var mongoose = require('mongoose');
 var _ = require('underscore');
+
 
 var User = require('../../models/user.js');
 var Hub = require('../../models/hub.js');
 var Person = require('../../models/person.js');
 var Group = require('../../models/group.js');
+var PersonGroupJoin = require('../../models/person_group_join.js');
 
 
 module.exports = function(app) {
@@ -110,24 +113,68 @@ module.exports = function(app) {
 					return console.log("err: " + err) 
 				}
 				Hub.findOne({user_owner_id: user._id}, function(err, hub){
-					console.log("user_____________")
-					console.log(user)
-					console.log("hub_____________")
-					console.log(hub)
+					// console.log("user_____________")
+					// console.log(user)
+					// console.log("hub_____________")
+					// console.log(hub)
 
 					if(_.isEqual(user._id, hub.user_owner_id)){
 					  	var sort = {sort: {update_date: -1} } 
 
+					 //  	PersonGroupJoin.find({hub_id: element.hub_id, group_id: element._id, person_id: req.params.person_id }, function(err, personGroup){
+
+						// 		if(personGroup.length > 0){
+						// 			// console.log("true")
+						// 	  	 	groups[index].checked = true;
+							  	 	
+						// 	  	} else {
+						// 	  		// console.log("false")
+						// 	  	 	groups[index].checked = false;
+						// 	  	}
+
+						// 	  		next()
+
+						// });
+
 						Person.find({hub_id: hub.id}, null, sort, function(err, persons){
-							Group.find({hub_id: hub.id},  null, sort, function(err, groups){	
-								var funct = function(arg){return arg}
+
+							forEachAsync(persons, function (next, element, index, array) {
+								// console.log(array[index]._id)
+
+								PersonGroupJoin.find({hub_id: hub.id, person_id: array[index]._id}, function(err, personGroup){
+									console.log(personGroup.length)
+									persons[index].groupCount = personGroup.length;
+									next();
+								});
+
+							
+
+							}).then(function(){
+								Group.find({hub_id: hub.id},  null, sort, function(err, groups){
+
+									forEachAsync(groups, function (next, element, index, array) {
+										// console.log(array[index]._id)
+
+										PersonGroupJoin.find({hub_id: hub.id, group_id: array[index]._id}, function(err, personGroup){
+											console.log(personGroup.length)
+											groups[index].groupCount = personGroup.length;
+											next();
+										});
+
+									}).then(function(){ 
+										return res.render('hub/hub', { user: req.user, hub: hub, persons: persons, groups: groups});
+
+									})
 
 
-								// Event.find({hub_id: hub.id}, null, sort, function(err, events){
-									return res.render('hub/hub', {funct: funct, user: req.user, hub: hub, persons: persons, groups: groups});
-								  	console.log("equals")
-							  	// }).limit(5);	
-						  	}).limit(5);
+							  	}).limit(5);
+
+							});
+
+							
+							
+
+							
 						}).limit(5);
 
 		  
