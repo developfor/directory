@@ -10,15 +10,18 @@
 
 <form method="post" action="?_csrf=<%= csrfToken %>" accept-charset="utf-8"  enctype="multipart/form-data">
 	<div class="form-block">
-		<h5>Photo</h5>
-		<input type='file' name='image'><br>
+		<h5>Photo: </h5>
+		<!-- this is the photo area -->
+		<img id="preview-img" src="/app/img/no-image_clear.png" alt="your image" />
+		<input type='file' name='image' id='image-file' ><br>
+
 	</div>
 	<div class="form-block">
 		<!-- name info -->
 		<h5>Group Title</h5>
 		<div class="row">
 			<div class="six columns title-info">
-                <label for="FirstName">title:</label>
+                <label for="FirstName">title: <span  style="color: #E23B3B;">*</span></label>
                 <input class="u-full-width" type="text" name="title" />
             </div>
 		</div>
@@ -548,6 +551,37 @@
 
    <script>
 	 $(function(){
+
+	 	function readURL(input) {
+           var defaultImage = $("#preview-img").attr("data-img")
+			if (input.files && input.files[0]) {
+		        var reader = new FileReader();
+
+		        reader.onload = function (e) {
+		        	// console.log(e)
+		            $('#preview-img').css('background-image', "url("+  e.target.result + ")");
+		        }
+
+		        reader.readAsDataURL(input.files[0]);
+		    } else{
+
+		    	
+
+		    		$('#preview-img').css('background-image', "url("+ defaultImage +")");
+		    }
+		}
+
+		$("#image-file").change(function(){
+		    readURL(this);
+		});
+
+
+
+
+
+
+
+
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 			var showToolbar = false
 		}else{

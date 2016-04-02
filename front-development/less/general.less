@@ -114,6 +114,9 @@ footer{
   border: 3px solid black; 
   padding: 10px;
   margin-bottom: 20px;
+  -webkit-border-radius: @themeBoarderRadius;
+  -moz-border-radius: @themeBoarderRadius;
+  border-radius: @themeBoarderRadius;
   p{
     margin-bottom: 10px;
   }
@@ -146,6 +149,11 @@ footer{
           background-repeat: no-repeat; 
           background-size: cover; 
           border: 3px solid #000;
+
+          -webkit-border-radius: @themeBoarderRadius;
+          -moz-border-radius: @themeBoarderRadius;
+          border-radius: @themeBoarderRadius;
+
           img{
             background-color: #666; 
             height: 60px; 
@@ -164,8 +172,9 @@ footer{
       p{
         margin-bottom: 5px;
       }
-      .edited{
+      .edited-count{
         color: black;
+        font-weight: 100;
       }
       
 
@@ -179,8 +188,11 @@ footer{
 }
 
 .nav-right ul{
-  border-top: 3px solid #000;
-  border-bottom: 3px solid #000;
+  border: 3px solid #000;
+  -webkit-border-radius: @themeBoarderRadius;
+  -moz-border-radius: @themeBoarderRadius;
+  border-radius: @themeBoarderRadius;
+
   .nav-right-obj-type{
     background: #000;
     color: #FFF;
@@ -202,6 +214,10 @@ footer{
 .nav-right{
   font-size: 14px;
   line-height:  40px;
+
+  -webkit-border-radius: @themeBoarderRadius;
+  -moz-border-radius: @themeBoarderRadius;
+  border-radius: @themeBoarderRadius;
 }
 
 .title-info{
@@ -217,7 +233,8 @@ footer{
 
 
 .button-profile{
-  width: 60px;
+  // width: 60px;
+  margin-right: 15px;
   display: inline-block;
   padding-right: 0px;
   text-transform: uppercase;
@@ -229,6 +246,9 @@ footer{
   fill: @themeColor;
   color: @themeColor;
   cursor: pointer;
+  #button-profile-delete{
+    margin-right: 0px;
+  }
 }
 .button-profile:hover{
   text-decoration: underline;
@@ -236,8 +256,8 @@ footer{
 
 .button-profile-wrapper{
     // border-top: 3px solid #000;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    // padding-top: 10px;
+    // padding-bottom: 10px;
     // border-bottom: 3px solid #000;
 }
 
@@ -267,17 +287,17 @@ a:hover {
 
 
 
-.selected:before {
-  content: "»";
-}
-.selected:hover:before{
-  content: "»";
-}
+// .selected:before {
+//   content: "»";
+// }
+// .selected:hover:before{
+//   content: "»";
+// }
 
 
-.button-profile svg{
-  width: 25px;
-}
+// .button-profile svg{
+//   width: 25px;
+// }
 
 .p-content-list{
   display: inline-block;
@@ -293,7 +313,9 @@ a:hover {
   //   line-height: 0;
   // }
 }
-
+.profile-area{
+  min-height: 550px;
+}
 
  .profile-category{
   font-size: 24px;
@@ -318,9 +340,11 @@ a:hover {
     box-shadow: inset 0px 0px 0px 3px #000;
     width: 100%;
     padding: 0;
-    // margin-bottom: 9px;
     line-height: 0; 
     border: none;
+    -webkit-border-radius: @themeBoarderRadius;
+    -moz-border-radius: @themeBoarderRadius;
+    border-radius: @themeBoarderRadius;
   }
 }
 
@@ -336,28 +360,31 @@ a:hover {
     box-shadow: inset 0px 0px 0px 3px #000;
     width: 100%;
     padding: 0;
-    margin-bottom: 9px;
     line-height: 0; 
     border: none;
+    -webkit-border-radius: @themeBoarderRadius;
+    -moz-border-radius: @themeBoarderRadius;
+    border-radius: @themeBoarderRadius;
   }
 }
 
 .profile-content-left img{
   width: 85%; 
   background:#363636; 
-  max-height: 400px; 
-  max-width: 250px;
+  // max-height: 400px; 
+  // max-width: 250px;
   border: 3px solid black;
 }
 
 
 .profile-content-left-info{
-  margin-top: 0px;
-  margin-bottom: 20px;
+  // margin-top: 0px;s
+  // margin-bottom: 20px;
   p{
-     font-size: 25px;
+     font-size: 18px;
      font-weight: bold;
      text-transform: capitalize;
+     // margin-bottom: 0;
   }
 }
 
@@ -461,6 +488,9 @@ a:hover {
     border: 3px solid #000;
     // margin-top: 10px;
     // margin-bottom: 10px;
+    -webkit-border-radius: @themeBoarderRadius;
+    -moz-border-radius: @themeBoarderRadius;
+    border-radius: @themeBoarderRadius;
 }
 
 .p-content-desc{
@@ -482,9 +512,12 @@ a:hover {
     box-shadow: inset 0px 0px 0px 3px #000;
     width: 100%;
     padding: 0;
-    // margin-bottom: 9px;
     line-height: 0; 
     border: none;
+
+    -webkit-border-radius: @themeBoarderRadius;
+    -moz-border-radius: @themeBoarderRadius;
+    border-radius: @themeBoarderRadius;
 
   }
   .title-info-wrapper{
@@ -534,6 +567,9 @@ a:hover {
     padding: 0px;
     // margin-top: 10px;
     // margin-bottom: 10px;
+    -webkit-border-radius: @themeBoarderRadius;
+    -moz-border-radius: @themeBoarderRadius;
+    border-radius: @themeBoarderRadius;
 }
 
 .prev-next-buttons{
@@ -586,6 +622,7 @@ a:hover {
 
 .p-content .button:hover, .button-primary:hover , .p-content  button:hover, .p-content input[type="submit"]:hover, .p-content input[type="reset"]:hover, .p-content input[type="button"]:hover {
   text-decoration: underline;
+
 }
  
 
@@ -641,10 +678,17 @@ a:hover {
   min-width: 0;
    // max-height: 300px;
    // height: auto;
-   
+  -webkit-border-radius: @themeBoarderRadius;
+  -moz-border-radius: @themeBoarderRadius;
+   border-radius: @themeBoarderRadius;
 }
 .mce-tinymce{
   border: #000 solid 3px !important;
+  -webkit-border-radius: @themeBoarderRadius;
+  -moz-border-radius: @themeBoarderRadius;
+   border-radius: @themeBoarderRadius;
+   overflow: hidden;
+
   .mce-edit-area{
     padding: 10px;
   }
@@ -675,7 +719,7 @@ a:hover {
 
 .birthday_form select, .birthday_form input{
   float: left;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .birthday_form #birth_month{
@@ -700,7 +744,18 @@ a:hover {
 }
 
 
-
+#preview-img{
+  border: 3px solid #000;  
+  height: 120px; 
+  width: 120px;     
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  line-height: 0;
+  border: none;
+  box-shadow: inset 0 0 0 3px #000;
+  padding: 0; 
+}
 
 .formlist{
   li{
@@ -776,29 +831,14 @@ a:hover {
 }
 
 @media (max-width: 549px) {
-
-  // .search-things  .button-primary{
-  //       margin-top: 0px;
-  // }
    .profile-content-left .profile-image {
     width: 60%;
-    margin-bottom: 9px;
 }
 
 }
 
 /* smaller than tablet */
 @media (max-width: 400px) {
-
-  // .profile-content-left img{
-  //   width: 100%; 
-  //   background:#363636; 
-  //   max-height: 400px; 
-  //   max-width: 250px;
-    
-  // }
-
-
 
   .p-content{
     width: 48%;

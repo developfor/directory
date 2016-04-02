@@ -4,6 +4,24 @@
 
 <% include ../_partials/user_navigation.ejs %>
 
+<div>
+    <div style="float: left;">
+	    <a href="/@/<%= user.username %>/person/<%= person._id %>">
+			<%  if(person.img_foldername && person.img_thumbnail){ %>
+				<img style="background-color: #666; height: 30px; width: 30px;     border: 3px solid #000;" src="/uploads/img/<%= person.img_foldername %>/<%=  person.img_icon  %>"> 
+			<% }else{  %>
+				<img  style="background-color: #<%= person.hex_color %>; height: 30px; width: 30px; border: 3px solid #000;" src="/app/img/no-image.png" >
+			<% }  %>
+		</a>
+    </div>
+    <div style="margin-left: 5px; width: 60%;">
+    	<p class="title-info"  ><a href="/@/<%= user.username %>/person/<%= person._id %>"><%= person.first_name  %></a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= person.update_date %>"> </span> <%= person.update_date %></span>   -->
+    	</p>
+
+ 
+    </div>
+
+</div>
 
 <!-- text editor -->
  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"/>
@@ -32,13 +50,22 @@
             </tr>
 		<h5>Photo</h5>
 		<div>
-          <%  if(person.img_foldername && person.img_thumbnail){ %>
-    				<img style="border: 3px solid #000; background-color: #666; height: 120px; width: 120px;" src="/uploads/img/<%= person.img_foldername %>/<%= person.img_icon %>">
-    			<% }else{  %>
-    				 <img style="border: 3px solid #000; sheight: 120px; width: 120px; background-color: #EEEEEE;" src="<%= person.defaultBigThumb %>" >
-    			<% }  %>
+      		<%  if(person.img_foldername && person.img_thumbnail){ %>
+				
+
+				 <img id="preview-img" data-img="/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>" style="background-image: url(/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>);" class="profile-image" src="/app/img/no-image_clear.png">
+
+
+
+			<% }else{  %>
+
+			 <img id="preview-img" style="background-image: url(<%= person.defaultBigThumb %>);" class="profile-image" src="/app/img/no-image_clear.png">
+			
+			<% }  %>
         </div>
-		<input type='file' name='image'><br>
+
+
+		<input type='file' name='image' id="image-file"><br>
 	</div>
 	<div class="form-block">
 		<!-- name info -->
@@ -51,7 +78,7 @@
 		</div> -->
       	<div class="row ">   
             <div class="six columns title-info">
-                <label for="FirstName">first name:<span  style="color: #E23B3B;">*</span></label>
+                <label for="FirstName">Name:<span  style="color: #E23B3B;">*</span></label>
                 <input class="u-full-width" type="text" name="first_name" value="<%= person.first_name %>"/>
         	</div>
 	  
@@ -545,6 +572,40 @@
 
    <script>
 	 $(function(){
+
+
+
+		function readURL(input) {
+           var defaultImage = $("#preview-img").attr("data-img")
+			if (input.files && input.files[0]) {
+		        var reader = new FileReader();
+
+		        reader.onload = function (e) {
+		        	// console.log(e)
+		            $('#preview-img').css('background-image', "url("+  e.target.result + ")");
+		        }
+
+		        reader.readAsDataURL(input.files[0]);
+		    } else{
+
+		    	
+
+		    		$('#preview-img').css('background-image', "url("+ defaultImage +")");
+		    }
+		}
+
+		$("#image-file").change(function(){
+		    readURL(this);
+		});
+
+
+
+
+
+
+
+
+
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 			// var showToolbar = false
 			var showToolbar = [

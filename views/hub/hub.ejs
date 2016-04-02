@@ -33,14 +33,14 @@
 
           <div class="six columns">
             <div class="content-box">
-            	<p class="up-title" >add a person:</p>
-            	<a  class="button button-primary" href="/@/<%= user.username %>/add_person">+ add person</a>
+            	<p class="up-title" >Contacts</p>
+            	<a  class="button button-primary" href="/@/<%= user.username %>/add_person">+ add contact</a>
               <% if(persons.length > 0){ %>
           		<hr>
 
 
             
-              <p class="up-title" >Recently Updated People:</p>
+             <!--  <p class="up-title" >People:</p> -->
               <div class="list-content">
                 <ul>
 
@@ -63,8 +63,8 @@
       		                <div class="list-text-block">
       		                	<p   ><span><%= (person.first_name).trunc(25) %></span>		                  	
       		                	</p>
-                           <p class="edited"> Edited <span  data-livestamp="<%= person.update_date %>"> </span><p>
-                          <p style="color: black; "> <%= person.groupCount %> Groups  <p>
+                           <p class="edited-count"> Edited <span  data-livestamp="<%= person.update_date %>"> </span><p>
+                          <p class="edited-count"> <%= person.groupCount %> Groups  <p>
 
       		                </div>
                      </div>
@@ -80,7 +80,7 @@
               </div>
               
 
-              <a class="button button-primary" href="/@/<%= user.username %>/persons">view all people</a><br>
+              <a class="button button-primary" href="/@/<%= user.username %>/persons">view all contacts</a><br>
               <% } %>
 
             </div>
@@ -92,12 +92,12 @@
 
  		<div class="six columns">
             <div class="content-box">
-            	<p class="up-title" >add a group:</p>
+            	<p class="up-title" >Groups</p>
             	 <a  class="button button-primary" href="/@/<%= user.username %>/add_group">+ add group</a>
               <% if(groups.length > 0){ %>
         			<hr>
 
-              <p class="up-title" >recently updated groups:</p>
+             
               <div class="list-content">
                 <ul>
 
@@ -120,8 +120,8 @@
                             <p ><span><%= (group.title).trunc(25) %></span>                        
                             </p>
 
-                             <p class="edited"> Edited <span  data-livestamp="<%= group.update_date %>"> </span><p>
-                          <p style="color: black; "> <%= group.groupCount %> people  <p>
+                             <p class="edited-count"> Edited <span  data-livestamp="<%= group.update_date %>"> </span><p>
+                          <p class="edited-count"> <%= group.groupCount %> people  <p>
 
 
                           </div>

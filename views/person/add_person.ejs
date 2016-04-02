@@ -25,7 +25,10 @@
 
 	<div class="form-block">
 		<h5>Photo</h5>
-		<img id="preview-img" src="#" alt="your image" />
+
+		<!-- this is the photo area -->
+		<img id="preview-img" src="/app/img/no-image_clear.png" alt="your image" />
+		
 		<input type='file' name='image' id='image-file' ><br>
 	</div>
 	<div class="form-block">
@@ -514,17 +517,21 @@
    <script>
 
    	function readURL(input) {
-
-	    if (input.files && input.files[0]) {
+    	var defaultImage = $("#preview-img").attr("data-img")
+		if (input.files && input.files[0]) {
 	        var reader = new FileReader();
 
 	        reader.onload = function (e) {
-	            $('#preview-img').attr('src', e.target.result);
+	        	// console.log(e)
+	            $('#preview-img').css('background-image', "url("+  e.target.result + ")");
 	        }
 
 	        reader.readAsDataURL(input.files[0]);
 	    } else{
-	    		$('#preview-img').attr('src', "http://g-ecx.images-amazon.com/images/G/01/img15/pet-products/small-tiles/23695_pets_vertical_store_dogs_small_tile_8._CB312176604_.jpg");
+
+	    	
+
+	    		$('#preview-img').css('background-image', "url("+ defaultImage +")");
 	    }
 	}
 
