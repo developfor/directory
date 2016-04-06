@@ -33,12 +33,12 @@
 	</div>
 	<div class="form-block">
 		<!-- name info -->
-		<h5>Person Name</h5>
+		<h5>Contact Name</h5>
 		
       	<div class="row">   
             <div class="four columns title-info">
                 <label for="FirstName">first name:<span  class="form-important" >*</span></label>
-                <input class="u-full-width" type="text" name="first_name" value="<%= person.first_name %>"/>
+                <input class="u-full-width" type="text" name="first_name" value="<%= contact.first_name %>"/>
         	</div>
 	  
         
@@ -53,7 +53,7 @@
 		 <div class="row">
 		 	<div class=" columns title-info">
 		 		<label for="gender">Short Description:</label>
-		 		<textarea  contenteditable="true" spellcheck="true" class="u-full-width" id="short-description" type="text" name="short_description" /><%= person.short_description %></textarea>
+		 		<textarea  contenteditable="true" spellcheck="true" class="u-full-width" id="short-description" type="text" name="short_description" /><%= contact.short_description %></textarea>
 		 		<div id="short-description-count"></div>
 		 	</div>
 		</div>
@@ -61,7 +61,7 @@
 		<div class="row">
 		 	<div class=" columns title-info">
 		 		<label for="gender">Detailed Description:</label>
-		 		<textarea contenteditable="true" spellcheck="true" class="u-full-width"  id="description" type="text" name="description"  ><%= person.description %></textarea>
+		 		<textarea contenteditable="true" spellcheck="true" class="u-full-width"  id="description" type="text" name="description"  ><%= contact.description %></textarea>
 		 		
 		 	</div>
 		</div>
@@ -78,7 +78,7 @@
 			
 			<div class="six columns title-info">
 	                <label for="jobtitle">job title:</label>
-	                <input  class="u-full-width" type="text" name="job_title" value="<%= person.job_title %>" />
+	                <input  class="u-full-width" type="text" name="job_title" value="<%= contact.job_title %>" />
 			</div>
 			<div class="six columns title-info">
 				<label for="gender">gender:</label>
@@ -167,21 +167,21 @@
 			
 			<div class="six columns title-info">
 	                <label for="jobtitle">email:</label>
-	               <input class="u-full-width"  type="email" name="email" value="<%= person.email %>" />
+	               <input class="u-full-width"  type="email" name="email" value="<%= contact.email %>" />
 			</div>
 		</div>
 		<div class="row">
 			<div class="four columns title-info">
 				<label for="gender">primary phone:</label>
-				 <input class="u-full-width" type="text" name="primary_phone" value="<%= person.primary_phone %>" />
+				 <input class="u-full-width" type="text" name="primary_phone" value="<%= contact.primary_phone %>" />
 			</div>
 			<div class="four columns title-info">
 				<label for="gender">mobile phone:</label>
-				<input class="u-full-width" type="text" name="mobile_phone" value="<%= person.mobile_phone %>" />
+				<input class="u-full-width" type="text" name="mobile_phone" value="<%= contact.mobile_phone %>" />
 			</div>
 			<div class="four columns title-info">
 				<label for="gender">fax:</label>
-				<input class="u-full-width" type="text" name="fax" value="<%= person.fax %>" />
+				<input class="u-full-width" type="text" name="fax" value="<%= contact.fax %>" />
 			</div>
 		</div>
 	</div>
@@ -477,7 +477,7 @@
 		 <div class="row">
 		 	<div class="six columns title-info">
 		 		<label for="gender">website address:</label>
-		 		 <input class="u-full-width" type="text" name="web_address" value="<%= person.web_address %>" />
+		 		 <input class="u-full-width" type="text" name="web_address" value="<%= contact.web_address %>" />
 		 	</div>
 		</div>
 	</div>

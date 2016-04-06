@@ -5,7 +5,7 @@
 <% include ../_partials/user_navigation.ejs %>
 
 <div class="button-area space-up">
- 	 <a class="button button-primary" href="/@/<%= user.username %>/add_person">+ add person</a>
+ 	 <a class="button button-primary" href="/@/<%= user.username %>/add_contact">+ add contact</a>
 </div>
 
 
@@ -29,11 +29,11 @@
                     <label for="radio4" class="css-label radGroup2">All</label>
                 </td>
                 <td>
-                    <input type="radio" name="obj_type" id="radio5" class="css-checkbox"  value="people" <% if(query.obj_type === "people"){ %> checked <% } %> />
+                    <input type="radio" name="obj_type" id="radio5" class="css-checkbox"  value="person" <% if(query.obj_type === "person"){ %> checked <% } %> />
                     <label for="radio5" class="css-label radGroup2">People</label>
                 </td>
                 <td>
-                    <input type="radio" name="obj_type" id="radio6" class="css-checkbox" value="entities" <% if(query.obj_type === "entities"){ %> checked <% } %> />
+                    <input type="radio" name="obj_type" id="radio6" class="css-checkbox" value="entity" <% if(query.obj_type === "entity"){ %> checked <% } %> />
                     <label for="radio6" class="css-label radGroup2">Entities</label>
                 </td>
             </tr>
@@ -77,7 +77,7 @@
 			 <div class="row">
 	            <div class="twelve columns">
 	                <input class="button-primary" type="submit" value="Submit">
-	                 <a class="button button-primary" href="/@/<%= user.username %>/persons"> < reset</a>
+	                 <a class="button button-primary" href="/@/<%= user.username %>/contacts"> < reset</a>
 	             
 	            </div>
 	          </div>
@@ -89,7 +89,7 @@
 	    </div>
 
 
-		  <% if(persons.length === 0){ %>
+		  <% if(contacts.length === 0){ %>
 		  			
 		  	<div class="row">
 	            <div class="twelve columns">
@@ -102,36 +102,36 @@
 	          </div>
 		  <%  } %>
 <div>
-		<% persons.forEach(function(person){ %>
+		<% contacts.forEach(function(contact){ %>
 
 
 			<div class="p-content">
-				<a href="/@/<%= user.username %>/person/<%= person._id %>">
-					<%  if(person.img_foldername && person.img_thumbnail){ %>
+				<a href="/@/<%= user.username %>/contact/<%= contact._id %>">
+					<%  if(contact.img_foldername && contact.img_thumbnail){ %>
 
-					 <img class="profile-image" style=" background-image: url(/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>); " src="/app/img/no-image_clear.png">
+					 <img class="profile-image" style=" background-image: url(/uploads/img/<%= contact.img_foldername %>/<%= contact.img_thumbnail %>); " src="/app/img/no-image_clear.png">
 
-					<!-- <div  class="background-img" style="    background-image: url(/uploads/img/<%= person.img_foldername %>/<%= person.img_thumbnail %>); ">
+					<!-- <div  class="background-img" style="    background-image: url(/uploads/img/<%= contact.img_foldername %>/<%= contact.img_thumbnail %>); ">
 						<img style="opacity: 0;" src="/app/img/no-image_clear.png">
 					</div> -->
 
 					<% }else{  %>
 
-						 <img class="profile-image" style="background-color:white; background-image: url(<%= person.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+						 <img class="profile-image" style="background-color:white; background-image: url(<%= contact.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
 	
 						 
 					<% } %>
 				</a>
-					<a class="button button-primary" href="/@/<%= user.username %>/person/<%= person._id %>">Details</a>   
+					<a class="button button-primary" href="/@/<%= user.username %>/contact/<%= contact._id %>">Details</a>   
 				<div>
 					<div>
-						<span class="title-info"><%=  person.first_name %></span>
+						<span class="title-info"><%=  contact.first_name %></span>
 					</div>
 					<div class="p-content-desc">
-						<span class="small-text" > <%= person.short_description.trunc(70) %></span>
+						<span class="small-text" > <%= contact.short_description.trunc(70) %></span>
 					</div>
 					<div class="updated-date">
-						<b class="small-text">Edited <span  data-livestamp="<%= person.update_date %>"> </span></b>
+						<b class="small-text">Edited <span  data-livestamp="<%= contact.update_date %>"> </span></b>
 					</div>
 				</div> 
 

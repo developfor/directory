@@ -7,11 +7,11 @@ var crypto = require('crypto');
 var forEachAsync = require('forEachAsync').forEachAsync;
 var async = require('async')
 
-var Person = require('../models/person.js');
+var Contact = require('../models/contact.js');
 var Group = require('../models/group.js');
 var Hub = require('../models/hub.js');
 var User = require('../models/user.js');
-var PersonGroupJoin = require('../models/person_group_join.js');
+var ContactGroupJoin = require('../models/contact_group_join.js');
 
 var csrf = require('csurf')
 
@@ -146,7 +146,7 @@ var groupController = function(){
 
 
 
-	var groupPersons = function (req, res) {
+	var groupContacts = function (req, res) {
 
 		var readGroup = function(hub){
 
@@ -156,14 +156,14 @@ var groupController = function(){
 
 			if(_.isEqual(userId, hubOwner)){
 
-				PersonGroupJoin.find({group_id: req.params.group_id, hub_id: hub.id}, function(err, groupJoins){		
-					var personArray = [];
+				ContactGroupJoin.find({group_id: req.params.group_id, hub_id: hub.id}, function(err, groupJoins){		
+					var contactArray = [];
 
 
 					forEachAsync(groupJoins, function (next, element, index, array) {
-						Person.find({_id: element.person_id, hub_id: element.hub_id}, function(err, person){
+						Contact.find({_id: element.contact_id, hub_id: element.hub_id}, function(err, contact){
 
-							personArray.push(person[0])
+							contactArray.push(contact[0])
 		
 							next()
 						})
@@ -184,7 +184,7 @@ var groupController = function(){
 
 							group.title  = group.title || "";
 						
-							res.render('group/persons', { group : group, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate, personArray: personArray });
+							res.render('group/contacts', { group : group, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate, contactArray: contactArray });
 
 
 						})
@@ -234,10 +234,10 @@ var groupController = function(){
 						return console.log("err++: " + err) 	
 					}	
 
-					PersonGroupJoin.find({group_id: req.params.group_id}, function(err, personGroup){
-						console.log(personGroup)
-						forEachAsync(personGroup, function(next, element, index, array){
-							PersonGroupJoin.remove({_id: element._id, hub_id: element.hub_id}, function(){})
+					ContactGroupJoin.find({group_id: req.params.group_id}, function(err, contactGroup){
+						console.log(contactGroup)
+						forEachAsync(contactGroup, function(next, element, index, array){
+							ContactGroupJoin.remove({_id: element._id, hub_id: element.hub_id}, function(){})
 							console.log("element: " + element)
 							next()
 						}).then(function(){
@@ -619,30 +619,30 @@ var groupController = function(){
 
 
 
-	var addPerson = function (req, res) {
+	var addContact = function (req, res) {
 		var group = function(hub){
-			var person_array = []
+			var contact_array = []
 			var user = req.user
 			Group.findById(req.params.group_id, function (err, group) {	
-				return Person.find({hub_id: hub.id}, null, function(err, persons){
+				return Contact.find({hub_id: hub.id}, null, function(err, contacts){
 				  	if(err){ return console.log("err: " + err) }
 
 
-				  	async.eachSeries(persons, function (person, callback) {
-					  	  var p = person.toJSON()
+				  	async.eachSeries(contacts, function (contact, callback) {
+					  	  var p = contact.toJSON()
 					  	  
 					  	  p.checked = false;
 
-						  PersonGroupJoin.find({hub_id: hub.id, person_id: person._id, group_id: req.params.group_id}, null, function(err, person_group){
-							  	 console.log(person_group)
-							  	if(person_group.length > 0){
+						  ContactGroupJoin.find({hub_id: hub.id, contact_id: contact._id, group_id: req.params.group_id}, null, function(err, contact_group){
+							  	 console.log(contact_group)
+							  	if(contact_group.length > 0){
 									console.log("true")
 							  	 	p.checked = true;
-							  	 	person_array.push(p)
+							  	 	contact_array.push(p)
 							  	} else {
 							  		console.log("false")
 							  	 	p.checked = false;
-							  	 	person_array.push(p)
+							  	 	contact_array.push(p)
 							  	}
 							  	
 							  	callback(); 
@@ -654,8 +654,8 @@ var groupController = function(){
 					}, function (err) {
 						
 					  if (err) { throw err; }
-					  return PersonGroupJoin.find({hub_id: hub.id}, null, function(err, person_group){
-				   		res.render('group/add_persons', { person_group: person_group, group : group, persons : person_array, user: user});
+					  return ContactGroupJoin.find({hub_id: hub.id}, null, function(err, contact_group){
+				   		res.render('group/add_contacts', { contact_group: contact_group, group : group, contacts : contact_array, user: user});
 				  	  });
 
 					});
@@ -673,26 +673,26 @@ var groupController = function(){
 
 
 
-	var addPersonPost = function (req, res) {
+	var addContactPost = function (req, res) {
 		var groupPost = function(hub){
 
-			var personGroupJoin = new PersonGroupJoin();
+			var contactGroupJoin = new ContactGroupJoin();
 
-			personGroupJoin.hub_id = mongoose.Types.ObjectId(hub.id);
-			personGroupJoin.group_id = mongoose.Types.ObjectId(req.params.group_id);
-			personGroupJoin.person_id = mongoose.Types.ObjectId(req.body.person_id);
+			contactGroupJoin.hub_id = mongoose.Types.ObjectId(hub.id);
+			contactGroupJoin.group_id = mongoose.Types.ObjectId(req.params.group_id);
+			contactGroupJoin.contact_id = mongoose.Types.ObjectId(req.body.contact_id);
 
-			// console.dir(person_group_join)
+			// console.dir(contact_group_join)
 
-			personGroupJoin.save(function (err, person_group) {
-				if(err || person_group === null){ 	
+			contactGroupJoin.save(function (err, contact_group) {
+				if(err || contact_group === null){ 	
 					req.flash('info', "Did not save group.")
 					res.redirect('/@/' + req.params.id+ '/add_group');
 					return console.log("err++: " + err) 	
 				}	
 				// res.redirect('/hub/' + req.params.id+ '/groups');
-				console.log("add person <<<<<<<<<<<<<<")
-				res.send('Completed add person');
+				console.log("add contact <<<<<<<<<<<<<<")
+				res.send('Completed add contact');
 
 			});	
 		}
@@ -701,23 +701,23 @@ var groupController = function(){
 
 
 
-	var removePersonPost = function(req, res){
-		console.log(req.body.person_id)
+	var removeContactPost = function(req, res){
+		console.log(req.body.contact_id)
 
-		var removePerson = function(hub){
-			PersonGroupJoin.remove( {
+		var removeContact = function(hub){
+			ContactGroupJoin.remove( {
 
 				group_id: req.params.group_id,
 				hub_id: hub.id,
-				person_id: req.body.person_id,
+				contact_id: req.body.contact_id,
 
 			}, function(err, hub){
 					console.log(hub)
-					res.send('Completed remove person');
+					res.send('Completed remove contact');
 
 			});
 		}
-		return hubchecker(req, res, removePerson);
+		return hubchecker(req, res, removeContact);
 	}
 
 
@@ -727,14 +727,14 @@ var groupController = function(){
 	return{
 		groupDescription: groupDescription,
 		groupInfo: groupInfo,
-		groupPersons: groupPersons,
+		groupContacts: groupContacts,
 		deleteGroup: deleteGroup,
 		groups: groups,
 		addGroup: addGroup,
 		addGroupPost: addGroupPost,
-		addPerson: addPerson,
-		addPersonPost: addPersonPost,
-		removePersonPost: removePersonPost,
+		addContact: addContact,
+		addContactPost: addContactPost,
+		removeContactPost: removeContactPost,
 		groupUpdate: groupUpdate,
 		groupUpdatePost: groupUpdatePost
 

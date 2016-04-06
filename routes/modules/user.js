@@ -169,7 +169,7 @@ module.exports = function(app) {
 
           // console.log('user: ' + user.email + " saved.");
           // return res.redirect('/account');
-          // hub.save(function (err, person) {
+          // hub.save(function (err, contact) {
         //   if (err) return console.error(err);
           
         // });
@@ -197,7 +197,7 @@ module.exports = function(app) {
                 // hub.description = req.body.description
                 hub.user_owner_id = req.user._id
 
-                hub.save(function (err, person) {
+                hub.save(function (err, contact) {
                   if (err) return console.error(err);
                   res.redirect('/');
                 }); 

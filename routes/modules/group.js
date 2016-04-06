@@ -16,7 +16,7 @@ var csrfProtection = csrf({ cookie: true })
 
 var Hub = require('../../models/hub.js');
 var Group = require('../../models/group.js');
-var Person = require('../../models/person.js');
+var Contact = require('../../models/contact.js');
 
 
 var upload = require('./../../helpers/upload.js').upload;
@@ -24,7 +24,7 @@ var imageProcessor = require('./../../helpers/image_processor.js');
 var deleteImgFile = require('./../../helpers/delete_img_file.js')
 
 
-var Person_group_join = require('../../models/person_group_join.js');
+var Contact_group_join = require('../../models/contact_group_join.js');
 
 var hubId = function(method){
 
@@ -59,7 +59,7 @@ module.exports = function(app) {
 
 	app.get('/@/:id/groups',  groupController.groups); //groupController.groupDescription
 
-	app.get('/@/:id/group/:group_id', groupController.groupPersons);
+	app.get('/@/:id/group/:group_id', groupController.groupContacts);
 	
 	app.get('/@/:id/group/:group_id/info', groupController.groupInfo);
 
@@ -75,19 +75,19 @@ module.exports = function(app) {
 	app.post('/@/:id/group/:group_id/update', upload.single('image'),  csrfProtection,  groupController.groupUpdatePost);
 				
 	//**************** ADD PERSONS **********************
-	app.get('/@/:id/group/:group_id/add_persons',  groupController.addPerson);
+	app.get('/@/:id/group/:group_id/add_contacts',  groupController.addContact);
 	//**************** ADD PERSONS POST
-	app.post('/@/:id/group/:group_id/add_persons', groupController.addPersonPost);
+	app.post('/@/:id/group/:group_id/add_contacts', groupController.addContactPost);
 
-	app.delete('/@/:id/group/:group_id/add_persons',  groupController.removePersonPost);
+	app.delete('/@/:id/group/:group_id/add_contacts',  groupController.removeContactPost);
 
-	// app.delete('/hub/:id/group/:group_id/add_persons', function (req, res,  next) {
+	// app.delete('/hub/:id/group/:group_id/add_contacts', function (req, res,  next) {
 
-	// 	 // Person_group_join.find()
+	// 	 // Contact_group_join.find()
 	// 	 //      .and([
 	// 	 //          { $and : [ { group_id : req.params.group_id} ] },
 
-	// 	 //          { $and : [ { person_id : req.body.person_id} ] },
+	// 	 //          { $and : [ { contact_id : req.body.contact_id} ] },
 		         
 	// 	 //          { $and : [ { hub_id : req.params.id} ] }
 	// 	 //      ])
@@ -96,28 +96,28 @@ module.exports = function(app) {
 	// 		// 	next();
 	// 	 //      });
 		
-	// 	console.log(req.body.person_id)
+	// 	console.log(req.body.contact_id)
 
-	// 	Person_group_join.remove( {
+	// 	Contact_group_join.remove( {
 
 	// 		group_id: req.params.group_id,
 	// 		hub_id: req.params.id,
-	// 		person_id: req.body.person_id,
+	// 		contact_id: req.body.contact_id,
 
 	// 	    // $and : [
 
 	// 	    // 	{group_id: {$eq: mongoose.Types.ObjectId(req.params.group_id)}},
-	// 	    // 	{person_id: {$eq: mongoose.Types.ObjectId(req.body.person_id)}},
+	// 	    // 	{contact_id: {$eq: mongoose.Types.ObjectId(req.body.contact_id)}},
 	// 	    // 	{hub_id: {$eq: mongoose.Types.ObjectId(req.params.id)}}
 		      
 	// 	    // ]
 	// 	}, function(err, hub){
 	// 			console.log(hub)
-	// 			res.send('Completed remove person');
+	// 			res.send('Completed remove contact');
 
 	// 	} )
 
-	// 	// return Person_group_join.find({ $and : [{hub_id: req.params.id}, {group_id: req.params.group_id}, {person_id: req.body.person_id}]}, function(err, hub){
+	// 	// return Contact_group_join.find({ $and : [{hub_id: req.params.id}, {group_id: req.params.group_id}, {contact_id: req.body.contact_id}]}, function(err, hub){
 	// 	// 		console.log(hub)
 	// 	// 		next()
 	// 	// 			// if(err || hub === null){ 	
@@ -135,35 +135,35 @@ module.exports = function(app) {
 
 
 
-	// 	// 	var person_group_join = new Person_group_join();
+	// 	// 	var contact_group_join = new Contact_group_join();
 
-	// 	// 	person_group_join.hub_id = mongoose.Types.ObjectId(req.params.id);
-	// 	// 	person_group_join.group_id = mongoose.Types.ObjectId(req.params.group_id);
-	// 	// 	person_group_join.person_id = mongoose.Types.ObjectId(req.body.person_id);
+	// 	// 	contact_group_join.hub_id = mongoose.Types.ObjectId(req.params.id);
+	// 	// 	contact_group_join.group_id = mongoose.Types.ObjectId(req.params.group_id);
+	// 	// 	contact_group_join.contact_id = mongoose.Types.ObjectId(req.body.contact_id);
 
-	// 	// 	console.dir(person_group_join)
+	// 	// 	console.dir(contact_group_join)
 
 
 
-	// 	// 	Person_group_join.remove({hub_id: person_group_join.hub_id, group_id: person_group_join.group_id, person_id: person_group_join.person_id}, function(err){	
+	// 	// 	Contact_group_join.remove({hub_id: contact_group_join.hub_id, group_id: contact_group_join.group_id, contact_id: contact_group_join.contact_id}, function(err){	
 	// 	// 			// 	if(err){ return console.log("err: " + err) }
-	// 	// 			console.log("remove person <<<<<<<<<<<<<<")
-	// 	// 		res.send('Completed remove person');
+	// 	// 			console.log("remove contact <<<<<<<<<<<<<<")
+	// 	// 		res.send('Completed remove contact');
 
 	// 	// 				// res.redirect('/hub/' + req.params.id);
 	// 	// 			});
 
 
 
-	// 	// 	person_group_join.remove(function (err, person_group) {
+	// 	// 	contact_group_join.remove(function (err, contact_group) {
 	// 	// 		if(err || group === null){ 	
 	// 	// 			req.flash('info', "Did not save group.")
 	// 	// 			res.redirect('/hub/' + req.params.id+ '/add_group');
 	// 	// 			return console.log("err++: " + err) 	
 	// 	// 		}	
 	// 	// 		// res.redirect('/hub/' + req.params.id+ '/groups');
-	// 	// 		// console.log("add person <<<<<<<<<<<<<<")
-	// 	// 		// res.send('Completed add person');
+	// 	// 		// console.log("add contact <<<<<<<<<<<<<<")
+	// 	// 		// res.send('Completed add contact');
 
 	// 	// 	});	
 
@@ -185,8 +185,8 @@ module.exports = function(app) {
 	// 	//  hubId(group_remove());
 
 	// 	//    // if(err){ return console.log("err: " + err) }
-	// 	//     res.send('Completed remove person');
-	// 	// console.log("remove person <<<<<<<<<<<<<<")
+	// 	//     res.send('Completed remove contact');
+	// 	// console.log("remove contact <<<<<<<<<<<<<<")
 	// 	// // next(); 
 	// 	}
 
@@ -201,15 +201,15 @@ module.exports = function(app) {
 
 
 
-	// function personAdd(req,res,next){
-	// 	var person = req.body.person;
+	// function contactAdd(req,res,next){
+	// 	var contact = req.body.contact;
 
-	// 	if(person === undefined){
-	// 		person = [];
+	// 	if(contact === undefined){
+	// 		contact = [];
 	// 	}
 
-	// 	if(person.constructor !== Array && person.constructor !== undefined){
-	// 		person = [req.body.person];
+	// 	if(contact.constructor !== Array && contact.constructor !== undefined){
+	// 		contact = [req.body.contact];
 	// 	}
 
 
@@ -218,21 +218,21 @@ module.exports = function(app) {
 	// 	    if(err){ return console.log("err: " + err) }
 
 	// 		var originA = originA;
-	// 		console.log("originA " + originA.persons);
+	// 		console.log("originA " + originA.contacts);
 			
-	// 		Group.findByIdAndUpdate(req.params.id,{ $set: { persons: person }}, function(err, affected){
+	// 		Group.findByIdAndUpdate(req.params.id,{ $set: { contacts: contact }}, function(err, affected){
 	// 			if(err){ return console.log("err: " + err) }
 
 	// 				var affected = affected;
 
 	// 			Group.findById(req.params.id, function(err, originB){
-	// 				console.log("originB " + originB.persons);
+	// 				console.log("originB " + originB.contacts);
 
-	// 				var removeArray = _.difference(originA.persons, originB.persons);
+	// 				var removeArray = _.difference(originA.contacts, originB.contacts);
 	// 				// console.log(removeArray);
 	// 				removeArray.forEach(function(element){
 	// 					// console.log("element: " +element)
-	// 					Person.findById(element, function(err, entry){
+	// 					Contact.findById(element, function(err, entry){
 	// 						console.log(entry.group)
 	// 						var result = _.without(entry.group, req.params.id);
 	// 						console.log(result)
@@ -244,7 +244,7 @@ module.exports = function(app) {
 	// 							result = [result];
 	// 						}
 
-	// 						Person.findByIdAndUpdate(element, { $set: {group: result}}, function(err, entryNext){
+	// 						Contact.findByIdAndUpdate(element, { $set: {group: result}}, function(err, entryNext){
 						
 	// 						})
 
@@ -256,55 +256,55 @@ module.exports = function(app) {
 	// 			})
 
 
-	// 			person.forEach(function(entry){
+	// 			contact.forEach(function(entry){
 					
 
 
-	// 				Person.findByIdAndUpdate(entry, { $addToSet: {group: req.params.id}}, function(err, entry){
+	// 				Contact.findByIdAndUpdate(entry, { $addToSet: {group: req.params.id}}, function(err, entry){
 						
 	// 				})
 	// 			});//end of for each
-	//     		res.redirect('/group/'+req.params.id+'/add_persons' );
+	//     		res.redirect('/group/'+req.params.id+'/add_contacts' );
 	// 		});	
 
 	// 	})
 	// 	next();
 	// }
 
-	// app.post('/hub/:id/group/:group_id/add_persons', function (req, res) {
+	// app.post('/hub/:id/group/:group_id/add_contacts', function (req, res) {
 
-	// 	var person_group_join = new Person_group_join();
-	// 	person_group_join.group_id = req.params.group_id;
-	// 	person_group_join.person_id = req.params.group_id;
+	// 	var contact_group_join = new Contact_group_join();
+	// 	contact_group_join.group_id = req.params.group_id;
+	// 	contact_group_join.contact_id = req.params.group_id;
 
-	// 	// Instructions: Creating a person_group_join
+	// 	// Instructions: Creating a contact_group_join
 	// 	// get group_id by just looking at the request params :group_id
-	// 	// get person_id by when person check mark it will js request ?person_id=UniqueId_1234 to this add_person under the particular group :group_id
-	// 	// save both ids (group_id & person_id) to the person_group_join
+	// 	// get contact_id by when contact check mark it will js request ?contact_id=UniqueId_1234 to this add_contact under the particular group :group_id
+	// 	// save both ids (group_id & contact_id) to the contact_group_join
 
 
 
 
-	// 	// res.redirect('/group/'+req.params.id+'/add_persons' );
+	// 	// res.redirect('/group/'+req.params.id+'/add_contacts' );
 
-	// 	// var person = req.body.person;
+	// 	// var contact = req.body.contact;
 
-	// 	// if(person === undefined){
-	// 	// 	person = [];
+	// 	// if(contact === undefined){
+	// 	// 	contact = [];
 	// 	// }
 
-	// 	// if(person.constructor !== Array && person.constructor !== undefined){
-	// 	// 	person = [req.body.person];
+	// 	// if(contact.constructor !== Array && contact.constructor !== undefined){
+	// 	// 	contact = [req.body.contact];
 	// 	// }
 
-	// 	// Group.findByIdAndUpdate(req.params.id,{ $set: { persons: person }}, function(err, affected){
+	// 	// Group.findByIdAndUpdate(req.params.id,{ $set: { contacts: contact }}, function(err, affected){
 
-	// 	// 	person.forEach(function(entry){
-	// 	// 		Person.findByIdAndUpdate(entry, { $push: {group: req.params.id}}, function(err, entry){
+	// 	// 	contact.forEach(function(entry){
+	// 	// 		Contact.findByIdAndUpdate(entry, { $push: {group: req.params.id}}, function(err, entry){
 					
 	// 	// 		})
 	// 	// 	});//end of for each
- //  //   		// res.redirect('/group/'+req.params.id+'/add_persons' );
+ //  //   		// res.redirect('/group/'+req.params.id+'/add_contacts' );
 	// 	// });
 	// });
 

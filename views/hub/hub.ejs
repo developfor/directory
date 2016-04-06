@@ -8,8 +8,8 @@
 <a href="/hub/<%= hub.id %>/update">Edit hub information</a><br>
 <%= hub %>
 <hr>
-<a href="/hub/<%= hub.id %>/persons">view people</a><br>
-<a href="/hub/<%= hub.id %>/add_person">add person</a><br><br>
+<a href="/hub/<%= hub.id %>/contacts">view people</a><br>
+<a href="/hub/<%= hub.id %>/add_contact">add contact</a><br><br>
 <a href="/hub/<%= hub.id %>/groups">view groups</a><br>
 <a href="/hub/<%= hub.id %>/add_group">add group</a><br><br>
 <a href="/hub/<%= hub.id %>/events">view events</a><br>
@@ -34,8 +34,8 @@
           <div class="six columns">
             <div class="content-box">
             	<p class="up-title" >Contacts</p>
-            	<a  class="button button-primary" href="/@/<%= user.username %>/add_person">+ add contact</a>
-              <% if(persons.length > 0){ %>
+            	<a  class="button button-primary" href="/@/<%= user.username %>/add_contact">+ add contact</a>
+              <% if(contacts.length > 0){ %>
           		<hr>
 
 
@@ -45,26 +45,26 @@
                 <ul>
 
 
-                <% persons.forEach(function(person){ %>
+                <% contacts.forEach(function(contact){ %>
 		            <li>
-                  <a href="/@/<%= user.username %>/person/<%= person._id %>"  > 
+                  <a href="/@/<%= user.username %>/contact/<%= contact._id %>"  > 
                     <div class="list-area">
       		                
-      		              <%  if(person.img_foldername && person.img_thumbnail){ %>
-                           <div class="image-block" style=" background-image: url(/uploads/img/<%= person.img_foldername %>/<%=  person.img_icon  %>); ">
+      		              <%  if(contact.img_foldername && contact.img_thumbnail){ %>
+                           <div class="image-block" style=" background-image: url(/uploads/img/<%= contact.img_foldername %>/<%=  contact.img_icon  %>); ">
                            </div>
       		        			<% }else{  %>
 
-                        <div class="image-block" style=" background-color: #EEEEEE; background-image: url(<%= person.defaultBigThumb %>); ">
+                        <div class="image-block" style=" background-color: #EEEEEE; background-image: url(<%= contact.defaultBigThumb %>); ">
                            </div>
       		        			<% }  %>
       		                
       		                
       		                <div class="list-text-block">
-      		                	<p   ><span><%= (person.first_name).trunc(25) %></span>		                  	
+      		                	<p   ><span><%= (contact.first_name).trunc(25) %></span>		                  	
       		                	</p>
-                           <p class="edited-count"> Edited <span  data-livestamp="<%= person.update_date %>"> </span><p>
-                          <p class="edited-count"> <%= person.groupCount %> Groups  <p>
+                           <p class="edited-count"> Edited <span  data-livestamp="<%= contact.update_date %>"> </span><p>
+                          <p class="edited-count"> <%= contact.groupCount %> Groups  <p>
 
       		                </div>
                      </div>
@@ -80,7 +80,7 @@
               </div>
               
 
-              <a class="button button-primary" href="/@/<%= user.username %>/persons">view all contacts</a><br>
+              <a class="button button-primary" href="/@/<%= user.username %>/contacts">view all contacts</a><br>
               <% } %>
 
             </div>

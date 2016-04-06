@@ -1,41 +1,42 @@
- <% include ../_partials/header %>
+<% include ../_partials/header %>
 
- <% include ../group/_partials/profile_left.ejs %>
+ <% include ../contact/_partials/profile_left.ejs %>
+
 
           <div class="eight columns">
             <div class="nav-right">
               <ul>
-                 <li class="nav-right-obj-type"> 
-                  <b>group</b>
-                </li>
-            
-                <li>
-                    <a class="no-style-link selected" href="/@/<%= user.username %>/group/<%= group._id %>">people</a>
+                <li class="nav-right-obj-type"> 
+                  <b><%= contact.obj_type%></b>
                 </li>
                 <li>
-                    <a class="no-style-link" href="/@/<%= user.username %>/group/<%= group._id %>/info">information</a>
+                    <a class="no-style-link" href="/@/<%= user.username %>/contact/<%= contact._id %>">description</a>
                 </li>
                 <li>
-                    <a class="no-style-link" href="/@/<%= user.username %>/group/<%= group._id %>/description">description</a>
+                    <a class="no-style-link" href="/@/<%= user.username %>/contact/<%= contact._id %>/info">information</a>
                 </li>
-              
+                <li>
+                    <a class="no-style-link  selected" href="/@/<%= user.username %>/contact/<%= contact._id %>/groups"><i class="fa fa-eye"></i>groups</a>
+                </li>
+               
               </ul>
               
             </div>
-            <div class="content-persons" >
-              
-                <a class="button button-primary" href="/@/<%= user.username %>/group/<%= group._id %>/add_persons">add or remove people</a><br>
+            <div class="content-groups" >
+            <!-- <div class="content-groups" id="i"> -->
+               <a class="button button-primary" href="/@/<%= user.username %>/contact/<%= contact._id %>/add_groups">add or remove groups</a><br>
 
-                <% personArray.forEach(function(item){ %>
+              <% groupArray.forEach(function(item){ %>
+
+                <% if(item !== undefined){ %>
+                  <!--   <%= item %>
+                     <a class="button button-primary" href="/hub/<%= item.hub_id %>/group/<%= item._id %>">More Details »</a>
+                     <hr> -->
+
+                  <div class="mini-p-content" >
 
 
-                  <% if(item !== undefined){ %>
-
-                    <div class="mini-p-content" >
-
-
-
-                    <a class="" href="/@/<%= user.username %>/person/<%= item._id %>">
+                    <a class="" href="/@/<%= user.username %>/group/<%= item._id %>">
                       <%  if(item.img_foldername && item.img_thumbnail){ %>
 
                        <img class="profile-image" style=" background-image: url(/uploads/img/<%= item.img_foldername %>/<%= item.img_thumbnail %>); " src="/app/img/no-image_clear.png">
@@ -53,32 +54,31 @@
                       <a class="button button-primary" href="/@/<%= user.username %>/group/<%= item._id %>">Details</a>   
                       <div>
                         <div>
-                          <span class="title-info"><%=  item.first_name %></span>
+                          <span class="title-info"><%=  item.title %></span>
                         </div>
                         <div class="p-content-desc">
                           <span class="small-text" > <%= item.short_description.trunc(70) %></span>
                         </div>
                        
                       </div> 
-                              
+                   
+                  </div>
+                <% } %>
+              <% }) %>
 
-
-
-                      
-                    </div>
-                  
-                  <% } %>
-
-                <% }) %>
-
+            
+              
             </div>
           </div>
 
+
+
+
+
       <!--  end row  -->
         </div>
-    <!--  end container -->
-    </div>
-<script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
+
+  <script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
 
     <script>
       $('.mini-p-content').matchHeight();
@@ -98,13 +98,10 @@
           }
 
       })
-
-      
     </script>
 
 
 <!-- footer start -->
 
-    
-  </body>
-</html>
+
+<% include ../_partials/footer %>

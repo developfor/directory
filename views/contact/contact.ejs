@@ -1,22 +1,22 @@
  <% include ../_partials/header %>
 
 
- <% include ../person/_partials/profile_left.ejs %>
+ <% include ../contact/_partials/profile_left.ejs %>
 
           <div class="eight columns">
             <div class="nav-right" >
               <ul>
                 <li class="nav-right-obj-type"> 
-                  <b><%= person.obj_type%></b>
+                  <b><%= contact.obj_type%></b>
                 </li>
                 <li>
-                    <a class="no-style-link selected" href="/@/<%= user.username %>/person/<%= person._id %>"><i class="fa fa-eye"></i>description</a>
+                    <a class="no-style-link selected" href="/@/<%= user.username %>/contact/<%= contact._id %>"><i class="fa fa-eye"></i>description</a>
                 </li>
                 <li>
-                    <a class="no-style-link" href="/@/<%= user.username %>/person/<%= person._id %>/info">information</a>
+                    <a class="no-style-link" href="/@/<%= user.username %>/contact/<%= contact._id %>/info">information</a>
                 </li>
                 <li>
-                    <a class="no-style-link" href="/@/<%= user.username %>/person/<%= person._id %>/groups">groups</a>
+                    <a class="no-style-link" href="/@/<%= user.username %>/contact/<%= contact._id %>/groups">groups</a>
                 </li>
                 
               </ul>
@@ -24,20 +24,20 @@
             </div>
             <div>
             <!-- <div id="i"> -->
-            <% if(person.short_description){ %>
+            <% if(contact.short_description){ %>
                <div>
                 <span class="title-info">Brief Description:</span><br>
                 <p> 
-                  <%= person.short_description %>
+                  <%= contact.short_description %>
                 </p>
               </div> 
             <% } %>
             
 
-            <% if(person.description){ %>
+            <% if(contact.description){ %>
               <div>
                 <span class="title-info ">Detailed Description:</span><br>
-                <%- person.description %>
+                <%- contact.description %>
               </div>
             <% } %>
             

@@ -39,6 +39,6 @@ module.exports = function(app) {
 
 	require('./modules/user.js')(app);
 	require('./modules/hub.js')(app);
-	require('./modules/person.js')(app);
+	require('./modules/contact.js')(app);
 	require('./modules/group.js')(app);
 }

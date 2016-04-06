@@ -2,11 +2,11 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Person = new Schema({
+var Contact = new Schema({
 	// ----- name info -------
 	obj_type: {
 		type: String,
-		default: "person"
+		default: "contact"
 	},
 	title: {
 		type: String,
@@ -202,14 +202,14 @@ var Person = new Schema({
 }
 });
 
-// Person.pre('save', function(next) {
-// 	// var validate = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/.test(Person.email)
+// Contact.pre('save', function(next) {
+// 	// var validate = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,})?$/.test(Contact.email)
 // 	// if(validate === false){
-// 	// 	// Person.email
+// 	// 	// Contact.email
 // 	// // }else{
-// 	// 	Person.email = null;
+// 	// 	Contact.email = null;
 // 	// }
-// 	// if Person.email === 
+// 	// if Contact.email === 
 // 	next();
 //   // var user = this;
 
@@ -234,4 +234,4 @@ var Person = new Schema({
 //   // });
 // });
 
-module.exports = mongoose.model('Person', Person);
+module.exports = mongoose.model('Contact', Contact);

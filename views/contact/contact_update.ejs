@@ -1,0 +1,763 @@
+
+
+<% include ../_partials/header %>
+
+<% include ../_partials/user_navigation.ejs %>
+
+<div>
+    <div style="float: left;">
+	    <a href="/@/<%= user.username %>/contact/<%= contact._id %>">
+			<%  if(contact.img_foldername && contact.img_thumbnail){ %>
+				<img style="background-color: #666; height: 30px; width: 30px;     border: 3px solid #000;" src="/uploads/img/<%= contact.img_foldername %>/<%=  contact.img_icon  %>"> 
+			<% }else{  %>
+				<img  style="background-color: #<%= contact.hex_color %>; height: 30px; width: 30px; border: 3px solid #000;" src="/app/img/no-image.png" >
+			<% }  %>
+		</a>
+    </div>
+    <div style="margin-left: 5px; width: 60%;">
+    	<p class="title-info"  ><a href="/@/<%= user.username %>/contact/<%= contact._id %>"><%= contact.first_name  %></a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= contact.update_date %>"> </span> <%= contact.update_date %></span>   -->
+    	</p>
+
+ 
+    </div>
+
+</div>
+
+<!-- text editor -->
+ <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"/>
+
+
+<!-- text editor  end -->
+
+
+<form method="post" action="?_csrf=<%= csrfToken %>" accept-charset="utf-8"  enctype="multipart/form-data">
+
+
+
+	
+	   
+	<div class="form-block">
+		 <tr>
+     
+                <td>
+                    <input type="radio" name="obj_type" id="radio5" class="css-checkbox"  value="person"  <% if (contact.obj_type == 'person') { %> checked <% } %> />
+                    <label for="radio5" class="css-label radGroup2">Person</label>
+                </td>
+                <td>
+                    <input type="radio" name="obj_type" id="radio6" class="css-checkbox" value="entity" <% if (contact.obj_type == 'entity') { %> checked <% } %> />
+                    <label for="radio6" class="css-label radGroup2">Entity</label>
+                </td>
+            </tr>
+		<h5>Photo</h5>
+		<div>
+      		<%  if(contact.img_foldername && contact.img_thumbnail){ %>
+				
+
+				 <img id="preview-img" data-img="/uploads/img/<%= contact.img_foldername %>/<%= contact.img_thumbnail %>" style="background-image: url(/uploads/img/<%= contact.img_foldername %>/<%= contact.img_thumbnail %>);" class="profile-image" src="/app/img/no-image_clear.png">
+
+
+
+			<% }else{  %>
+
+			 <img id="preview-img" style="background-image: url(<%= contact.defaultBigThumb %>);" class="profile-image" src="/app/img/no-image_clear.png">
+			
+			<% }  %>
+        </div>
+
+
+		<input type='file' name='image' id="image-file"><br>
+	</div>
+	<div class="form-block">
+		<!-- name info -->
+		<h5>Contact Name</h5>
+		<!-- <div class="row">
+			<div class="six columns title-info">
+                <label for="FirstName">title:</label>
+                <input class="u-full-width" type="text" name="title" value="<%= contact.title %>"/>
+            </div>
+		</div> -->
+      	<div class="row ">   
+            <div class="six columns title-info">
+                <label for="FirstName">Name:<span  style="color: #E23B3B;">*</span></label>
+                <input class="u-full-width" type="text" name="first_name" value="<%= contact.first_name %>"/>
+        	</div>
+	  
+        <!-- 	<div class="four columns title-info">
+                <label for="MiddleName">middle name:</label>
+                <input class="u-full-width" type="text" name="middle_name" value="<%= contact.middle_name %>" /> 
+        	</div>
+      
+        	<div class="four columns title-info">
+                <label for="LastName">last name:<span  style="color: #E23B3B;">*</span> </label>
+                <input class="u-full-width" type="text" name="last_name" value="<%= contact.last_name %>" />
+        	</div> -->
+        </div>
+		<!-- <div class="row">   
+			<div class="six columns title-info">
+	            <label for="suffix">suffix:</label>
+				<input class="u-full-width" type="text" name="suffix" value="<%= contact.suffix %>" />        	
+			</div>
+		</div> -->
+
+	</div>
+
+	<div class="form-block">
+		<!-- name info -->
+		<h5>Description</h5>
+		 <div class="row">
+		 	<div class=" columns title-info">
+		 		<label for="gender">Short Description:</label>
+		 		<textarea class="u-full-width" id="short-description" type="text" name="short_description" /><%= contact.short_description %></textarea>
+		 		<div id="short-description-count"></div>
+		 	</div>
+		</div>
+
+		<div class="row">
+		 	<div class=" columns title-info">
+		 		<label for="gender">Detailed Description:</label>
+		 		<textarea class="u-full-width"  id="description" type="text" name="description"  ><%= contact.description %></textarea>
+		 		
+		 	</div>
+		</div>
+	</div>
+
+
+
+
+
+	<div class="form-block">
+		<!-- general info -->
+		<h5>General Information</h5>
+		<div class="row"> 
+			
+			<div class="six columns title-info">
+	                <label for="jobtitle">job title:</label>
+	                <input  class="u-full-width" type="text" name="job_title" value="<%= contact.job_title %>" />
+			</div>
+			<div class="six columns title-info">
+				<label for="gender">gender:</label>
+				 <select class="u-full-width" name="gender">
+				  <option  <% if (contact.gender == '') { %>selected<% } %> ></option>
+				  <option value="male" <% if (contact.gender == 'male') { %>selected<% } %> >Male</option>
+				  <option value="female" <% if (contact.gender == 'female') { %>selected<% } %> >Female</option>
+				 
+				</select>
+			</div>
+		</div>
+		<div class="row"> 
+
+
+
+
+			<div class=" columns title-info birthday_form">
+				<label for="month">birthday:</label>
+
+				<!-- Month dropdown -->
+				<select name="birth_month" id="birth_month" onchange="" size="1">
+					<option value=""></option>
+				    <option <% if (contact.birth_month == 'january') { %>selected<% } %> value="january">January</option>
+				    <option <% if (contact.birth_month == 'february') { %>selected<% } %>  value="february">February</option>
+				    <option <% if (contact.birth_month == 'march') { %>selected<% } %> value="march">March</option>
+				    <option <% if (contact.birth_month == 'april') { %>selected<% } %> value="april">April</option>
+				    <option <% if (contact.birth_month == 'may') { %>selected<% } %> value="may">May</option>
+				    <option <% if (contact.birth_month == 'june') { %>selected<% } %> value="june">June</option>
+				    <option <% if (contact.birth_month == 'july') { %>selected<% } %> value="july">July</option>
+				    <option <% if (contact.birth_month == 'august') { %>selected<% } %> value="august">August</option>
+				    <option <% if (contact.birth_month == 'september') { %>selected<% } %> value="september">September</option>
+				    <option <% if (contact.birth_month == 'october') { %>selected<% } %> value="october">October</option>
+				    <option <% if (contact.birth_month == 'november') { %>selected<% } %> value="november">November</option>
+				    <option <% if (contact.birth_month == 'december') { %>selected<% } %> value="december">December</option>
+				</select>
+
+				<!-- Day dropdown -->
+				<select name="birth_day" id="birth_day" onchange="" size="1">
+					<option value=""></option>
+				    <option <% if (contact.birth_day == '1') { %>selected<% } %> value="1">1</option>
+				    <option <% if (contact.birth_day == '2') { %>selected<% } %> value="2">2</option>
+				    <option <% if (contact.birth_day == '3') { %>selected<% } %> value="3">3</option>
+				    <option <% if (contact.birth_day == '4') { %>selected<% } %> value="4">4</option>
+				    <option <% if (contact.birth_day == '5') { %>selected<% } %> value="5">5</option>
+				    <option <% if (contact.birth_day == '6') { %>selected<% } %> value="6">6</option>
+				    <option <% if (contact.birth_day == '7') { %>selected<% } %> value="7">7</option>
+				    <option <% if (contact.birth_day == '8') { %>selected<% } %> value="8">8</option>
+				    <option <% if (contact.birth_day == '9') { %>selected<% } %> value="9">9</option>
+				    <option <% if (contact.birth_day == '10') { %>selected<% } %> value="10">10</option>
+				    <option <% if (contact.birth_day == '11') { %>selected<% } %> value="11">11</option>
+				    <option <% if (contact.birth_day == '12') { %>selected<% } %> value="12">12</option>
+				    <option <% if (contact.birth_day == '13') { %>selected<% } %> value="13">13</option>
+				    <option <% if (contact.birth_day == '14') { %>selected<% } %> value="14">14</option>
+				    <option <% if (contact.birth_day == '15') { %>selected<% } %> value="15">15</option>
+				    <option <% if (contact.birth_day == '16') { %>selected<% } %> value="16">16</option>
+				    <option <% if (contact.birth_day == '17') { %>selected<% } %> value="17">17</option>
+				    <option <% if (contact.birth_day == '18') { %>selected<% } %> value="18">18</option>
+				    <option <% if (contact.birth_day == '19') { %>selected<% } %> value="19">19</option>
+				    <option <% if (contact.birth_day == '20') { %>selected<% } %> value="20">20</option>
+				    <option <% if (contact.birth_day == '21') { %>selected<% } %> value="21">21</option>
+				    <option <% if (contact.birth_day == '22') { %>selected<% } %> value="22">22</option>
+				    <option <% if (contact.birth_day == '23') { %>selected<% } %> value="23">23</option>
+				    <option <% if (contact.birth_day == '24') { %>selected<% } %> value="24">24</option>
+				    <option <% if (contact.birth_day == '25') { %>selected<% } %> value="25">25</option>
+				    <option <% if (contact.birth_day == '26') { %>selected<% } %> value="26">26</option>
+				    <option <% if (contact.birth_day == '27') { %>selected<% } %> value="27">27</option>
+				    <option <% if (contact.birth_day == '28') { %>selected<% } %> value="28">28</option>
+				    <option <% if (contact.birth_day == '29') { %>selected<% } %> value="29">29</option>
+				    <option <% if (contact.birth_day == '30') { %>selected<% } %> value="30">30</option>
+				    <option <% if (contact.birth_day == '31') { %>selected<% } %> value="31">31</option>
+				</select>
+
+
+
+				<input size="1" type="text" name="birth_year" id="birth_year" <% if( isNaN( new Date( contact.birthday))  === false){ %> value="<%= contact.birth_year %>" <% } %> />
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+	<div class="form-block">
+		<!-- name info -->
+		<h5>Contact Information</h5>
+		<div class="row"> 	
+			
+			<div class="six columns title-info">
+	                <label for="jobtitle">email:</label>
+	               <input class="u-full-width"  type="email" name="email" value="<%= contact.email %>" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="four columns title-info">
+				<label for="gender">primary phone:</label>
+				 <input class="u-full-width" type="text" name="primary_phone" value="<%= contact.primary_phone %>" />
+			</div>
+			<div class="four columns title-info">
+				<label for="gender">mobile phone:</label>
+				<input class="u-full-width" type="text" name="mobile_phone" value="<%= contact.mobile_phone %>" />
+			</div>
+			<div class="four columns title-info">
+				<label for="gender">fax:</label>
+				<input class="u-full-width" type="text" name="fax" value="<%= contact.fax %>" />
+			</div>
+		</div>
+	</div>
+
+
+	<div class="form-block">
+		<h5>Location</h5>
+		<div class="row">
+		 	<div class="columns title-info">
+		 		<label for="gender">Street:</label>
+		 		<input class="u-full-width" type="text" name="street"  value="<%= contact.street %>"/>
+		 	</div>
+		 	
+		 	
+		</div>
+	
+		<div class="row">
+			<div class="five columns title-info">
+		 		<label for="city">City:</label>
+		 		<input class="u-full-width" type="text" name="city" value="<%= contact.city %>" />
+		 	</div>
+			<div class="seven columns title-info">
+		 		<label for="state_province_region">State/Province/Region:</label>
+		 		<input class="u-full-width" type="text" name="state_province_region"   value="<%= contact.state_province_region %>" />
+		 	</div>
+		</div>
+		<div class="row">
+			<div class="six columns title-info">
+		 		<label for="postal_code">Postal Code:</label>
+		 		<input class="u-full-width" type="text" name="postal_code" value="<%= contact.postal_code %>"/>
+		 	</div>
+			<div class="six columns title-info">
+		 		<label for="country">Country:</label>
+		 		<select  name="country" class="u-full-width" >
+		 			<option <% if (contact.country == '') { %>selected<% } %> value=""></option>
+					<option <% if (contact.country == 'AFG') { %>selected<% } %> value="AFG">Afghanistan</option>
+					<option <% if (contact.country == 'ALA') { %>selected<% } %> value="ALA">Åland Islands</option>
+					<option <% if (contact.country == 'ALB') { %>selected<% } %> value="ALB">Albania</option>
+					<option <% if (contact.country == 'DZA') { %>selected<% } %> value="DZA">Algeria</option>
+					<option <% if (contact.country == 'ASM') { %>selected<% } %> value="ASM">American Samoa</option>
+					<option <% if (contact.country == 'AND') { %>selected<% } %> value="AND">Andorra</option>
+					<option <% if (contact.country == 'AGO') { %>selected<% } %> value="AGO">Angola</option>
+					<option <% if (contact.country == 'AIA') { %>selected<% } %> value="AIA">Anguilla</option>
+					<option <% if (contact.country == 'ATA') { %>selected<% } %> value="ATA">Antarctica</option>
+					<option <% if (contact.country == 'ATG') { %>selected<% } %> value="ATG">Antigua and Barbuda</option>
+					<option <% if (contact.country == 'ARG') { %>selected<% } %>value="ARG">Argentina</option>
+					<option <% if (contact.country == 'ARM') { %>selected<% } %> value="ARM">Armenia</option>
+					<option <% if (contact.country == 'ABW') { %>selected<% } %> value="ABW">Aruba</option>
+					<option <% if (contact.country == 'AUS') { %>selected<% } %> value="AUS">Australia</option>
+					<option <% if (contact.country == 'AUT') { %>selected<% } %> value="AUT">Austria</option>
+					<option <% if (contact.country == 'AZE') { %>selected<% } %> value="AZE">Azerbaijan</option>
+					<option <% if (contact.country == 'BHS') { %>selected<% } %> value="BHS">Bahamas</option>
+					<option <% if (contact.country == 'BHR') { %>selected<% } %> value="BHR">Bahrain</option>
+					<option <% if (contact.country == 'BGD') { %>selected<% } %> value="BGD">Bangladesh</option>
+					<option <% if (contact.country == 'BRB') { %>selected<% } %> value="BRB">Barbados</option>
+					<option <% if (contact.country == 'BLR') { %>selected<% } %> value="BLR">Belarus</option>
+					<option <% if (contact.country == 'BEL') { %>selected<% } %> value="BEL">Belgium</option>
+					<option <% if (contact.country == 'BLZ') { %>selected<% } %> value="BLZ">Belize</option>
+					<option <% if (contact.country == 'BEN') { %>selected<% } %> value="BEN">Benin</option>
+					<option <% if (contact.country == 'BMU') { %>selected<% } %> value="BMU">Bermuda</option>
+					<option <% if (contact.country == 'BTN') { %>selected<% } %> value="BTN">Bhutan</option>
+					<option <% if (contact.country == 'BOL') { %>selected<% } %> value="BOL">Bolivia, Plurinational State of</option>
+					<option <% if (contact.country == 'BES') { %>selected<% } %> value="BES">Bonaire, Sint Eustatius and Saba</option>
+					<option <% if (contact.country == 'BIH') { %>selected<% } %> value="BIH">Bosnia and Herzegovina</option>
+					<option <% if (contact.country == 'BWA') { %>selected<% } %> value="BWA">Botswana</option>
+					<option <% if (contact.country == 'BVT') { %>selected<% } %> value="BVT">Bouvet Island</option>
+					<option <% if (contact.country == 'BRA') { %>selected<% } %> value="BRA">Brazil</option>
+					<option <% if (contact.country == 'IOT') { %>selected<% } %> value="IOT">British Indian Ocean Territory</option>
+					<option <% if (contact.country == 'BRN') { %>selected<% } %> value="BRN">Brunei Darussalam</option>
+					<option <% if (contact.country == 'BGR') { %>selected<% } %> value="BGR">Bulgaria</option>
+					<option <% if (contact.country == 'BFA') { %>selected<% } %> value="BFA">Burkina Faso</option>
+					<option <% if (contact.country == 'BDI') { %>selected<% } %> value="BDI">Burundi</option>
+					<option <% if (contact.country == 'KHM') { %>selected<% } %> value="KHM">Cambodia</option>
+					<option <% if (contact.country == 'CMR') { %>selected<% } %> value="CMR">Cameroon</option>
+					<option <% if (contact.country == 'CAN') { %>selected<% } %> value="CAN">Canada</option>
+					<option <% if (contact.country == 'CPV') { %>selected<% } %> value="CPV">Cape Verde</option>
+					<option <% if (contact.country == 'CYM') { %>selected<% } %> value="CYM">Cayman Islands</option>
+					<option <% if (contact.country == 'CAF') { %>selected<% } %> value="CAF">Central African Republic</option>
+					<option <% if (contact.country == 'TCD') { %>selected<% } %> value="TCD">Chad</option>
+					<option <% if (contact.country == 'CHL') { %>selected<% } %> value="CHL">Chile</option>
+					<option <% if (contact.country == 'CHN') { %>selected<% } %> value="CHN">China</option>
+					<option <% if (contact.country == 'CXR') { %>selected<% } %> value="CXR">Christmas Island</option>
+					<option <% if (contact.country == 'CCK') { %>selected<% } %> value="CCK">Cocos (Keeling) Islands</option>
+					<option <% if (contact.country == 'COL') { %>selected<% } %> value="COL">Colombia</option>
+					<option <% if (contact.country == 'COM') { %>selected<% } %> value="COM">Comoros</option>
+					<option <% if (contact.country == 'COG') { %>selected<% } %> value="COG">Congo</option>
+					<option <% if (contact.country == 'COD') { %>selected<% } %> value="COD">Congo, the Democratic Republic of the</option>
+					<option <% if (contact.country == 'COK') { %>selected<% } %> value="COK">Cook Islands</option>
+					<option <% if (contact.country == 'CRI') { %>selected<% } %> value="CRI">Costa Rica</option>
+					<option <% if (contact.country == 'CIV') { %>selected<% } %> value="CIV">Côte d'Ivoire</option>
+					<option <% if (contact.country == 'HRV') { %>selected<% } %> value="HRV">Croatia</option>
+					<option <% if (contact.country == 'CUB') { %>selected<% } %> value="CUB">Cuba</option>
+					<option <% if (contact.country == 'CUW') { %>selected<% } %> value="CUW">Curaçao</option>
+					<option <% if (contact.country == 'CYP') { %>selected<% } %> value="CYP">Cyprus</option>
+					<option <% if (contact.country == 'CZE') { %>selected<% } %> value="CZE">Czech Republic</option>
+					<option <% if (contact.country == 'DNK') { %>selected<% } %> value="DNK">Denmark</option>
+					<option <% if (contact.country == 'DJI') { %>selected<% } %> value="DJI">Djibouti</option>
+					<option <% if (contact.country == 'DMA') { %>selected<% } %> value="DMA">Dominica</option>
+					<option <% if (contact.country == 'DOM') { %>selected<% } %> value="DOM">Dominican Republic</option>
+					<option <% if (contact.country == 'ECU') { %>selected<% } %> value="ECU">Ecuador</option>
+					<option <% if (contact.country == 'EGY') { %>selected<% } %> value="EGY">Egypt</option>
+					<option <% if (contact.country == 'SLV') { %>selected<% } %> value="SLV">El Salvador</option>
+					<option <% if (contact.country == 'GNQ') { %>selected<% } %> value="GNQ">Equatorial Guinea</option>
+					<option <% if (contact.country == 'ERI') { %>selected<% } %> value="ERI">Eritrea</option>
+					<option <% if (contact.country == 'EST') { %>selected<% } %> value="EST">Estonia</option>
+					<option <% if (contact.country == 'ETH') { %>selected<% } %> value="ETH">Ethiopia</option>
+					<option <% if (contact.country == 'FLK') { %>selected<% } %> value="FLK">Falkland Islands (Malvinas)</option>
+					<option <% if (contact.country == 'FRO') { %>selected<% } %> value="FRO">Faroe Islands</option>
+					<option <% if (contact.country == 'FJI') { %>selected<% } %> value="FJI">Fiji</option>
+					<option <% if (contact.country == 'FIN') { %>selected<% } %> value="FIN">Finland</option>
+					<option <% if (contact.country == 'FRA') { %>selected<% } %> value="FRA">France</option>
+					<option <% if (contact.country == 'GUF') { %>selected<% } %> value="GUF">French Guiana</option>
+					<option <% if (contact.country == 'PYF') { %>selected<% } %> value="PYF">French Polynesia</option>
+					<option <% if (contact.country == 'ATF') { %>selected<% } %> value="ATF">French Southern Territories</option>
+					<option <% if (contact.country == 'GAB') { %>selected<% } %> value="GAB">Gabon</option>
+					<option <% if (contact.country == 'GMB') { %>selected<% } %> value="GMB">Gambia</option>
+					<option <% if (contact.country == 'GEO') { %>selected<% } %> value="GEO">Georgia</option>
+					<option <% if (contact.country == 'DEU') { %>selected<% } %> value="DEU">Germany</option>
+					<option <% if (contact.country == 'GHA') { %>selected<% } %> value="GHA">Ghana</option>
+					<option <% if (contact.country == 'GIB') { %>selected<% } %> value="GIB">Gibraltar</option>
+					<option <% if (contact.country == 'GRC') { %>selected<% } %> value="GRC">Greece</option>
+					<option <% if (contact.country == 'GRL') { %>selected<% } %> value="GRL">Greenland</option>
+					<option <% if (contact.country == 'GRD') { %>selected<% } %> value="GRD">Grenada</option>
+					<option <% if (contact.country == 'GLP') { %>selected<% } %> value="GLP">Guadeloupe</option>
+					<option <% if (contact.country == 'GUM') { %>selected<% } %> value="GUM">Guam</option>
+					<option <% if (contact.country == 'GTM') { %>selected<% } %> value="GTM">Guatemala</option>
+					<option <% if (contact.country == 'GGY') { %>selected<% } %> value="GGY">Guernsey</option>
+					<option <% if (contact.country == 'GIN') { %>selected<% } %> value="GIN">Guinea</option>
+					<option <% if (contact.country == 'GNB') { %>selected<% } %> value="GNB">Guinea-Bissau</option>
+					<option <% if (contact.country == 'GUY') { %>selected<% } %> value="GUY">Guyana</option>
+					<option <% if (contact.country == 'HTI') { %>selected<% } %> value="HTI">Haiti</option>
+					<option <% if (contact.country == 'HMD') { %>selected<% } %> value="HMD">Heard Island and McDonald Islands</option>
+					<option <% if (contact.country == 'VAT') { %>selected<% } %> value="VAT">Holy See (Vatican City State)</option>
+					<option <% if (contact.country == 'HND') { %>selected<% } %> value="HND">Honduras</option>
+					<option <% if (contact.country == 'HKG') { %>selected<% } %> value="HKG">Hong Kong</option>
+					<option <% if (contact.country == 'HUN') { %>selected<% } %> value="HUN">Hungary</option>
+					<option <% if (contact.country == 'ISL') { %>selected<% } %> value="ISL">Iceland</option>
+					<option <% if (contact.country == 'IND') { %>selected<% } %> value="IND">India</option>
+					<option <% if (contact.country == 'IDN') { %>selected<% } %> value="IDN">Indonesia</option>
+					<option <% if (contact.country == 'IRN') { %>selected<% } %> value="IRN">Iran, Islamic Republic of</option>
+					<option <% if (contact.country == 'IRQ') { %>selected<% } %> value="IRQ">Iraq</option>
+					<option <% if (contact.country == 'IRL') { %>selected<% } %> value="IRL">Ireland</option>
+					<option <% if (contact.country == 'IMN') { %>selected<% } %> value="IMN">Isle of Man</option>
+					<option <% if (contact.country == 'ISR') { %>selected<% } %> value="ISR">Israel</option>
+					<option <% if (contact.country == 'ITA') { %>selected<% } %> value="ITA">Italy</option>
+					<option <% if (contact.country == 'JAM') { %>selected<% } %> value="JAM">Jamaica</option>
+					<option <% if (contact.country == 'JPN') { %>selected<% } %> value="JPN">Japan</option>
+					<option <% if (contact.country == 'JEY') { %>selected<% } %> value="JEY">Jersey</option>
+					<option <% if (contact.country == 'JOR') { %>selected<% } %> value="JOR">Jordan</option>
+					<option <% if (contact.country == 'KAZ') { %>selected<% } %> value="KAZ">Kazakhstan</option>
+					<option <% if (contact.country == 'KEN') { %>selected<% } %> value="KEN">Kenya</option>
+					<option <% if (contact.country == 'KIR') { %>selected<% } %> value="KIR">Kiribati</option>
+					<option <% if (contact.country == 'PRK') { %>selected<% } %> value="PRK">Korea, Democratic People's Republic of</option>
+					<option <% if (contact.country == 'KOR') { %>selected<% } %> value="KOR">Korea, Republic of</option>
+					<option <% if (contact.country == 'KWT') { %>selected<% } %> value="KWT">Kuwait</option>
+					<option <% if (contact.country == 'KGZ') { %>selected<% } %> value="KGZ">Kyrgyzstan</option>
+					<option <% if (contact.country == 'LAO') { %>selected<% } %> value="LAO">Lao People's Democratic Republic</option>
+					<option <% if (contact.country == 'LVA') { %>selected<% } %> value="LVA">Latvia</option>
+					<option <% if (contact.country == 'LBN') { %>selected<% } %> value="LBN">Lebanon</option>
+					<option <% if (contact.country == 'LSO') { %>selected<% } %> value="LSO">Lesotho</option>
+					<option <% if (contact.country == 'LBR') { %>selected<% } %> value="LBR">Liberia</option>
+					<option <% if (contact.country == 'LBY') { %>selected<% } %> value="LBY">Libya</option>
+					<option <% if (contact.country == 'LIE') { %>selected<% } %> value="LIE">Liechtenstein</option>
+					<option <% if (contact.country == 'LTU') { %>selected<% } %> value="LTU">Lithuania</option>
+					<option <% if (contact.country == 'LUX') { %>selected<% } %> value="LUX">Luxembourg</option>
+					<option <% if (contact.country == 'MAC') { %>selected<% } %> value="MAC">Macao</option>
+					<option <% if (contact.country == 'MKD') { %>selected<% } %> value="MKD">Macedonia, the former Yugoslav Republic of</option>
+					<option <% if (contact.country == 'MDG') { %>selected<% } %> value="MDG">Madagascar</option>
+					<option <% if (contact.country == 'MWI') { %>selected<% } %> value="MWI">Malawi</option>
+					<option <% if (contact.country == 'MYS') { %>selected<% } %> value="MYS">Malaysia</option>
+					<option <% if (contact.country == 'MDV') { %>selected<% } %> value="MDV">Maldives</option>
+					<option <% if (contact.country == 'MLI') { %>selected<% } %> value="MLI">Mali</option>
+					<option <% if (contact.country == 'MLT') { %>selected<% } %> value="MLT">Malta</option>
+					<option <% if (contact.country == 'MHL') { %>selected<% } %> value="MHL">Marshall Islands</option>
+					<option <% if (contact.country == 'MTQ') { %>selected<% } %> value="MTQ">Martinique</option>
+					<option <% if (contact.country == 'MRT') { %>selected<% } %> value="MRT">Mauritania</option>
+					<option <% if (contact.country == 'MUS') { %>selected<% } %> value="MUS">Mauritius</option>
+					<option <% if (contact.country == 'MYT') { %>selected<% } %> value="MYT">Mayotte</option>
+					<option <% if (contact.country == 'MEX') { %>selected<% } %> value="MEX">Mexico</option>
+					<option <% if (contact.country == 'FSM') { %>selected<% } %> value="FSM">Micronesia, Federated States of</option>
+					<option <% if (contact.country == 'MDA') { %>selected<% } %> value="MDA">Moldova, Republic of</option>
+					<option <% if (contact.country == 'MCO') { %>selected<% } %> value="MCO">Monaco</option>
+					<option <% if (contact.country == 'MNG') { %>selected<% } %> value="MNG">Mongolia</option>
+					<option <% if (contact.country == 'MNE') { %>selected<% } %> value="MNE">Montenegro</option>
+					<option <% if (contact.country == 'MSR') { %>selected<% } %> value="MSR">Montserrat</option>
+					<option <% if (contact.country == 'MAR') { %>selected<% } %> value="MAR">Morocco</option>
+					<option <% if (contact.country == 'MOZ') { %>selected<% } %> value="MOZ">Mozambique</option>
+					<option <% if (contact.country == 'MMR') { %>selected<% } %> value="MMR">Myanmar</option>
+					<option <% if (contact.country == 'NAM') { %>selected<% } %> value="NAM">Namibia</option>
+					<option <% if (contact.country == 'NRU') { %>selected<% } %> value="NRU">Nauru</option>
+					<option <% if (contact.country == 'NPL') { %>selected<% } %> value="NPL">Nepal</option>
+					<option <% if (contact.country == 'NLD') { %>selected<% } %> value="NLD">Netherlands</option>
+					<option <% if (contact.country == 'NCL') { %>selected<% } %> value="NCL">New Caledonia</option>
+					<option <% if (contact.country == 'NZL') { %>selected<% } %> value="NZL">New Zealand</option>
+					<option <% if (contact.country == 'NIC') { %>selected<% } %> value="NIC">Nicaragua</option>
+					<option <% if (contact.country == 'NER') { %>selected<% } %> value="NER">Niger</option>
+					<option <% if (contact.country == 'NGA') { %>selected<% } %> value="NGA">Nigeria</option>
+					<option <% if (contact.country == 'NIU') { %>selected<% } %> value="NIU">Niue</option>
+					<option <% if (contact.country == 'NKF') { %>selected<% } %> value="NFK">Norfolk Island</option>
+					<option <% if (contact.country == 'MNP') { %>selected<% } %> alue="MNP">Northern Mariana Islands</option>
+					<option <% if (contact.country == 'NOR') { %>selected<% } %> value="NOR">Norway</option>
+					<option <% if (contact.country == 'OMN') { %>selected<% } %> value="OMN">Oman</option>
+					<option <% if (contact.country == 'PAK') { %>selected<% } %>value="PAK">Pakistan</option>
+					<option <% if (contact.country == 'PLW') { %>selected<% } %> value="PLW">Palau</option>
+					<option <% if (contact.country == 'PSE') { %>selected<% } %> value="PSE">Palestinian Territory, Occupied</option>
+					<option <% if (contact.country == 'PAN') { %>selected<% } %> value="PAN">Panama</option>
+					<option <% if (contact.country == 'PNG') { %>selected<% } %> value="PNG">Papua New Guinea</option>
+					<option <% if (contact.country == 'PRY') { %>selected<% } %> value="PRY">Paraguay</option>
+					<option <% if (contact.country == 'PER') { %>selected<% } %> value="PER">Peru</option>
+					<option <% if (contact.country == 'PHL') { %>selected<% } %> value="PHL">Philippines</option>
+					<option <% if (contact.country == 'PCN') { %>selected<% } %> value="PCN">Pitcairn</option>
+					<option <% if (contact.country == 'POL') { %>selected<% } %> value="POL">Poland</option>
+					<option <% if (contact.country == 'PRT') { %>selected<% } %> value="PRT">Portugal</option>
+					<option <% if (contact.country == 'PRI') { %>selected<% } %> value="PRI">Puerto Rico</option>
+					<option <% if (contact.country == 'QAT') { %>selected<% } %> value="QAT">Qatar</option>
+					<option <% if (contact.country == 'REU') { %>selected<% } %> value="REU">Réunion</option>
+					<option <% if (contact.country == 'ROU') { %>selected<% } %> value="ROU">Romania</option>
+					<option <% if (contact.country == 'RUS') { %>selected<% } %> value="RUS">Russian Federation</option>
+					<option <% if (contact.country == 'RWA') { %>selected<% } %> value="RWA">Rwanda</option>
+					<option <% if (contact.country == 'BLM') { %>selected<% } %> value="BLM">Saint Barthélemy</option>
+					<option <% if (contact.country == 'SHN') { %>selected<% } %> value="SHN">Saint Helena, Ascension and Tristan da Cunha</option>
+					<option <% if (contact.country == 'KNA') { %>selected<% } %> value="KNA">Saint Kitts and Nevis</option>
+					<option <% if (contact.country == 'LCA') { %>selected<% } %> value="LCA">Saint Lucia</option>
+					<option <% if (contact.country == 'MAF') { %>selected<% } %> value="MAF">Saint Martin (French part)</option>
+					<option <% if (contact.country == 'SPM') { %>selected<% } %> value="SPM">Saint Pierre and Miquelon</option>
+					<option <% if (contact.country == 'VCT') { %>selected<% } %> value="VCT">Saint Vincent and the Grenadines</option>
+					<option <% if (contact.country == 'WSM') { %>selected<% } %> value="WSM">Samoa</option>
+					<option <% if (contact.country == 'SMR') { %>selected<% } %> value="SMR">San Marino</option>
+					<option <% if (contact.country == 'STP') { %>selected<% } %> value="STP">Sao Tome and Principe</option>
+					<option <% if (contact.country == 'SAU') { %>selected<% } %> value="SAU">Saudi Arabia</option>
+					<option <% if (contact.country == 'SEN') { %>selected<% } %> value="SEN">Senegal</option>
+					<option <% if (contact.country == 'SRB') { %>selected<% } %> value="SRB">Serbia</option>
+					<option <% if (contact.country == 'SYC') { %>selected<% } %> value="SYC">Seychelles</option>
+					<option <% if (contact.country == 'SLE') { %>selected<% } %> value="SLE">Sierra Leone</option>
+					<option <% if (contact.country == 'SGP') { %>selected<% } %> value="SGP">Singapore</option>
+					<option <% if (contact.country == 'SXM') { %>selected<% } %> value="SXM">Sint Maarten (Dutch part)</option>
+					<option <% if (contact.country == 'SVK') { %>selected<% } %> value="SVK">Slovakia</option>
+					<option <% if (contact.country == 'SVN') { %>selected<% } %> value="SVN">Slovenia</option>
+					<option <% if (contact.country == 'SLB') { %>selected<% } %> value="SLB">Solomon Islands</option>
+					<option <% if (contact.country == 'SOM') { %>selected<% } %> value="SOM">Somalia</option>
+					<option <% if (contact.country == 'ZAF') { %>selected<% } %> value="ZAF">South Africa</option>
+					<option <% if (contact.country == 'SGS') { %>selected<% } %> value="SGS">South Georgia and the South Sandwich Islands</option>
+					<option <% if (contact.country == 'SSD') { %>selected<% } %> value="SSD">South Sudan</option>
+					<option <% if (contact.country == 'ESP') { %>selected<% } %> value="ESP">Spain</option>
+					<option <% if (contact.country == 'LKA') { %>selected<% } %> value="LKA">Sri Lanka</option>
+					<option <% if (contact.country == 'SDN') { %>selected<% } %> value="SDN">Sudan</option>
+					<option <% if (contact.country == 'SUR') { %>selected<% } %>value="SUR">Suriname</option>
+					<option <% if (contact.country == 'SJM') { %>selected<% } %> value="SJM">Svalbard and Jan Mayen</option>
+					<option <% if (contact.country == 'SWZ') { %>selected<% } %> value="SWZ">Swaziland</option>
+					<option <% if (contact.country == 'SWE') { %>selected<% } %> value="SWE">Sweden</option>
+					<option <% if (contact.country == 'CHE') { %>selected<% } %> value="CHE">Switzerland</option>
+					<option <% if (contact.country == 'SYR') { %>selected<% } %> value="SYR">Syrian Arab Republic</option>
+					<option <% if (contact.country == 'TWN') { %>selected<% } %> value="TWN">Taiwan, Province of China</option>
+					<option <% if (contact.country == 'TJK') { %>selected<% } %> value="TJK">Tajikistan</option>
+					<option <% if (contact.country == 'TZA') { %>selected<% } %> value="TZA">Tanzania, United Republic of</option>
+					<option <% if (contact.country == 'THA') { %>selected<% } %> value="THA">Thailand</option>
+					<option <% if (contact.country == 'TLS') { %>selected<% } %> value="TLS">Timor-Leste</option>
+					<option <% if (contact.country == 'TGO') { %>selected<% } %> value="TGO">Togo</option>
+					<option <% if (contact.country == 'TKL') { %>selected<% } %> value="TKL">Tokelau</option>
+					<option <% if (contact.country == 'TON') { %>selected<% } %>value="TON">Tonga</option>
+					<option <% if (contact.country == 'TTO') { %>selected<% } %>value="TTO">Trinidad and Tobago</option>
+					<option <% if (contact.country == 'TUN') { %>selected<% } %> value="TUN">Tunisia</option>
+					<option <% if (contact.country == 'TUR') { %>selected<% } %> value="TUR">Turkey</option>
+					<option <% if (contact.country == 'TKM') { %>selected<% } %> value="TKM">Turkmenistan</option>
+					<option <% if (contact.country == 'TCA') { %>selected<% } %>value="TCA">Turks and Caicos Islands</option>
+					<option <% if (contact.country == 'TUV') { %>selected<% } %> value="TUV">Tuvalu</option>
+					<option <% if (contact.country == 'UGA') { %>selected<% } %> value="UGA">Uganda</option>
+					<option <% if (contact.country == 'UKR') { %>selected<% } %> value="UKR">Ukraine</option>
+					<option <% if (contact.country == 'ARE') { %>selected<% } %> value="ARE">United Arab Emirates</option>
+					<option <% if (contact.country == 'GBR') { %>selected<% } %> value="GBR">United Kingdom</option>
+					<option <% if (contact.country == 'USA') { %>selected<% } %> value="USA">United States</option>
+					<option <% if (contact.country == 'UMI') { %>selected<% } %> value="UMI">United States Minor Outlying Islands</option>
+					<option <% if (contact.country == 'URY') { %>selected<% } %> value="URY">Uruguay</option>
+					<option <% if (contact.country == 'UZB') { %>selected<% } %> value="UZB">Uzbekistan</option>
+					<option <% if (contact.country == 'VUT') { %>selected<% } %> value="VUT">Vanuatu</option>
+					<option <% if (contact.country == 'VEN') { %>selected<% } %> value="VEN">Venezuela, Bolivarian Republic of</option>
+					<option <% if (contact.country == 'VNM') { %>selected<% } %> value="VNM">Viet Nam</option>
+					<option <% if (contact.country == 'VGB') { %>selected<% } %> value="VGB">Virgin Islands, British</option>
+					<option <% if (contact.country == 'VIR') { %>selected<% } %> value="VIR">Virgin Islands, U.S.</option>
+					<option <% if (contact.country == 'WLF') { %>selected<% } %> value="WLF">Wallis and Futuna</option>
+					<option <% if (contact.country == 'ESH') { %>selected<% } %> value="ESH">Western Sahara</option>
+					<option <% if (contact.country == 'YEM') { %>selected<% } %> value="YEM">Yemen</option>
+					<option <% if (contact.country == 'ZMB') { %>selected<% } %> value="ZMB">Zambia</option>
+					<option <% if (contact.country == 'ZWE') { %>selected<% } %> value="ZWE">Zimbabwe</option>
+				</select>
+		 	</div>
+		</div>
+	</div>
+
+	<div class="form-block">
+		<!-- name info -->
+		<h5>Online</h5>
+		 <div class="row">
+		 	<div class="six columns title-info">
+		 		<label for="gender">website address:</label>
+		 		 <input class="u-full-width" type="text" name="web_address" value="<%= contact.web_address %>" />
+		 	</div>
+		</div>
+	</div>
+	
+
+	
+
+
+	
+
+
+
+
+<!-- 	<div class="form-block">
+		<h5>Address</h5>
+		 <div class="row">
+		</div>
+	</div> -->
+
+		
+
+		<!-- submit button -->
+		<input class="button button-primary" type ="submit" value="Save">
+	</form>
+
+	<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+
+  
+
+
+<link rel="stylesheet" href="/vendor/css/font-awesome.min.css">
+<script src="/vendor/js/tinymce/tinymce.min.js"></script>
+
+
+
+   <script>
+	 $(function(){
+
+
+
+		function readURL(input) {
+           var defaultImage = $("#preview-img").attr("data-img")
+			if (input.files && input.files[0]) {
+		        var reader = new FileReader();
+
+		        reader.onload = function (e) {
+		        	// console.log(e)
+		            $('#preview-img').css('background-image', "url("+  e.target.result + ")");
+		        }
+
+		        reader.readAsDataURL(input.files[0]);
+		    } else{
+
+		    	
+
+		    		$('#preview-img').css('background-image', "url("+ defaultImage +")");
+		    }
+		}
+
+		$("#image-file").change(function(){
+		    readURL(this);
+		});
+
+
+
+
+
+
+
+
+
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+			// var showToolbar = false
+			var showToolbar = [
+		    "undo redo | bold italic | bullist numlist | removeformat"
+		  ]
+		  tinymce.init({
+		  		forced_root_block : "", 
+			    force_br_newlines : false,
+			    force_p_newlines : false,
+		    
+				selector: "#description",
+				// content_style: "div{ border: #000 solid 3px}",
+				 plugins : "paste autolink lists charmap preview",
+				toolbar: showToolbar,
+				 menubar: false,
+				statusbar: false,
+				content_css : "/app/css/style.css",
+				default_link_target: "_blank",
+				target_list: false,
+				link_title: false,
+				paste_as_text: true,
+				paste_text_sticky : true,
+				paste_text_sticky_default: true,
+				link_assume_external_targets: true,
+				extended_valid_elements: 'a[href|target=_blank]',
+				browser_spellcheck: true,
+
+				theme_advanced_resizing: false,
+				 plugins: "autoresize",
+				 resize: false,
+				// content_style: "div  {border: #000 solid 3px;}"
+
+				 height: "300"
+
+		    });
+		}else{
+			var showToolbar = [
+		    "undo redo | bold italic | bullist numlist | removeformat"
+		  ]
+
+
+		  tinymce.init({
+			  	forced_root_block : "", 
+			    force_br_newlines : false,
+			    force_p_newlines : false,
+		    
+				selector: "#description",
+				// content_style: "div{ border: #000 solid 3px}",
+				plugins : "paste autolink lists charmap preview",
+				toolbar: showToolbar,
+				menubar: false,
+				statusbar: false,
+				content_css : "/app/css/style.css",
+				default_link_target: "_blank",
+				target_list: false,
+				link_title: false,
+				paste_as_text: true,
+				paste_text_sticky : true,
+				paste_text_sticky_default: true,
+				link_assume_external_targets: true,
+				extended_valid_elements: 'a[href|target=_blank]',
+				browser_spellcheck: true,
+				// theme_advanced_resizing: false,
+				// plugins: "autoresize",
+				// content_style: "div  {border: #000 solid 3px;}"
+
+				height: "300",
+
+		    });
+		}
+
+		    
+
+      
+
+   		
+  //  		$('#short-description').ready(function () {
+       	
+		// 	var max = 160;
+		// 	var len = $(this).val().length;
+		// 	console.log(this)
+
+		// 	v = $(this).val().substring(0,160)
+		// 	 $(this).val(v);
+
+
+		// 	if(len > max){
+		// 		$(this).val($(this).val().substring(0, len-1));
+		// 	}
+		// 	if (len >= max) {
+		// 	$('#short-description-count').text(' you have reached the limit');
+		// 	} else {
+		// 	var char = max - len;
+		// 	$('#short-description-count').text(char + ' characters left');
+		// 	 console.log(v)
+
+		// 	}
+		// })
+
+		var checkLength = function(field){
+			var max = 160;
+			var len = $(field).val().length;
+
+			v = $(field).val().substring(0,160)
+			 $(this).val(v);
+
+			
+			if(len > max){
+				$(this).val($(field).val().substring(0, len-1));
+			}
+			if (len >= max) {
+			$('#short-description-count').text(' you have reached the limit');
+			} else {
+			var char = max - len;
+			$('#short-description-count').text(char + ' characters left');
+			 console.log(v)
+
+			}
+		}
+		checkLength('#short-description');
+
+
+
+       	$('#short-description').keyup(function () {
+       	
+			var max = 160;
+			var len = $(this).val().length;
+
+			v = $(this).val().substring(0,160)
+			 $(this).val(v);
+
+
+			if(len > max){
+				$(this).val($(this).val().substring(0, len-1));
+			}
+			if (len >= max) {
+			$('#short-description-count').text(' you have reached the limit');
+			} else {
+			var char = max - len;
+			$('#short-description-count').text(char + ' characters left');
+			 console.log(v)
+
+			}
+		}).bind('keypress', function(e) {
+		  if ((e.keyCode || e.which) == 13) {
+		    return false;
+		  }
+		});
+
+
+      });
+  </script>
+
+  
+<% include ../_partials/footer %>

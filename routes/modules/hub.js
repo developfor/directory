@@ -21,9 +21,9 @@ var _ = require('underscore');
 
 var User = require('../../models/user.js');
 var Hub = require('../../models/hub.js');
-var Person = require('../../models/person.js');
+var Contact = require('../../models/contact.js');
 var Group = require('../../models/group.js');
-var PersonGroupJoin = require('../../models/person_group_join.js');
+var ContactGroupJoin = require('../../models/contact_group_join.js');
 
 
 module.exports = function(app) {
@@ -66,7 +66,7 @@ module.exports = function(app) {
 	// 	hub.description = req.body.description
 	// 	hub.user_owner_id = req.user._id
 
-	// 	hub.save(function (err, person) {
+	// 	hub.save(function (err, contact) {
 	// 	  if (err) return console.error(err);
 	// 	  res.redirect('/hubs');
 	// 	});	
@@ -121,9 +121,9 @@ module.exports = function(app) {
 					if(_.isEqual(user._id, hub.user_owner_id)){
 					  	var sort = {sort: {update_date: -1} } 
 
-					 //  	PersonGroupJoin.find({hub_id: element.hub_id, group_id: element._id, person_id: req.params.person_id }, function(err, personGroup){
+					 //  	ContactGroupJoin.find({hub_id: element.hub_id, group_id: element._id, contact_id: req.params.contact_id }, function(err, contactGroup){
 
-						// 		if(personGroup.length > 0){
+						// 		if(contactGroup.length > 0){
 						// 			// console.log("true")
 						// 	  	 	groups[index].checked = true;
 							  	 	
@@ -136,14 +136,14 @@ module.exports = function(app) {
 
 						// });
 
-						Person.find({hub_id: hub.id}, null, sort, function(err, persons){
+						Contact.find({hub_id: hub.id}, null, sort, function(err, contacts){
 
-							forEachAsync(persons, function (next, element, index, array) {
+							forEachAsync(contacts, function (next, element, index, array) {
 								// console.log(array[index]._id)
 
-								PersonGroupJoin.find({hub_id: hub.id, person_id: array[index]._id}, function(err, personGroup){
-									console.log(personGroup.length)
-									persons[index].groupCount = personGroup.length;
+								ContactGroupJoin.find({hub_id: hub.id, contact_id: array[index]._id}, function(err, contactGroup){
+									console.log(contactGroup.length)
+									contacts[index].groupCount = contactGroup.length;
 									next();
 								});
 
@@ -155,14 +155,14 @@ module.exports = function(app) {
 									forEachAsync(groups, function (next, element, index, array) {
 										// console.log(array[index]._id)
 
-										PersonGroupJoin.find({hub_id: hub.id, group_id: array[index]._id}, function(err, personGroup){
-											console.log(personGroup.length)
-											groups[index].groupCount = personGroup.length;
+										ContactGroupJoin.find({hub_id: hub.id, group_id: array[index]._id}, function(err, contactGroup){
+											console.log(contactGroup.length)
+											groups[index].groupCount = contactGroup.length;
 											next();
 										});
 
 									}).then(function(){ 
-										return res.render('hub/hub', { user: req.user, hub: hub, persons: persons, groups: groups});
+										return res.render('hub/hub', { user: req.user, hub: hub, contacts: contacts, groups: groups});
 
 									})
 
@@ -209,10 +209,10 @@ module.exports = function(app) {
 			// 	if(_.isEqual(user, hubOnwer)){
 			// 		var sort = {sort: {update_date: -1} } 
 
-			// 		Person.find({hub_id: hub.id}, null, sort, function(err, persons){
+			// 		Contact.find({hub_id: hub.id}, null, sort, function(err, contacts){
 			// 			Group.find({hub_id: hub.id},  null, {}, function(err, groups){	
 			// 				Event.find({hub_id: hub.id}, null, {}, function(err, events){
-			// 					return res.render('hub/hub', {user: req.user, hub: hub, persons: persons, groups: groups, events: events});
+			// 					return res.render('hub/hub', {user: req.user, hub: hub, contacts: contacts, groups: groups, events: events});
 			// 				  	console.log("equals")
 			// 			  	}).limit(5);	
 			// 		  	}).limit(5);
@@ -255,10 +255,10 @@ module.exports = function(app) {
 				if(_.isEqual(user, hubOnwer)){
 					var sort = {sort: {update_date: -1} } 
 
-					Person.find({hub_id: hub.id}, null, sort, function(err, persons){
+					Contact.find({hub_id: hub.id}, null, sort, function(err, contacts){
 						Group.find({hub_id: hub.id},  null, {}, function(err, groups){	
 							Event.find({hub_id: hub.id}, null, {}, function(err, events){
-								return res.render('hub/hub', {user: req.user, hub: hub, persons: persons, groups: groups, events: events});
+								return res.render('hub/hub', {user: req.user, hub: hub, contacts: contacts, groups: groups, events: events});
 							  	console.log("equals")
 						  	}).limit(5);	
 					  	}).limit(5);
@@ -346,15 +346,15 @@ module.exports = function(app) {
 
 	// 		if(_.isEqual(user, hubOwner)){
 
-	// 			// return Person.remove({_id: req.params.id}, function(err){
+	// 			// return Contact.remove({_id: req.params.id}, function(err){
 	// 			// 	// console.log("err: " + err);
 	// 			// 	if(err){ 	
-	// 			// 		req.flash('info', "Person not found.")
-	// 			// 		res.redirect('/persons');
+	// 			// 		req.flash('info', "Contact not found.")
+	// 			// 		res.redirect('/contacts');
 	// 			// 		return console.log("err++: " + err) 	
 	// 			// 	}			
 	// 			// 	console.log("delete");
-	// 			// 	res.redirect('/persons');
+	// 			// 	res.redirect('/contacts');
 	// 			// });
 
 	// 			hub.remove(function (err) {
@@ -365,16 +365,16 @@ module.exports = function(app) {
 	// 				res.redirect('/hub/' + req.params.id);
 	// 			});
 
-	// 			// return Person.remove({_id: req.params.person_id, hub_id: hub.id}, function(err, person){
-	// 			// 	if(err || person === null){ 	
-	// 			// 		req.flash('info', "Person not found.")
+	// 			// return Contact.remove({_id: req.params.contact_id, hub_id: hub.id}, function(err, contact){
+	// 			// 	if(err || contact === null){ 	
+	// 			// 		req.flash('info', "Contact not found.")
 	// 			// 		res.redirect('/hub/:id');
 	// 			// 		return console.log("err++: " + err) 	
 	// 			// 	}
-	// 			// 	console.log(person);
-	// 			// 	return res.redirect('/hub/'+ hub.id + '/persons' );
+	// 			// 	console.log(contact);
+	// 			// 	return res.redirect('/hub/'+ hub.id + '/contacts' );
 
-	// 			// 	// res.render('person/person', {person : person});
+	// 			// 	// res.render('contact/contact', {contact : contact});
 	// 			// })
 
 	  
