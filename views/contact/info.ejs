@@ -21,7 +21,8 @@
             </div>
              <div>
            <!--  <div id="i"> -->
-            
+                            <p><a>#hiphop</a>   <a>#artist</a>   <a>#nyc</a></p>
+
 
                <% if(contact.short_description){ %>
                <div>
@@ -33,13 +34,13 @@
               </div> 
             <% } %>
             
-
+           <div style="border-bottom: 3px solid #000; margin-bottom: 15px; padding-bottom: 15px;">
             <% if(contact.description){ %>
-              <div>
+              <div id="info" style="line-height: 28px; ">
                 <%- contact.description %>
               </div>
             <% } %>
-
+          </div>
 
               <% if(contact.job_title){ %>
 	              <span class="title-info">Job Title:</span>
@@ -100,7 +101,22 @@
 
       <!--  end row  -->
         </div>
-  
+    <script src="/app/js/readmore.min.js"></script>
+
+  <script>
+    $('#info').readmore({
+      moreLink: '<a href="#">Read More <span class="fa fa-chevron-circle-down"> </span></a>',
+       lessLink: '<a href="#">Read Less <span class="fa fa-chevron-circle-up"> </span></a>',
+      collapsedHeight: 84,
+      afterToggle: function(trigger, element, expanded) {
+        if(! expanded) { // The "Close" link was clicked
+          $('html, body').animate({scrollTop: element.offset().top}, {duration: 100});
+        }
+      }
+    });
+
+    $('article').readmore({speed: 500});
+  </script>
 
     <script>
 

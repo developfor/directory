@@ -110,7 +110,7 @@ module.exports = function(app) {
 	app.get('/@/:id/contacts', contactController.contacts);
 
 	// READ PERSON
-	app.get('/@/:id/contact/:contact_id', contactController.contact);
+	app.get('/@/:id/contact/:contact_id',  contactController.contactInfo);
 
 	// READ INFO
 	app.get('/@/:id/contact/:contact_id/info', contactController.contactInfo);

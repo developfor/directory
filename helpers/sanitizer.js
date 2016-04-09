@@ -4,7 +4,7 @@ var sanitize = function(dirty) {
 	var cleanedHTML = function(){
 		return sanitizeHtml(dirty, {
 		  // allowedTags: [ "p", "ul", "li", "ol", "a", "em", "strong", "br" ],
-		  allowedTags: [ "p" ],
+		  allowedTags: ["p", "br" ],
 
 		})
 	}
