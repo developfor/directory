@@ -61,7 +61,7 @@
       		                
       		                
       		                <div class="list-text-block">
-      		                	<p   ><span><%= (contact.first_name).trunc(25) %></span>		                  	
+      		                	<p   ><span><%=(contact.name).trunc(25) %></span>		                  	
       		                	</p>
                            <p class="edited-count"> Edited <span  data-livestamp="<%= contact.update_date %>"> </span><p>
                           <p class="edited-count"> <%= contact.groupCount %> Groups  <p>

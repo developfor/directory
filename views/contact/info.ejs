@@ -107,7 +107,7 @@
     $('#info').readmore({
       moreLink: '<a href="#">Read More <span class="fa fa-chevron-circle-down"> </span></a>',
        lessLink: '<a href="#">Read Less <span class="fa fa-chevron-circle-up"> </span></a>',
-      collapsedHeight: 84,
+      collapsedHeight: 200,
       afterToggle: function(trigger, element, expanded) {
         if(! expanded) { // The "Close" link was clicked
           $('html, body').animate({scrollTop: element.offset().top}, {duration: 100});

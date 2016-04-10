@@ -12,7 +12,7 @@ var Contact = new Schema({
 		type: String,
 		default: ""
 	},
-	first_name: {
+	name: {
 		type: String,
 		require: true,
 		index : "text",

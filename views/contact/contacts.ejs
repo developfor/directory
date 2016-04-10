@@ -38,7 +38,7 @@
                 </td>
             </tr>
             <div>
-	              <input id="p-search" name="first_name" class="u-full-width" type="text" placeholder="Contact Name" id="input-group-title" value="<%= query.first_name %>">
+	              <input id="p-search" name="name" class="u-full-width" type="text" placeholder="Contact Name" id="input-group-title" value="<%= query.name %>">
 
 	              <button id="p-search-button" class="button-primary" type="submit"><img src="/app/img/magnifying_glass_icon.png" > </button>
 	               <div>   
@@ -125,7 +125,7 @@
 					<a class="button button-primary" href="/@/<%= user.username %>/contact/<%= contact._id %>">Details</a>   
 				<div>
 					<div>
-						<span class="title-info"><%=  contact.first_name %></span>
+						<span class="title-info"><%=  contact.name %></span>
 					</div>
 					<div class="p-content-desc">
 						<span class="small-text" > <%= contact.short_description.trunc(70) %></span>
@@ -179,9 +179,9 @@
 			var uri = new URI(location.href)
 			var queries = uri.search(true)
 			var querySkip = parseInt(queries.skip) || 0;
-			queries.first_name = queries.first_name || "";
-			queries.last_name = queries.last_name || "";
-			var queriesPage = queries.first_name
+			queries.name = queries.name || "";
+			// queries.last_name = queries.last_name || "";
+			var queriesPage = queries.name
 
 			if( !($(".p-content").length >= 20) ){
 				$('#next').css("display", "none")
@@ -195,17 +195,17 @@
 			        console.log("begining")
 			    });
 			  $('#next').on("click", function (e) {
-					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1)
+					window.location.href = location.origin  + location.pathname + "?name=" + queries.name + "&skip=" + (querySkip + 1)
 			    });
 			  
 			  // console.log("queries.page")
 			  
 			}else{
 				$('#previous').on("click", function (e) {
-					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip - 1)
+					window.location.href = location.origin  + location.pathname + "?name=" + queries.name + "&skip=" + (querySkip - 1)
 			    });
 			    $('#next').on("click", function (e) {
-					window.location.href = location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1)
+					window.location.href = location.origin  + location.pathname + "?name=" + queries.name + "&skip=" + (querySkip + 1)
 			    });
 			   // console.log("ubhjbhjbhjed")
 			}
@@ -215,9 +215,7 @@
 		        $(this).closest("form").submit();
 		      });
 
-			// console.log(location.pathname)
-			// console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + querySkip)
-			// console.log(location.origin  + location.pathname + "?first_name=" + queries.first_name + "&last_name=" + queries.last_name + "&skip=" + (querySkip + 1))
+		
 
 
       });

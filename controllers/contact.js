@@ -84,7 +84,7 @@ var contactController = function(contactService, app ){
 			var randomString = token;
 
 			var requestBody = req.body;
-			var intials = requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase()
+			var intials = requestBody.name.replace(/\s+/g, '').charAt(0).toUpperCase()
 
 			var contact = new Contacts();
 			
@@ -96,9 +96,9 @@ var contactController = function(contactService, app ){
 			contact.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
 		  
-			contact.first_name = sanitize(requestBody.first_name).cleanedHTMLCHAR();
+			contact.name = sanitize(requestBody.name).cleanedHTMLCHAR();
 			
-			contact.lowercase_first_name = sanitize(requestBody.first_name.toLowerCase()).cleanedHTMLCHAR();
+			contact.lowercase_name = sanitize(requestBody.name.toLowerCase()).cleanedHTMLCHAR();
 
 			contact.job_title = sanitize(requestBody.job_title).noTagsCleanedHTML();
 			contact.gender = sanitize(requestBody.gender).cleanedHTMLCHAR();
@@ -182,7 +182,7 @@ var contactController = function(contactService, app ){
 			
 			if(_.isEqual(userId, hubOwner)){
 
-				var firstName = req.query.first_name || ""
+				var name = req.query.name || ""
 
 				var objType = req.query.obj_type  || ""
 
@@ -199,23 +199,22 @@ var contactController = function(contactService, app ){
 				 }
 
 				console.log(objType)
-				// firstName = firstName.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
 
 				 // if(req.query.obj_type != undefined){
 				 // 	console.log("all")
 				 // 	req.query.obj_type =  ""
 				 // }
 
-				 if(firstName.length <= 0){
+				 if(name.length <= 0){
 				 	if( objType === "" ){
 				 		var findText = {
 					 		hub_id: hub.id, 
-					 		first_name: new RegExp('^'+firstName.toLowerCase(), "i")
+					 		name: new RegExp('^'+name.toLowerCase(), "i")
 				 		} // , obj_type: "entity"
 					 }else{
 				 		var findText = {
 					 		hub_id: hub.id, 
-					 		first_name: new RegExp('^'+firstName.toLowerCase(), "i"), 
+					 		name: new RegExp('^'+name.toLowerCase(), "i"), 
 					 		obj_type: objType  
 				 		}
 
@@ -223,35 +222,34 @@ var contactController = function(contactService, app ){
 				 	var sort = {sort: {update_date: -1} } 
 				 	// console.log("empty")
 				 }else{
-				 	// var findText =  {hub_id: hub.id, first_name:{    $regex : ".*"+firstName+"*"}} //firstName.toLowerCase() }
-				 	// var findText =  {hub_id: hub.id, first_name:{ $text: { $search: firstName } }}
+				 	
 				 	if(objType === "" ){
 					 	var findText =  {
 					 		hub_id: hub.id, 
-					 		$text : { $search: "\"" +firstName.toLowerCase() +"\""  }
+					 		$text : { $search: "\"" +name.toLowerCase() +"\""  }
 					        }
 					}else{
 						var findText =  {
 					 		hub_id: hub.id, 
-					 		$text : { $search: "\"" +firstName.toLowerCase() +"\""  },
+					 		$text : { $search: "\"" +name.toLowerCase() +"\""  },
 					 		obj_type: objType
 					        }
 
 					}
-				 	var sort = {sort: {lowercase_first_name: 1}} 
+				 	var sort = {sort: {lowercase_name: 1}} 
 					// console.log("full")
 				 }
 
 				if(objType === "" ){
 					var findTextAgain = {
 						hub_id: hub.id, 
-						first_name : new RegExp('^'+firstName.toLowerCase(), "i")
-						// $text :/.* firstName .*/
+						name : new RegExp('^'+name.toLowerCase(), "i")
+						// $text :/.* name .*/
 					}
 				}else{
 					var findTextAgain = {
 						hub_id: hub.id, 
-						first_name : new RegExp('^'+firstName.toLowerCase(), "i"),
+						name : new RegExp('^'+name.toLowerCase(), "i"),
 						obj_type: objType 
 					}
 				}
@@ -264,7 +262,7 @@ var contactController = function(contactService, app ){
 				
 				 console.log(res)
 
-				// Contacts.find({hub_id: hub.id, lowercase_first_name: new RegExp('^'+firstName.toLowerCase(), "i")}, null, sort, function(err, contacts){
+				// Contacts.find({hub_id: hub.id, lowercase_name: new RegExp('^'+name.toLowerCase(), "i")}, null, sort, function(err, contacts){
 				Contacts.find(findText, null, sort, function(err, contacts){
 					console.log(contacts.length === 0)
 
@@ -276,7 +274,7 @@ var contactController = function(contactService, app ){
 					if(contacts.length === 0){
 
 
-						// Contacts.find( {hub_id: hub.id, lowercase_first_name:  new RegExp('^'+firstName.toLowerCase(), "i") }, null, sort, function(err, contacts){
+						// Contacts.find( {hub_id: hub.id, lowercase_name:  new RegExp('^'+name.toLowerCase(), "i") }, null, sort, function(err, contacts){
 						Contacts.find( findTextAgain, null, sort, function(err, contacts){
 						    // console.log("}}}}}}}}}}}}}}}}}}}}}}}}}length")
 						    return res.render('contact/contacts', {hub: hub, contacts: contacts, query: req.query, user: user});
@@ -337,7 +335,7 @@ var contactController = function(contactService, app ){
 					var pmiddle = contact.middle_name || "";	
 					var psuffix = contact.suffix || "";
 
-					var title = contact.first_name;
+					var title = contact.name;
 
 					res.render('contact/contact', {title: title, user: user, contact: contact, hub: hub, updateDate: updateDate, creationDate: creationDate   });
 				})
@@ -410,7 +408,7 @@ var contactController = function(contactService, app ){
 						contact.birthday = moment(contact.birthday).format("LL")
 					}
 					
-					var title = contact.first_name;
+					var title = contact.name;
 
 
 					res.render('contact/info', {title: title, contact : contact, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate   });
@@ -480,7 +478,7 @@ var contactController = function(contactService, app ){
 							var pmiddle = contact.middle_name || "";	
 							var psuffix = contact.suffix || "";
 							console.log(groupArray);
-							var title = contact.first_name;
+							var title = contact.name;
 							res.render('contact/groups', {title: title, contact : contact, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate, groupArray: groupArray });
 
 
@@ -688,7 +686,7 @@ var contactController = function(contactService, app ){
 					var randomString = token;
 					var requestBody = req.body;
 
-					var intials = requestBody.first_name.replace(/\s+/g, '').charAt(0).toUpperCase()
+					var intials = requestBody.name.replace(/\s+/g, '').charAt(0).toUpperCase()
 
 				
 					
@@ -704,8 +702,8 @@ var contactController = function(contactService, app ){
 					contact.obj_type = sanitize(requestBody.obj_type).personEntity();
 
 
-					contact.first_name = sanitize(requestBody.first_name).cleanedHTMLCHAR();
-					contact.lowercase_first_name = sanitize(requestBody.first_name.toLowerCase()).cleanedHTMLCHAR();
+					contact.name = sanitize(requestBody.name).cleanedHTMLCHAR();
+					contact.lowercase_name = sanitize(requestBody.name.toLowerCase()).cleanedHTMLCHAR();
 
 					contact.job_title = sanitize(requestBody.job_title).noTagsCleanedHTML();
 					contact.gender = sanitize(requestBody.gender).cleanedHTMLCHAR();
@@ -819,7 +817,7 @@ var contactController = function(contactService, app ){
 
 
 					console.log("-----------------");
-					console.log(contact.first_name);
+					console.log(contact.name);
 					console.log("-----------------");
 					deleteImgFile(contact.img_foldername);
 				
