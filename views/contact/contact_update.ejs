@@ -15,7 +15,7 @@
 		</a>
     </div>
     <div style="margin-left: 5px; width: 60%;">
-    	<p class="title-info"  ><a href="/@/<%= user.username %>/contact/<%= contact._id %>"><%= contact.first_name  %></a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= contact.update_date %>"> </span> <%= contact.update_date %></span>   -->
+    	<p class="title-info"  ><a href="/@/<%= user.username %>/contact/<%= contact._id %>"><%= contact.name  %></a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= contact.update_date %>"> </span> <%= contact.update_date %></span>   -->
     	</p>
 
  
@@ -70,16 +70,11 @@
 	<div class="form-block">
 		<!-- name info -->
 		<h5>Contact Name</h5>
-		<!-- <div class="row">
-			<div class="six columns title-info">
-                <label for="FirstName">title:</label>
-                <input class="u-full-width" type="text" name="title" value="<%= contact.title %>"/>
-            </div>
-		</div> -->
+		
       	<div class="row ">   
             <div class="six columns title-info">
-                <label for="FirstName">Name:<span  style="color: #E23B3B;">*</span></label>
-                <input class="u-full-width" type="text" name="first_name" value="<%= contact.first_name %>"/>
+                <label for="Name">Name:<span  style="color: #E23B3B;">*</span></label>
+                <input class="u-full-width" type="text" name="name" value="<%= contact.name %>"/>
         	</div>
 	  
         <!-- 	<div class="four columns title-info">
