@@ -84,6 +84,7 @@ var contactController = function(contactService, app ){
 			var randomString = token;
 
 			var requestBody = req.body;
+			requestBody.name = requestBody.name || ""
 			var intials = requestBody.name.replace(/\s+/g, '').charAt(0).toUpperCase()
 
 			var contact = new Contacts();
@@ -685,7 +686,7 @@ var contactController = function(contactService, app ){
 					var token = crypto.randomBytes(8).toString('hex') + "_" +Date.now(); 
 					var randomString = token;
 					var requestBody = req.body;
-
+					requestBody.name = requestBody.name || ""
 					var intials = requestBody.name.replace(/\s+/g, '').charAt(0).toUpperCase()
 
 				
@@ -712,6 +713,11 @@ var contactController = function(contactService, app ){
 
 					contact.short_description = sanitize(requestBody.short_description).noTagsCleanedHTML();
 					contact.description = sanitize(requestBody.description).cleanedHTML();
+					
+
+					// contact.headline = sanitize(requestBody.headline).noTagsCleanedHTML();
+					// contact.about = sanitize(requestBody.about).cleanedHTML();
+
 
 					contact.email = sanitize(requestBody.email).noTagsCleanedHTML();
 					contact.primary_phone = sanitize(requestBody.primary_phone).noTagsCleanedHTML();

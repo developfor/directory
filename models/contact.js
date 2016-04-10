@@ -96,6 +96,16 @@ var Contact = new Schema({
 	},
 
 
+	headline:{
+	type: String,
+	default: ""
+	},
+
+	about:{
+	type: String,
+	default: ""
+	},
+
 
 	// ----- contact info -------
 	email: {
