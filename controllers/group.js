@@ -371,7 +371,7 @@ var groupController = function(){
 		    group.lowercase_title = sanitize(requestBody.title.toLowerCase()).noTagsCleanedHTML();
 			
 									
-			group.short_description = sanitize(requestBody.short_description).noTagsCleanedHTML();
+			group.headline = sanitize(requestBody.headline).noTagsCleanedHTML();
 			group.description = sanitize(requestBody.description).cleanedHTML();
 
 
@@ -527,7 +527,7 @@ var groupController = function(){
 				    group.lowercase_title = sanitize(requestBody.title.toLowerCase()).noTagsCleanedHTML();
 					
 											
-					group.short_description = sanitize(requestBody.short_description).noTagsCleanedHTML();
+					group.headline = sanitize(requestBody.headline).noTagsCleanedHTML();
 					group.description = sanitize(requestBody.description).cleanedHTML();
 
 

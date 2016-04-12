@@ -52,16 +52,16 @@
 		<h5>Description</h5>
 		 <div class="row">
 		 	<div class=" columns title-info">
-		 		<label for="gender">Short Description:</label>
-		 		<textarea  contenteditable="true" spellcheck="true" class="u-full-width" id="short-description" type="text" name="short_description" /><%= contact.short_description %></textarea>
+		 		<label for="gender">Headline:</label>
+		 		<textarea  contenteditable="true" spellcheck="true" class="u-full-width" id="short-description" type="text" name="headline" /><%= contact.headline %></textarea>
 		 		<div id="short-description-count"></div>
 		 	</div>
 		</div>
 
 		<div class="row">
 		 	<div class=" columns title-info">
-		 		<label for="gender">Detailed Description:</label>
-		 		<textarea contenteditable="true" spellcheck="true" class="u-full-width"  id="description" type="text" name="description"  ><%= contact.description %></textarea>
+		 		<label for="gender">About:</label>
+		 		<textarea contenteditable="true" spellcheck="true" class="u-full-width"  id="about" type="text" name="about"  ><%= contact.about %></textarea>
 		 		
 		 	</div>
 		</div>
@@ -577,10 +577,10 @@
   
 
 		var checkLength = function(field){
-			var max = 160;
+			var max = 70;
 			var len = $(field).val().length;
 
-			v = $(field).val().substring(0,160)
+			v = $(field).val().substring(0,max)
 			$(this).val(v);
 
 			
@@ -602,7 +602,7 @@
 			var max = 70;
 			var len = $(this).val().length;
 
-			v = $(this).val().substring(0,160)
+			v = $(this).val().substring(0,max)
 			 $(this).val(v);
 
 

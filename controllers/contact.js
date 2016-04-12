@@ -106,8 +106,8 @@ var contactController = function(contactService, app ){
 
 			contact.birthday = new Date(requestBody.birth_month + " " + requestBody.birth_day + " " + requestBody.birth_year)
 
-			contact.short_description = sanitize(requestBody.short_description).noTagsCleanedHTML();
-			contact.description = sanitize(requestBody.description).cleanedHTML();
+			contact.headline = sanitize(requestBody.headline).noTagsCleanedHTML();
+			contact.about = sanitize(requestBody.about).cleanedHTML();
 
 			contact.email = sanitize(requestBody.email).noTagsCleanedHTML();
 
@@ -175,7 +175,6 @@ var contactController = function(contactService, app ){
 	// Read Contactss
 	var contacts = function (req, res) {
 		var readContactss = function(hub){
-			// console.log("contacts")
 
 			var hubOwner = hub.user_owner_id
 			var userId = req.user._id
@@ -201,17 +200,14 @@ var contactController = function(contactService, app ){
 
 				console.log(objType)
 
-				 // if(req.query.obj_type != undefined){
-				 // 	console.log("all")
-				 // 	req.query.obj_type =  ""
-				 // }
+			
 
 				 if(name.length <= 0){
 				 	if( objType === "" ){
 				 		var findText = {
 					 		hub_id: hub.id, 
 					 		name: new RegExp('^'+name.toLowerCase(), "i")
-				 		} // , obj_type: "entity"
+				 		} 
 					 }else{
 				 		var findText = {
 					 		hub_id: hub.id, 
@@ -221,7 +217,7 @@ var contactController = function(contactService, app ){
 
 					 	}
 				 	var sort = {sort: {update_date: -1} } 
-				 	// console.log("empty")
+				 	
 				 }else{
 				 	
 				 	if(objType === "" ){
@@ -238,14 +234,14 @@ var contactController = function(contactService, app ){
 
 					}
 				 	var sort = {sort: {lowercase_name: 1}} 
-					// console.log("full")
+				
 				 }
 
 				if(objType === "" ){
 					var findTextAgain = {
 						hub_id: hub.id, 
 						name : new RegExp('^'+name.toLowerCase(), "i")
-						// $text :/.* name .*/
+					
 					}
 				}else{
 					var findTextAgain = {
@@ -254,16 +250,10 @@ var contactController = function(contactService, app ){
 						obj_type: objType 
 					}
 				}
-				// if(req.query.obj_type === "all" ){
-				 // 	console.log("all")
-
-
-				 // }
-
+			
 				
 				 console.log(res)
 
-				// Contacts.find({hub_id: hub.id, lowercase_name: new RegExp('^'+name.toLowerCase(), "i")}, null, sort, function(err, contacts){
 				Contacts.find(findText, null, sort, function(err, contacts){
 					console.log(contacts.length === 0)
 
@@ -275,9 +265,7 @@ var contactController = function(contactService, app ){
 					if(contacts.length === 0){
 
 
-						// Contacts.find( {hub_id: hub.id, lowercase_name:  new RegExp('^'+name.toLowerCase(), "i") }, null, sort, function(err, contacts){
 						Contacts.find( findTextAgain, null, sort, function(err, contacts){
-						    // console.log("}}}}}}}}}}}}}}}}}}}}}}}}}length")
 						    return res.render('contact/contacts', {hub: hub, contacts: contacts, query: req.query, user: user});
 						})
 					}else{
@@ -285,14 +273,13 @@ var contactController = function(contactService, app ){
 
 					}
 					
-					// console.log(contact) 
 				}).limit(20).skip(req.query.skip*20);
 				return;
 
 	  
 			} else {
-				console.log("not equals");
-				// console.log(req);
+			  console.log("not equals");
+
 			  return res.redirect('/');
 			}		
 			
@@ -343,9 +330,8 @@ var contactController = function(contactService, app ){
 
 			} else {
 				console.log("not equals");
-				// console.log(req);
-			  // return res.redirect('/hubs');
-			  res.send('404: Page not Found', 404);
+			
+			 	res.send('404: Page not Found', 404);
 			}			
 		}
 		return hubchecker(req, res, readContacts)
@@ -417,9 +403,8 @@ var contactController = function(contactService, app ){
 
 			} else {
 				console.log("not equals");
-				// console.log(req);
-			  // return res.redirect('/hubs');
-			  res.send('404: Page not Found', 404);
+			
+			  	res.send('404: Page not Found', 404);
 			}
 
 		}
@@ -448,15 +433,14 @@ var contactController = function(contactService, app ){
 
 				ContactsGroupJoin.find({contact_id: req.params.contact_id, hub_id: hub.id}, function(err, groupJoins){		
 
-					// console.log(groupJoins)
 					var groupArray = [];
 
 
 					forEachAsync(groupJoins, function (next, element, index, array) {
 						Group.find({_id: element.group_id, hub_id: element.hub_id}, function(err, group){
-							// console.log(group);
+							
 							groupArray.push(group[0])
-							// console.log(groupArray)
+					
 							next()
 						})
 
@@ -471,7 +455,6 @@ var contactController = function(contactService, app ){
 								res.redirect('/@/:id');
 								return console.log("err++: " + err) 	
 							}
-							// console.log(contact);
 							var updateDate = contact.update_date.getTime();
 							var creationDate = contact.creation_date.getTime();
 
@@ -489,22 +472,13 @@ var contactController = function(contactService, app ){
 					    
 					});
 
-				    // _.each(groupJoins, function(){}, console.log("complete"));
-					// groupJoins.forEach(function(entry){	
-					// 	console.log(entry.group_id);	 
-					// 	Group.find({_id: entry.group_id, hub_id: entry.hub_id}, function(err, group){
-					// 		console.log(group);
-					// 	})
-					// })
-
 		
 					
 				})
 			} else {
 				console.log("not equals");
-				// console.log(req);
-			  // return res.redirect('/hubs');
-			  res.send('404: Page not Found', 404);
+			
+			  	res.send('404: Page not Found', 404);
 			}
 
 		}
@@ -533,11 +507,9 @@ var contactController = function(contactService, app ){
 						ContactsGroupJoin.find({hub_id: element.hub_id, group_id: element._id, contact_id: req.params.contact_id }, function(err, contactGroup){
 
 								if(contactGroup.length > 0){
-									// console.log("true")
 							  	 	groups[index].checked = true;
 							  	 	
 							  	} else {
-							  		// console.log("false")
 							  	 	groups[index].checked = false;
 							  	}
 
@@ -546,11 +518,7 @@ var contactController = function(contactService, app ){
 						});
 					}).then(function () {
 					    console.log('All requests have finished');
-						   // console.log(groups); 
-						   console.log(groups)
 					    res.render('contact/add_groups', {groups : groups, user:user, contact: contact});
-					     // console.log(groups);
-
 					});
 				});
 
@@ -577,7 +545,6 @@ var contactController = function(contactService, app ){
 			contactGroupJoin.group_id = mongoose.Types.ObjectId(req.body.group_id);
 			contactGroupJoin.contact_id = mongoose.Types.ObjectId(req.params.contact_id);
 
-			// console.dir(contact_group_join)
 
 			contactGroupJoin.save(function (err, contact_group) {
 				if(err || contact_group === null){ 	
@@ -585,7 +552,6 @@ var contactController = function(contactService, app ){
 					res.redirect('/@/' + req.params.id+ '/add_group');
 					return console.log("err++: " + err) 	
 				}	
-				// res.redirect('/hub/' + req.params.id+ '/groups');
 				console.log("add contact <<<<<<<<<<<<<<")
 				res.send('Completed add contact');
 
@@ -609,7 +575,6 @@ var contactController = function(contactService, app ){
 				contact_id: req.params.contact_id,
 
 			}, function(err, hub){
-					// console.log(hub)
 					console.log("remove contact <<<<<<<<<<<<<<")
 
 					res.send('Completed remove contact');
@@ -711,13 +676,8 @@ var contactController = function(contactService, app ){
 
 					contact.birthday = new Date(requestBody.birth_month + " " + requestBody.birth_day + " " + requestBody.birth_year)
 
-					contact.short_description = sanitize(requestBody.short_description).noTagsCleanedHTML();
-					contact.description = sanitize(requestBody.description).cleanedHTML();
-					
-
-					// contact.headline = sanitize(requestBody.headline).noTagsCleanedHTML();
-					// contact.about = sanitize(requestBody.about).cleanedHTML();
-
+					contact.headline = sanitize(requestBody.headline).noTagsCleanedHTML();
+					contact.about = sanitize(requestBody.about).cleanedHTML();
 
 					contact.email = sanitize(requestBody.email).noTagsCleanedHTML();
 					contact.primary_phone = sanitize(requestBody.primary_phone).noTagsCleanedHTML();
@@ -781,8 +741,7 @@ var contactController = function(contactService, app ){
 	  
 			} else {
 				console.log("not equals");
-				// console.log(req);
-			  return res.redirect('/');
+			  	return res.redirect('/');
 			}
 
 
@@ -843,8 +802,7 @@ var contactController = function(contactService, app ){
 						
 			} else {
 				console.log("not equals");
-				// console.log(req);
-			  return res.redirect('/');
+			  	return res.redirect('/');
 			}
 
 		}

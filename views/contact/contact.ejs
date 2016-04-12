@@ -24,20 +24,20 @@
             </div>
             <div>
             <!-- <div id="i"> -->
-            <% if(contact.short_description){ %>
+            <% if(contact.headline){ %>
                <div>
                 <span class="title-info">Brief Description:</span><br>
                 <p> 
-                  <%= contact.short_description %>
+                  <%= contact.headline %>
                 </p>
               </div> 
             <% } %>
             
 
-            <% if(contact.description){ %>
+            <% if(contact.about){ %>
               <div>
-                <span class="title-info ">Detailed Description:</span><br>
-                <%- contact.description %>
+                <span class="title-info ">About:</span><br>
+                <%- contact.about %>
               </div>
             <% } %>
             

@@ -1,29 +1,31 @@
 <% include ../_partials/header %>
-
-
-    <% include ../_partials/user_navigation.ejs %>
-
-  
+<% include ../_partials/user_navigation.ejs %>
+<b> Add or Remove Groups from <%= contact.name  %></b>
  <div>
+
     <div style="float: left;">
 	    <a href="/@/<%= user.username %>/contact/<%= contact._id %>/groups">
 			<%  if(contact.img_foldername && contact.img_thumbnail){ %>
-				<img style="background-color: #666; height: 30px; width: 30px;     border: 3px solid #000;" src="/uploads/img/<%= contact.img_foldername %>/<%=  contact.img_icon  %>"> 
+
+				<img class="icon-profile-image" style="background-image: url(/uploads/img//<%= contact.img_foldername %>/<%=  contact.img_icon  %>); " src="/app/img/no-image_clear.png">
+
+
 			<% }else{  %>
-				<img style="background-color: #<%= contact.hex_color %>; height: 30px; width: 30px; border: 3px solid #000;" src="/app/img/no-image.png" >
+				<img class="icon-profile-image" style="background-image: url(<%= contact.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
 			<% }  %>
 		</a>
     
     </div>
     <div style="margin-left: 5px; width: 60%;">
-    	<p class="title-info"  ><a href="/@/<%= user.username %>/contact/<%= contact._id %>/groups"><%= contact.first_name  %></a>		                  	<!-- <span class="date-small"  > <span data-livestamp="<%= contact.update_date %>"> </span> <%= contact.update_date %></span>   -->
+    	<p class="title-info">
+    		<a href="/@/<%= user.username %>/contact/<%= contact._id %>/groups"> <i class="fa fa-arrow-circle-left  " aria-hidden="true"></i> <%= contact.name  %></a>		                  
     	</p>
 
- 
     </div>
 
+
+
 </div>
- <!-- border: 3px solid #000; -->
 	<% if(groups.length === 0){ %> 
 		<p>There are no groups.</p>
 		<div class="button-area space-up">
@@ -36,38 +38,29 @@
 		
 		
 
-	<% groups.forEach(function(name){ %>
-	<!-- <%= JSON.stringify(name._id) %> -->
+<% groups.forEach(function(name){ %>
 	<%  if(name.checked === true) { %>
-	
-     <li style="">
- 		<div class="check-element-box p-content">
- 			<div >
-	 			<!-- <a href="/@/<%= user.username %>/group/<%= name._id %>"> -->
-	 			<div class="fancy-toggle-button">
-	 				<%  if(name.img_foldername && name.img_thumbnail){ %>
-			        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
-	        		<% }else{  %>
-	        			 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
-	        		<% }  %>
-	        	
-	        	<!-- </a> -->
-		            <div class="Checkbox Module fancyToggle on styledToggle">
-			            <div class="slider"></div>
-			            <div class="onText status"></div>
-			            <div class="offText status"></div>
-		 				<input type="checkbox" name="group" value="<%= name._id %>" checked></div>
-		            </div>
-		    </div>
-        
- 				<div >
- 					<p class="title-info"><span><%= name.title %></span></p>
- 					<p class="small-text" style="font-size: 12px;"><span> <%= name.short_description %></span>		                  
- 					</p>
- 				</div>
+	     <li style="">
+	 		<div class="check-element-box p-content">
+	 			<div >
+		 			<div class="fancy-toggle-button">
+		 				<%  if(name.img_foldername && name.img_thumbnail){ %>
+				        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
+		        		<% }else{  %>
+		        			 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+		        		<% }  %>
+						<div class="fancyToggle fa fa-check-square-o fa-2x" style="color: #4683B7;" data-name="<%= name._id %>" data-toggle="on"> </div>
+			        </div>
+			    </div>
+	        
+	 				<div >
+	 					<p class="title-info"><span><%= name.title %></span></p>
+	 					<p class="small-text" style="font-size: 12px;"><span> <%= name.headline %></span>		                  
+	 					</p>
+	 				</div>
 
- 		</div>
- 	</li>
+	 		</div>
+	 	</li>
 
 
 
@@ -76,123 +69,87 @@
 	<%  } else { %>
 
 	
-     <li style="">
- 		<div class="check-element-box p-content">
- 			<div >
-	 			<!-- <a href="/@/<%= user.username %>/group/<%= name._id %>"> -->
-	 			<div class="fancy-toggle-button">
-	 				<%  if(name.img_foldername && name.img_thumbnail){ %>
-			        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
-	        		<% }else{  %>
-	        			 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
-	        		<% }  %>
-	        	
-	        	<!-- </a> -->
-		            <div class="Checkbox Module fancyToggle  styledToggle">
-			            <div class="slider"></div>
-			            <div class="onText status"></div>
-			            <div class="offText status"></div>
-		 				<input type="checkbox" name="group" value="<%= name._id %>" ></div>
-		            </div>
-		    </div>
+	     <li style="">
+	 		<div class="check-element-box p-content">
+	 			<div >
+		 			<div class="fancy-toggle-button">
+		 				<%  if(name.img_foldername && name.img_thumbnail){ %>
+				        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
+		        		<% }else{  %>
+		        			 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+		        		<% }  %>
+		        		<div class="fancyToggle fa fa-square-o fa-2x" style="color: #4683B7;" data-name="<%= name._id %>" data-toggle="off"> </div>        
+			        </div> 
+			   	</div>
+	 				<div>
+	 					<p class="title-info"><span><%= name.title %></span>		                  
+	 					</p>
 
+	 					<p class="small-text" style="font-size: 12px;"><span> <%= name.headline %></span>		                  
+	 					</p>
+	 				</div>
+	 		</div>
+	 	</li>
 
-
-
-
-
-
-
-
-
-        
- 				<div >
- 					<p class="title-info"><span><%= name.title %></span>		                  
- 					</p>
-
- 					<p class="small-text" style="font-size: 12px;"><span> <%= name.short_description %></span>		                  
- 					</p>
- 				</div>
-
- 		</div>
- 	</li>
-
-		
-
-
-
-
-
-		
+	
 		<% } %>
 	<% }) %>
 	</div>
 </form>
 
-
-  <script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
-
-
-
-
-  <script>
-
-   $(".p-content-list li").matchHeight();
-
-   	$(".fancy-toggle-button").on("click", function(){
-   		console.log("click")
-   		$( this ).children( ".fancyToggle" ).click();
-   	});
-
-	$(".fancyToggle").on("click", function(e) {
-	       $( this ).toggleClass("on");
-	  
-	    if ($(this).children('input').is(':checked')){
-	    	$.ajax({
-				  type: "DELETE",
-				  url: location.pathname,
-				  data: {'group_id': this.getElementsByTagName("input")[0].defaultValue},
-				  success: "success",
-				  dataType: "dataType"
-				});
-
-	      // console.log("unchecked");
-		    $(this).children('input').prop( "checked", false );
-	     //  console.log( this.getElementsByTagName("input")[0].defaultValue);
-	     return false;
-
-
-	    }else{
-
-	    	$.ajax({
-				  type: "POST",
-				  url: location.pathname,
-				  data: {'group_id': this.getElementsByTagName("input")[0].defaultValue},
-				  success: "success",
-				  dataType: "dataType"
-				});
-
-	    	
-	       // console.log("checked"); 
-	       $(this).children('input').prop( "checked", true );
-	       return false;
-
-	    }
-
-	  // e.preventDefault();
-	  //   e.stopPropagation();
-	   return false;
-
-	});
-
-
-
- 
-
-</script>
-
 <!-- footer start -->
 
 
 <% include ../_partials/footer %>
+
+
+<script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
+
+
+
+
+<script>
+   $(".p-content-list li").matchHeight();
+
+   	$(".fancy-toggle-button img").on("click", function(event){
+   		console.log($(this).siblings(".fancyToggle").click())
+   		return false
+   	});
+
+	$(".fancyToggle").on("click", function(e) {
+    	if ($(this).data().toggle === "on"){
+    		$(this).removeClass("fa-check-square-o")
+    		$(this).addClass("fa-square-o")
+    		$(this).data("toggle", "off")
+    		 
+    		$.ajax({
+				type: "DELETE",
+				url: location.pathname,
+				data: {'group_id': $(this).data().name},
+				success: "success",
+				dataType: "dataType"
+			});
+			return false
+    	}
+
+    	if ($(this).data().toggle === "off"){
+    		console.log("off")
+    		$(this).removeClass("fa-square-o")
+    		$(this).addClass("fa-check-square-o")
+    	    $(this).data("toggle", "on")
+    	    $.ajax({
+				type: "POST",
+				url: location.pathname,
+				data: {'group_id': $(this).data().name},
+				success: "success",
+				dataType: "dataType"
+			});
+    		 return false
+    	}
+    	return false
+	});
+
+</script>
+
+
 

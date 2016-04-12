@@ -22,7 +22,7 @@ var Contact = new Schema({
 	 //      },
 	     message: '{VALUE} is not a valid name!'
 	},
-	lowercase_first_name:{
+	lowercase_name:{
 		type: String,
 		require: true,
 		// validate: /\S+$/,
@@ -85,15 +85,15 @@ var Contact = new Schema({
 
 
 	// ----- description info -------
-	short_description: {
-		type: String,
-		default: ""
-	},
+	// headline: {
+	// 	type: String,
+	// 	default: ""
+	// },
 
-	description: {
-		type: String,
-		default: ""
-	},
+	// description: {
+	// 	type: String,
+	// 	default: ""
+	// },
 
 
 	headline:{

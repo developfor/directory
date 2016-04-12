@@ -101,16 +101,16 @@
 		<h5>Description</h5>
 		 <div class="row">
 		 	<div class=" columns title-info">
-		 		<label for="gender">Short Description:</label>
-		 		<textarea class="u-full-width" id="short-description" type="text" name="short_description" /><%= contact.short_description %></textarea>
-		 		<div id="short-description-count"></div>
+		 		<label for="headline">Headline:</label>
+		 		<textarea class="u-full-width" id="headline" type="text" name="headline" /><%= contact.headline %></textarea>
+		 		<div id="headline-count"></div>
 		 	</div>
 		</div>
 
 		<div class="row">
 		 	<div class=" columns title-info">
-		 		<label for="gender">Detailed Description:</label>
-		 		<textarea class="u-full-width"  id="description" type="text" name="description"  ><%= contact.description %></textarea>
+		 		<label for="about">About:</label>
+		 		<textarea class="u-full-width"  id="about" type="text" name="about"  ><%= contact.about %></textarea>
 		 		
 		 	</div>
 		</div>
@@ -617,7 +617,7 @@
 			    force_p_newlines : true,
 		    
 		    
-				selector: "#description",
+				selector: "#about",
 				plugins : "paste autolink lists charmap preview",
 				toolbar: showToolbar,
 				menubar: false,
@@ -655,7 +655,7 @@
 			 //    remove_redundant_brs : true,
 				// remove_trailing_brs : true,
 		    
-				selector: "#description",
+				selector: "#about",
 				plugins : "paste autolink lists charmap preview",
 				toolbar: showToolbar,
 				menubar: false,
@@ -708,10 +708,10 @@
 		// })
 
 		var checkLength = function(field){
-			var max = 160;
+			var max = 70;
 			var len = $(field).val().length;
 
-			v = $(field).val().substring(0,160)
+			v = $(field).val().substring(0,max)
 			 $(this).val(v);
 
 			
@@ -719,24 +719,24 @@
 				$(this).val($(field).val().substring(0, len-1));
 			}
 			if (len >= max) {
-			$('#short-description-count').text(' you have reached the limit');
+			$('#headline-count').text(' you have reached the limit');
 			} else {
 			var char = max - len;
-			$('#short-description-count').text(char + ' characters left');
+			$('#headline-count').text(char + ' characters left');
 			 console.log(v)
 
 			}
 		}
-		checkLength('#short-description');
+		checkLength('#headline');
 
 
 
-       	$('#short-description').keyup(function () {
+       	$('#headline').keyup(function () {
        	
-			var max = 160;
+			var max = 70;
 			var len = $(this).val().length;
 
-			v = $(this).val().substring(0,160)
+			v = $(this).val().substring(0,max)
 			 $(this).val(v);
 
 
@@ -744,10 +744,10 @@
 				$(this).val($(this).val().substring(0, len-1));
 			}
 			if (len >= max) {
-			$('#short-description-count').text(' you have reached the limit');
+			$('#headline-count').text(' you have reached the limit');
 			} else {
 			var char = max - len;
-			$('#short-description-count').text(char + ' characters left');
+			$('#headline-count').text(char + ' characters left');
 			 console.log(v)
 
 			}

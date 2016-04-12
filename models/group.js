@@ -13,7 +13,7 @@ var Group = new Schema({
 
 
 	// ----- description info -------
-	short_description: {
+	headline: {
 		type: String
 	},
 	description: {

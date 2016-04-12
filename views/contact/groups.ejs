@@ -55,7 +55,11 @@
                           <span class="title-info"><%=  item.title %></span>
                         </div>
                         <div class="p-content-desc">
-                          <span class="small-text" > <%= item.short_description.trunc(70) %></span>
+                          <% try{ %>
+                             <span class="small-text" > <%= item.headline.trunc(70) %></span>
+                            <% }catch(e){ %>
+                             <span class="small-text" > <%= e %> </span>
+                          <%  }%>
                         </div>
                        
                       </div> 

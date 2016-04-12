@@ -23,20 +23,21 @@
                <!-- <p><b>Tags:</b> <a>#hiphop</a>   <a>#artist</a>   <a>#nyc</a></p> -->
 
 
-               <% if(contact.short_description){ %>
+               <% if(contact.headline){ %>
                <div>
                 <p style="font-weight: 700;
     font-size: 22px;
     text-transform: capitalize;"> 
-                  <%= contact.short_description %>
+
+                  <%= contact.headline %>
                 </p>
               </div> 
             <% } %>
             
            <div style="border-bottom: 3px solid #000; margin-bottom: 15px; padding-bottom: 15px;">
-            <% if(contact.description){ %>
+            <% if(contact.about){ %>
               <div id="info" style="line-height: 28px; ">
-                <%- contact.description %>
+                <%- contact.about %>
               </div>
             <% } %>
           </div>
