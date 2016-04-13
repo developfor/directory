@@ -10,22 +10,34 @@
                 </li>
             
                 <li>
-                    <a class="no-style-link " href="/@/<%= user.username %>/group/<%= group._id %>">people</a>
+                    <a class="no-style-link " href="/@/<%= user.username %>/group/<%= group._id %>">contacts</a>
                 </li>
                 <li>
                     <a class="no-style-link selected" href="/@/<%= user.username %>/group/<%= group._id %>/info">information</a>
                 </li>
-                <li>
-                    <a class="no-style-link" href="/@/<%= user.username %>/group/<%= group._id %>/description">description</a>
-                </li>
-              
               </ul>
               
             </div>
             <div>
+
+              <% if(group.headline){ %>
+                 <div>
+                  <h1 class="headline"> 
+                    <%= group.headline %>
+                  </h1>
+                </div> 
+              <% } %>
+
+              <div class="about-block">
+                <% if(group.about){ %>
+                  <div id="info">
+                    <%- group.about %>
+                  </div>
+                <% } %>
+              </div>
              <!--  <div id="i"> -->
-              <span class="title-info">Title:</span>
-              <p><%= group.title %></p>
+              <span class="title-info">Name:</span>
+              <p><%= group.name %></p>
 
               <% if(group.job_title){ %>
                 <span class="title-info">Job Title:</span>

@@ -182,7 +182,7 @@ var groupController = function(){
 							var updateDate = group.update_date.getTime();
 							var creationDate = group.creation_date.getTime();
 
-							group.title  = group.title || "";
+							group.name  = group.name || "";
 						
 							res.render('group/contacts', { group : group, hub: hub, user: user, updateDate: updateDate, creationDate: creationDate, contactArray: contactArray });
 
@@ -277,20 +277,20 @@ var groupController = function(){
 			var user = req.user
 			if(_.isEqual(userId, hubOwner)){
 
-				var title = req.query.title || ""
+				var name = req.query.name || ""
 
-				title = title.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
+				name = name.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
 
-				 if(title.length <= 0){
+				 if(name.length <= 0){
 				 	var sort = {sort: {update_date: -1} } 
 				 	console.log("empty")
 				 }else{
-				 	var sort = {sort: { title: 1}} 
+				 	var sort = {sort: { name: 1}} 
 					console.log("full")
 				 }
 
 
-				Group.find({hub_id: hub.id, title: new RegExp('^'+title.toLowerCase(), "i")}, null, sort, function(err, groups){
+				Group.find({hub_id: hub.id, name: new RegExp('^'+name.toLowerCase(), "i")}, null, sort, function(err, groups){
 					if(err){ return console.log("err: " + err) }
 					// console.log(groups);
 					res.render('group/groups', {hub: hub, groups : groups, user: user, query: req.query });
@@ -352,7 +352,7 @@ var groupController = function(){
 			console.log(req.body)
 
 			var requestBody = req.body;
-			var intials = requestBody.title.replace(/\s+/g, '').charAt(0).toUpperCase()
+			var intials = requestBody.name.replace(/\s+/g, '').charAt(0).toUpperCase()
 
 
 
@@ -367,12 +367,12 @@ var groupController = function(){
 			group.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
 	
-		    group.title = sanitize(requestBody.title).noTagsCleanedHTML();
-		    group.lowercase_title = sanitize(requestBody.title.toLowerCase()).noTagsCleanedHTML();
+		    group.name = sanitize(requestBody.name).noTagsCleanedHTML();
+		    group.lowercase_name = sanitize(requestBody.name.toLowerCase()).noTagsCleanedHTML();
 			
 									
 			group.headline = sanitize(requestBody.headline).noTagsCleanedHTML();
-			group.description = sanitize(requestBody.description).cleanedHTML();
+			group.about= sanitize(requestBody.about).cleanedHTML();
 
 
 			group.industry = sanitize(requestBody.industry).noTagsCleanedHTML();
@@ -483,16 +483,16 @@ var groupController = function(){
 
 			if(_.isEqual(userId, hubOwner)){
 
-				// var title = req.query.title || ""
+				// var name = req.query.name || ""
 
 
-				// title = title.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
+				// name = name.replace(/[^a-zA-Z0-9\s]/gi, "").replace(/ +$/, "");
 
-				//  if(title.length <= 0){
+				//  if(name.length <= 0){
 				//  	var sort = {sort: {update_date: -1} } 
 				//  	console.log("empty")
 				//  }else{
-				//  	var sort = {sort: { title: 1}} 
+				//  	var sort = {sort: { name: 1}} 
 				// 	console.log("full")
 				//  }
 
@@ -510,7 +510,7 @@ var groupController = function(){
 					var token = crypto.randomBytes(8).toString('hex') + "_" +Date.now(); 
 					var randomString = token;
 					var requestBody = req.body;
-					var intials = requestBody.title.replace(/\s+/g, '').charAt(0).toUpperCase()
+					var intials = requestBody.name.replace(/\s+/g, '').charAt(0).toUpperCase()
 
 					
 				
@@ -523,12 +523,12 @@ var groupController = function(){
 					group.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb()
 					group.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 			
-				    group.title = sanitize(requestBody.title).noTagsCleanedHTML();
-				    group.lowercase_title = sanitize(requestBody.title.toLowerCase()).noTagsCleanedHTML();
+				    group.name = sanitize(requestBody.name).noTagsCleanedHTML();
+				    group.lowercase_name = sanitize(requestBody.name.toLowerCase()).noTagsCleanedHTML();
 					
 											
 					group.headline = sanitize(requestBody.headline).noTagsCleanedHTML();
-					group.description = sanitize(requestBody.description).cleanedHTML();
+					group.about = sanitize(requestBody.about).cleanedHTML();
 
 
 					group.industry = sanitize(requestBody.industry).noTagsCleanedHTML();

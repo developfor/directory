@@ -16,8 +16,8 @@
 	        <form >
 	          <div class="row">
 	            <div class="columns title-info">
-	            <!--   <label for="GroupTitle">Search By Group Title:</label> -->
-	              <input id="p-search" name="title" class="u-full-width" type="text" placeholder="Group Title" id="input-group-title" value="<%= query.title %>">
+	            <!--   <label for="GroupName">Search By Group Name:</label> -->
+	              <input id="p-search" name="name" class="u-full-width" type="text" placeholder="Group Name" id="input-group-name" value="<%= query.name %>">
 
 	              <button id="p-search-button" class="button-primary" type="submit"><img src="/app/img/magnifying_glass_icon.png" > </button>
 
@@ -54,17 +54,17 @@
 				<a href="/@/<%= user.username %>/group/<%= group._id %>">
 					<%  if(group.img_foldername && group.img_thumbnail){ %>
 					<img class="profile-image" style=" background-image: url(/uploads/img/<%= group.img_foldername %>/<%= group.img_thumbnail %>); " src="/app/img/no-image_clear.png">
-					     <!-- <img src="/app/img/no-image.png" > -->
+					  
 					<% }else{  %>
-					 <!-- <img style="background-color: #EEEEEE" src="<%= group.defaultBigThumb %>" > -->
- 					<img class="profile-image" style="background-color:white; background-image: url(<%= group.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+					
+ 					<img class="profile-image" style="background-image: url(<%= group.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
 	
 					<% }  %>
 				</a>
 				<a class="button button-primary" href="/@/<%= user.username %>/group/<%= group._id %>">Details</a> 
 				<div>
 					<div>
-						<span class="title-info"><%= group.title.trunc(30) %> </span>
+						<span class="title-info"><%= group.name.trunc(30) %> </span>
 					</div>
 					<div class="p-content-desc">
 						<span class="small-text" > <%=  `${group.headline}`.trunc(70) %> </span><br>
@@ -111,8 +111,8 @@
 			var uri = new URI(location.href)
 			var queries = uri.search(true)
 			var querySkip = parseInt(queries.skip) || 0;
-			queries.title = queries.title || "";
-			var queriesPage = queries.title
+			queries.name = queries.name || "";
+			var queriesPage = queries.name
 
 			if( !($(".p-content").length > 20) ){
 				$('#next').css("display", "none")
@@ -126,16 +126,16 @@
 			  //   });
 		      	$('#previous').css("display", "none")
 			  	$('#next').on("click", function (e) {
-					window.location.href = location.origin  + location.pathname + "?title=" + queries.title +  "&skip=" + (querySkip + 1)
+					window.location.href = location.origin  + location.pathname + "?name=" + queries.name +  "&skip=" + (querySkip + 1)
 			    });
 			  
 			  
 			}else{
 				$('#previous').on("click", function (e) {
-					window.location.href = location.origin  + location.pathname + "?title=" + queries.title + "&skip=" + (querySkip - 1)
+					window.location.href = location.origin  + location.pathname + "?name=" + queries.name + "&skip=" + (querySkip - 1)
 			    });
 			    $('#next').on("click", function (e) {
-					window.location.href = location.origin  + location.pathname + "?title=" + queries.title + "&skip=" + (querySkip + 1)
+					window.location.href = location.origin  + location.pathname + "?name=" + queries.name + "&skip=" + (querySkip + 1)
 			    });
 			}
 

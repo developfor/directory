@@ -7,13 +7,13 @@
           <%  if(group.img_foldername && group.img_thumbnail){ %>
     				<img class="profile-image" style=" background-image: url(/uploads/img/<%= group.img_foldername %>/<%= group.img_thumbnail %>); " src="/app/img/no-image_clear.png">
     			<% }else{  %>
-             <img style="background-color: #EEEEEE" src="<%= group.defaultBigThumb %>" >
+             <img  src="<%= group.defaultBigThumb %>" >
     			<% }  %>
         </div>
 
         <div  class="profile-content-left-info">
           <p>
-             <%= group.title %>
+             <%= group.name %>
           </p>
          <!--  <p>
             <span class="title-info">updated on: </span></br>

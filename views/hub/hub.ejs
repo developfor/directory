@@ -55,7 +55,7 @@
                            </div>
       		        			<% }else{  %>
 
-                        <div class="image-block" style=" background-color: #EEEEEE; background-image: url(<%= contact.defaultBigThumb %>); ">
+                        <div class="image-block" style=" background-image: url(<%= contact.defaultBigThumb %>); ">
                            </div>
       		        			<% }  %>
       		                
@@ -112,12 +112,12 @@
                            </div>
                         <% }else{  %>
 
-                        <div class="image-block" style=" background-color: #EEEEEE; background-image: url(<%= group.defaultBigThumb %>); ">
+                        <div class="image-block" style=" background-image: url(<%= group.defaultBigThumb %>); ">
                            </div>
                         <% }  %>
 
                          <div class="list-text-block">
-                            <p ><span><%= (group.title).trunc(25) %></span>                        
+                            <p ><span><%= (group.name).trunc(25) %></span>                        
                             </p>
 
                              <p class="edited-count"> Edited <span  data-livestamp="<%= group.update_date %>"> </span><p>

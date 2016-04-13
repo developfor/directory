@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Group = new Schema({
-	title: {
+	name: {
 		type: String,
 		require: true,
 		validate: /\S+/
@@ -16,7 +16,7 @@ var Group = new Schema({
 	headline: {
 		type: String
 	},
-	description: {
+	about: {
 		type: String
 	},
 
