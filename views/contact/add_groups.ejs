@@ -1,155 +1,177 @@
 <% include ../_partials/header %>
-<% include ../_partials/user_navigation.ejs %>
-<b> Add or Remove Groups from <%= contact.name  %></b>
+
+  <% include ../_partials/user_navigation.ejs %>
+
+
+ <b> Add or Remove Groups from <%= contact.name  %></b>
+
  <div>
+<div style="float: left;">
+    <a href="/@/<%= user.username %>/contact/<%= contact._id %>">
+		<%  if(contact.img_foldername && contact.img_thumbnail){ %>
 
-    <div style="float: left;">
-	    <a href="/@/<%= user.username %>/contact/<%= contact._id %>/groups">
-			<%  if(contact.img_foldername && contact.img_thumbnail){ %>
-
-				<img class="icon-profile-image" style="background-image: url(/uploads/img//<%= contact.img_foldername %>/<%=  contact.img_icon  %>); " src="/app/img/no-image_clear.png">
+			<img class="icon-profile-image" style="background-image: url(/uploads/img//<%= contact.img_foldername %>/<%=  contact.img_icon  %>); " src="/app/img/no-image_clear.png">
 
 
-			<% }else{  %>
-				<img class="icon-profile-image" style="background-image: url(<%= contact.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
-			<% }  %>
-		</a>
-    
-    </div>
-    <div class="title-back-to" style="">
+		<% }else{  %>
+			<img class="icon-profile-image" style="background-image: url(<%= contact.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+		<% }  %>
+	</a>
+</div>
+<div class="title-back-to" style="">
     	<p class="title-info">
-    		<a href="/@/<%= user.username %>/contact/<%= contact._id %>/groups"> <i class="fa fa-arrow-circle-left  " aria-hidden="true"></i> <%= contact.name  %></a>		                  
+    		<a href="/@/<%= user.username %>/contact/<%= contact._id %>"> <i class="fa fa-arrow-circle-left  " aria-hidden="true"></i> <%= contact.name  %></a>		                  
     	</p>
 
     </div>
 
-
-
 </div>
-	<% if(groups.length === 0){ %> 
-		<p>There are no groups.</p>
-		<div class="button-area space-up">
-		 	<a class="button button-primary" href="/@/<%= user.username %>/add_group">+ add group</a>
-		</div>
-	<% } %>
+
+
 <form style="clear: both;">
 	<div class="p-content-list check-element">
+	<% groups.forEach(function(name){ %>
 
-		
-		
-
-<% groups.forEach(function(name){ %>
 	<%  if(name.checked === true) { %>
-	     <li style="">
+
+
+		<li style="">
 	 		<div class="check-element-box p-content">
-	 			<div >
-		 			<div class="fancy-toggle-button">
-		 				<%  if(name.img_foldername && name.img_thumbnail){ %>
+	 			<div>
+						<div class="fancy-toggle-button">
+							<%  if(name.img_foldername && name.img_thumbnail){ %>
 				        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
-		        		<% }else{  %>
-		        			 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
-		        		<% }  %>
-						<div class="fancyToggle fa fa-check-square-o fa-2x" style="color: #4683B7;" data-name="<%= name._id %>" data-toggle="on"> </div>
-			        </div>
-			    </div>
+						<% }else{  %>
+							 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+						<% }  %>
+					
+				        <div class="Checkbox Module fancyToggle on styledToggle">
+				            <div class="slider"></div>
+				            <div class="onText status"></div>
+				            <div class="offText status"></div>
+								<input type="checkbox" name="group" value="<%= name._id %>" checked></div>
+				        </div>
+				</div>
+
+
+
 	        
 	 				<div >
-	 					<p class="title-info"><span><%= name.title %></span></p>
-	 					<p class="small-text" style="font-size: 12px;"><span> <%= name.headline %></span>		                  
+	 					<p class="title-info"><span><%= name.name %> <%= name.middle_name %> <%= name.last_name %> <%= name.suffix %></span>		                  
 	 					</p>
 	 				</div>
 
 	 		</div>
 	 	</li>
-
-
 
 
 
 	<%  } else { %>
 
-	
-	     <li style="">
+		<li style="">
 	 		<div class="check-element-box p-content">
-	 			<div >
-		 			<div class="fancy-toggle-button">
-		 				<%  if(name.img_foldername && name.img_thumbnail){ %>
+	 		
+	 			<div>
+						<div class="fancy-toggle-button">
+							<%  if(name.img_foldername && name.img_thumbnail){ %>
 				        	 <img class="profile-image" style=" background-image: url(/uploads/img/<%= name.img_foldername %>/<%=  name.img_icon  %>); " src="/app/img/no-image_clear.png">
-		        		<% }else{  %>
-		        			 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
-		        		<% }  %>
-		        		<div class="fancyToggle fa fa-square-o fa-2x" style="color: #4683B7;" data-name="<%= name._id %>" data-toggle="off"> </div>        
-			        </div> 
-			   	</div>
-	 				<div>
-	 					<p class="title-info"><span><%= name.title %></span>		                  
-	 					</p>
+						<% }else{  %>
+							 <img class="profile-image" style=" background-image: url(<%= name.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+						<% }  %>
+					
+				        <div class="Checkbox Module fancyToggle styledToggle">
+				            <div class="slider"></div>
+				            <div class="onText status"></div>
+				            <div class="offText status"></div>
+								<input type="checkbox" name="group" value="<%= name._id %>"></div>
+				        </div>
+				</div>
 
-	 					<p class="small-text" style="font-size: 12px;"><span> <%= name.headline %></span>		                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	        
+	 				<div >
+	 					<p class="title-info"><span><%= name.name %> <%= name.middle_name %> <%= name.last_name %> <%= name.suffix %></span>		                  
 	 					</p>
 	 				</div>
+
 	 		</div>
 	 	</li>
 
-	
+
+
 		<% } %>
 	<% }) %>
 	</div>
 </form>
 
-<!-- footer start -->
+  <script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
 
+  <script>
 
-<% include ../_partials/footer %>
+   	$(".p-content-list li").matchHeight();
 
-
-<script type="text/javascript" src="/vendor/js/jquery.matchHeight-min.js"></script>
-
-
-
-
-<script>
-   $(".p-content-list li").matchHeight();
-
-   	$(".fancy-toggle-button img").on("click", function(event){
+    // $(".fancy-toggle-button").on("click", function(){
+   	// 	$( this ).children( ".fancyToggle" ).click();
+   	// });
+	$(".fancy-toggle-button img").on("click", function(event){
    		console.log($(this).siblings(".fancyToggle").click())
    		return false
    	});
 
-	$(".fancyToggle").on("click", function(e) {
-    	if ($(this).data().toggle === "on"){
-    		$(this).removeClass("fa-check-square-o")
-    		$(this).addClass("fa-square-o")
-    		$(this).data("toggle", "off")
-    		 
-    		$.ajax({
-				type: "DELETE",
-				url: location.pathname,
-				data: {'group_id': $(this).data().name},
-				success: "success",
-				dataType: "dataType"
-			});
-			return false
-    	}
 
-    	if ($(this).data().toggle === "off"){
-    		console.log("off")
-    		$(this).removeClass("fa-square-o")
-    		$(this).addClass("fa-check-square-o")
-    	    $(this).data("toggle", "on")
-    	    $.ajax({
-				type: "POST",
-				url: location.pathname,
-				data: {'group_id': $(this).data().name},
-				success: "success",
-				dataType: "dataType"
-			});
-    		 return false
-    	}
-    	return false
+	$(".fancyToggle").on("click", function(e) {
+	       $( this ).toggleClass("on");
+	  
+	    if ($(this).children('input').is(':checked')){
+	    	$.ajax({
+				  type: "DELETE",
+				  url: location.pathname,
+				  data: {'group_id': this.getElementsByTagName("input")[0].defaultValue},
+				  success: "success",
+				  dataType: "dataType"
+				});
+		    $(this).children('input').prop( "checked", false );
+	  
+	     return false;
+
+
+	    }else{
+
+	    	$.ajax({
+				  type: "POST",
+				  url: location.pathname,
+				  data: {'group_id': this.getElementsByTagName("input")[0].defaultValue},
+				  success: "success",
+				  dataType: "dataType"
+				});
+	       $(this).children('input').prop( "checked", true );
+	       return false;
+
+	    }
+
+	   return false;
+
 	});
 
+
+
+ 
+
 </script>
-
-
 
