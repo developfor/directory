@@ -53,8 +53,8 @@
 		 <div class="row">
 		 	<div class=" columns title-info">
 		 		<label for="gender">Headline:</label>
-		 		<textarea  contenteditable="true" spellcheck="true" class="u-full-width" id="short-description" type="text" name="headline" /><%= contact.headline %></textarea>
-		 		<div id="short-description-count"></div>
+		 		<input  contenteditable="true" spellcheck="true" class="u-full-width" id="headline" type="text" name="headline" />
+		 		<div id="headline-count"></div>
 		 	</div>
 		</div>
 
@@ -545,12 +545,12 @@
 			var showToolbar = false
 		}else{
 			var showToolbar = [
-		    "undo redo | bold italic | bullist numlist | link | removeformat"
+		    "undo redo"
 		  ]
 		}
 		    tinymce.init({
 		    
-				selector: "#description",
+				selector: "#about",
 				// plugins : "paste autolink link lists charmap preview textcolor",
 				plugins : "paste autolink link lists charmap preview",
 				toolbar: showToolbar,
@@ -588,16 +588,16 @@
 				$(this).val($(field).val().substring(0, len-1));
 			}
 			if (len >= max) {
-				$('#short-description-count').text(' you have reached the limit');
+				$('#headline-count').text(' you have reached the limit');
 			} else {
 			var char = max - len;
-				$('#short-description-count').text(char + ' characters left');
+				$('#headline-count').text(char + ' characters left');
 			}
 		}
-		checkLength('#short-description');
+		checkLength('#headline');
    
 
-       $('#short-description').keyup(function () {
+       $('#headline').keyup(function () {
        	
 			var max = 70;
 			var len = $(this).val().length;
@@ -610,10 +610,10 @@
 				$(this).val($(this).val().substring(0, len-1));
 			}
 			if (len >= max) {
-				$('#short-description-count').text(' you have reached the limit');
+				$('#headline-count').text(' you have reached the limit');
 			} else {
 			var char = max - len;
-				$('#short-description-count').text(char + ' characters left');
+				$('#headline-count').text(char + ' characters left');
 			}
 		}).bind('keypress', function(e) {
 		  if ((e.keyCode || e.which) == 13) {

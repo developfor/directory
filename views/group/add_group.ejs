@@ -34,7 +34,7 @@
 		 <div class="row">
 		 	<div class=" columns title-info">
 		 		<label for="gender">Headline:</label>
-		 		<textarea class="u-full-width" id="headline" type="text" name="headline" /></textarea>
+		 		<input  contenteditable="true" spellcheck="true" class="u-full-width" id="headline" type="text" name="headline" />
 		 		<div id="headline-count"></div>
 		 	</div>
 		</div>
@@ -520,21 +520,6 @@
 
 	
 
-
-	
-
-
-
-
-<!-- 	<div class="form-block">
-		<h5>Address</h5>
-		 <div class="row">
-		</div>
-	</div> -->
-
-		
-
-		<!-- submit button -->
 		<input class="button button-primary" type ="submit" value="Save">
 	</form>
 
@@ -586,11 +571,11 @@
 			var showToolbar = false
 		}else{
 			var showToolbar = [
-		    "undo redo | bold italic | bullist numlist | link | removeformat"
+		    "undo redo"
 		  ]
 		}
 		    tinymce.init({   
-				selector: "#description",
+				selector: "#about",
 				plugins : "paste autolink link lists charmap preview",
 				toolbar: showToolbar,
 				menubar: false,
