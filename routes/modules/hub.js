@@ -109,7 +109,7 @@ module.exports = function(app) {
 				
 
 				if(err  || user === null){ 
-					res.send('no user by that name');
+					res.render("error/404");
 					return console.log("err: " + err) 
 				}
 				Hub.findOne({user_owner_id: user._id}, function(err, hub){

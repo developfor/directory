@@ -68,6 +68,11 @@ module.exports = function(app) {
 	// READ INFO
 	app.get('/@/:id/contact/:contact_id/info', contactController.contactInfo);
 
+
+	// READ Note
+	app.get('/@/:id/contact/:contact_id/notes', contactController.contactNotes);
+
+
 	// READ GROUPS
 	app.get('/@/:id/contact/:contact_id/groups', contactController.contactGroups);
 

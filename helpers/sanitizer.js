@@ -37,6 +37,10 @@ var sanitize = function(dirty) {
 		return cleaned
 	}
 
+	var trimText = function(n){
+	    return (dirty.length > n) ? dirty.substr(0,n)+'' : dirty;
+	};
+
 	// var namefieldclean = function(){
 
 	// 	var removeUnwantedCharacters = 
@@ -49,7 +53,8 @@ var sanitize = function(dirty) {
 		cleanedHTML: cleanedHTML,
 		noTagsCleanedHTML: noTagsCleanedHTML,
 		cleanedHTMLCHAR: cleanedHTMLCHAR,
-		personEntity: personEntity
+		personEntity: personEntity,
+		trimText: trimText
 	}
 }
 

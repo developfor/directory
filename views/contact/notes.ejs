@@ -1,0 +1,96 @@
+<% include ../_partials/header %>
+
+ <% include ../contact/_partials/profile_left.ejs %>
+
+
+          <div class="eight columns">
+            <div class="nav-right">
+              <ul>
+                <li class="nav-right-obj-type"> 
+                  <b><%= contact.obj_type%></b>
+                </li>
+                <li>
+                    <a class="no-style-link" href="/@/<%= user.username %>/contact/<%= contact._id %>/info">information</a>
+                </li>
+                <li>
+                     <a class="no-style-link" href="/@/<%= user.username %>/contact/<%= contact._id %>/groups">groups</a>
+                </li>
+                 <li>
+                     <a class="no-style-link selected" href="/@/<%= user.username %>/contact/<%= contact._id %>/notes"><i class="fa fa-eye"></i>notes</a>
+                </li>
+                 
+              </ul>
+              
+            </div>
+            <div>
+              <!-- content area -->
+
+         
+            <a class="button button-primary" href="/@/<%= user.username %>/add_group">+ add contact</a>
+
+            <div class="note-block">
+                
+                  <div>
+                    jdilla is the awesomeness&nbsp;J Dilla is from New York and made beats with MFDoom and other hip hop artists.
+                  </div>
+                
+                <div class="button-note">
+                  <div style="float: left;">
+
+                      <a href="/@/test/contact/570e2edcba1f28ec27bcf201/update/" class="button-profile"> 
+
+                      <span><i class="fa fa-pencil"></i> edit</span>
+                      </a>
+                      </div>
+
+                      <div class="button-profile" id="button-profile-delete">
+
+                      <div>
+                      <span><i class="fa fa-trash-o"></i> delete</span>
+                      </div>
+                  </div>
+
+                </div>
+
+
+
+
+              </div>
+             
+
+
+           
+      
+            
+              
+            </div>
+          </div>
+
+
+
+
+
+      <!--  end row  -->
+        </div>
+    <script src="/app/js/readmore.min.js"></script>
+
+  <script>
+    $('#info').readmore({
+      moreLink: '<a href="#">Read More <span class="fa fa-chevron-circle-down"> </span></a>',
+       lessLink: '<a href="#">Read Less <span class="fa fa-chevron-circle-up"> </span></a>',
+      collapsedHeight: 200,
+      afterToggle: function(trigger, element, expanded) {
+        if(! expanded) { // The "Close" link was clicked
+          $('html, body').animate({scrollTop: element.offset().top}, {duration: 100});
+        }
+      }
+    });
+
+    $('article').readmore({speed: 500});
+  </script>
+
+
+<!-- footer start -->
+
+
+<% include ../_partials/footer %>

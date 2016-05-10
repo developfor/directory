@@ -47,6 +47,8 @@ app.set('views', path.join(__dirname, 'views'));
 String.prototype.trunc = String.prototype.trunc || function(n){
     return (this.length > n) ? this.substr(0,n-1)+'...' : this;
 };
+
+
 String.prototype.isEmpty = function() {
     return (this.length === 0 || !this.trim());
 };
@@ -109,7 +111,9 @@ route(app);
 
 // Handle 404
 app.use(function(req, res) {
- res.send('404: Page not Found', 404);
+ // res.send('404: Page not Found', 404);
+ res.render('error/404');
+  // res.render("/404")
 });
 
 

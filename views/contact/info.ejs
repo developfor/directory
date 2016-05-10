@@ -15,6 +15,10 @@
                 <li>
                      <a class="no-style-link" href="/@/<%= user.username %>/contact/<%= contact._id %>/groups">groups</a>
                 </li>
+
+                <li>
+                     <a class="no-style-link" href="/@/<%= user.username %>/contact/<%= contact._id %>/notes">notes</a>
+                </li>
                  
               </ul>
               
@@ -114,25 +118,6 @@
 
     $('article').readmore({speed: 500});
   </script>
-
-    <script>
-
-      $("#button-profile-delete").on("click", function(){
-         
-          if (confirm("Are you sure you want to delete this entry?") == true) {
-
-              var deletePath = $(this).attr('data-delete-path');
-              var redirectPath = $(this).attr('data-redirect-path');
-          
-              $.post(deletePath, function() {
-                window.location.href = redirectPath;
-              });
-          } else {
-              return false;
-          }
-
-      })
-    </script>
 
 
 <!-- footer start -->

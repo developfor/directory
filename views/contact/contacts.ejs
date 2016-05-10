@@ -129,7 +129,8 @@
 						<span class="small-text" > <%= contact.headline.trunc(70) %></span>
 					</div>
 					<div class="updated-date">
-						<b class="small-text">Edited <span  data-livestamp="<%= contact.update_date %>"> </span></b>
+						
+						<b class="small-text">Edited <%= moment(contact.update_date).fromNow();  %> </b>
 					</div>
 				</div> 
 

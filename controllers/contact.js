@@ -97,7 +97,8 @@ var contactController = function(contactService, app ){
 			contact.defaultBigThumb = canvasThumbnail(intials).bigTextThumb()
 
 		  
-			contact.name = sanitize(requestBody.name).cleanedHTMLCHAR();
+			contact.name = sanitize(sanitize(requestBody.name).cleanedHTMLCHAR()).trimText(70)
+			// contact.name = sanitize(contact.name).trimText(2);
 			
 			contact.lowercase_name = sanitize(requestBody.name.toLowerCase()).cleanedHTMLCHAR();
 
@@ -257,6 +258,7 @@ var contactController = function(contactService, app ){
 				Contacts.find(findText, null, sort, function(err, contacts){
 					console.log(contacts.length === 0)
 
+
 					if(err){ 
 						res.redirect('/');
 					    console.log("err: " + err) 
@@ -266,10 +268,10 @@ var contactController = function(contactService, app ){
 
 
 						Contacts.find( findTextAgain, null, sort, function(err, contacts){
-						    return res.render('contact/contacts', {hub: hub, contacts: contacts, query: req.query, user: user});
+						    return res.render('contact/contacts', {hub: hub, contacts: contacts, query: req.query, user: user, moment: moment});
 						})
 					}else{
-						return res.render('contact/contacts', {hub: hub, contacts: contacts, query: req.query, user: user});
+						return res.render('contact/contacts', {hub: hub, contacts: contacts, query: req.query, user: user, moment: moment});
 
 					}
 					
@@ -411,6 +413,63 @@ var contactController = function(contactService, app ){
 
 		return hubchecker(req, res, readContacts)
 	}
+
+
+
+
+
+
+
+
+
+
+
+	// Read Contacts
+	var contactNotes = function (req, res) {
+		var readContacts = function(hub){
+			console.log("contact id")
+			
+			
+			var hubOwner = hub.user_owner_id
+			var userId = req.user._id
+			var user = req.user
+
+			if(_.isEqual(userId, hubOwner)){
+
+				return Contacts.findOne({_id: req.params.contact_id, hub_id: hub.id}, function(err, contact){
+					if(err || contact === null){ 	
+						req.flash('info', "Contacts not found.")
+						res.redirect('/@/:id');
+						return console.log("err++: " + err) 	
+					}
+
+					var updateDate = contact.update_date.getTime();
+					var creationDate = contact.creation_date.getTime();
+
+					
+
+					var title = contact.name;
+					// res.render('contact/contactNotes', {title: title, user: user, contact: contact, hub: hub, updateDate: updateDate, creationDate: creationDate   });
+
+					res.render('contact/notes', { user: user, contact: contact, hub: hub, updateDate: updateDate, creationDate: creationDate });
+				})
+
+			} else {
+				console.log("not equals");
+			
+			 	res.send('404: Page not Found', 404);
+			}			
+		}
+		return hubchecker(req, res, readContacts)
+	}
+
+
+
+
+
+
+
+
 
 
 
@@ -834,6 +893,7 @@ var contactController = function(contactService, app ){
 		contacts: contacts,
 		contact: contact,
 		contactInfo: contactInfo,
+		contactNotes: contactNotes,
 		contactGroups: contactGroups,
 		addGroupsPost: addGroupsPost,
 		removeGroupPost: removeGroupPost,

@@ -50,24 +50,7 @@
 
 
 
-    <script>
-
-      $("#button-profile-delete").on("click", function(){
-         
-          if (confirm("Are you sure you want to delete this entry?") == true) {
-
-              var deletePath = $(this).attr('data-delete-path');
-              var redirectPath = $(this).attr('data-redirect-path');
-          
-              $.post(deletePath, function() {
-                window.location.href = redirectPath;
-              });
-          } else {
-              return false;
-          }
-
-      })
-    </script>
+    
 
 
 <!-- footer start -->
