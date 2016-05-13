@@ -26,18 +26,21 @@
               <!-- content area -->
 
          
-            <a class="button button-primary" href="/@/<%= user.username %>/add_group">+ add contact</a>
+            <a class="button button-primary" href="/@/<%= user.username %>/contact/<%= contact._id %>/add_note">+ add note</a>
 
+
+<% notes.forEach(function(note){ %>
+          <div class="note-block-wrapper">
             <div class="note-block">
                 
-                  <div>
-                    jdilla is the awesomeness&nbsp;J Dilla is from New York and made beats with MFDoom and other hip hop artists.
+                  <div> 
+                  <%-  note.details %>
                   </div>
                 
                 <div class="button-note">
                   <div style="float: left;">
 
-                      <a href="/@/test/contact/570e2edcba1f28ec27bcf201/update/" class="button-profile"> 
+                      <a href="/@/<%= user.username %>/contact/<%= contact._id %>/note/<%= note._id %>/edit_note" class="button-profile"> 
 
                       <span><i class="fa fa-pencil"></i> edit</span>
                       </a>
@@ -46,18 +49,18 @@
                       <div class="button-profile" id="button-profile-delete">
 
                       <div>
+                        <a href="/@/<%= user.username %>/contact/<%= contact._id %>/note/<%= note._id %>/delete">
                       <span><i class="fa fa-trash-o"></i> delete</span>
+                      </a>
                       </div>
                   </div>
 
                 </div>
 
-
-
-
-              </div>
+            </div>
+          </div>
              
-
+<% }) %>
 
            
       

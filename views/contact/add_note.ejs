@@ -1,0 +1,146 @@
+<% include ../_partials/header %>
+
+<% include ../_partials/user_navigation.ejs %>
+
+
+
+<div>
+	<div style="float: left;">
+		<a href="/@/<%= user.username %>/contact/<%= contact._id %>/notes">
+			<%  if(contact.img_foldername && contact.img_thumbnail){ %>
+
+			<img class="icon-profile-image" style="background-image: url(/uploads/img/<%= contact.img_foldername %>/<%=  contact.img_icon  %>); " src="/app/img/no-image_clear.png">
+
+
+			<% }else{  %>
+			<img class="icon-profile-image" style="background-image: url(<%= contact.defaultBigThumb %>); " src="/app/img/no-image_clear.png">
+			<% }  %>
+		</a>
+	</div>
+	<div class="title-back-to" style="">
+		<p class="title-info">
+			<a href="/@/<%= user.username %>/contact/<%= contact._id %>/notes"> <i class="fa fa-arrow-circle-left  " aria-hidden="true"></i> <%= contact.name  %></a>		    
+		</p>
+	</div>
+</div>
+
+
+
+<!-- text editor -->
+ <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"/>
+
+
+<!-- text editor  end -->
+
+
+<form method="post" action="?_csrf=<%= csrfToken %>" accept-charset="utf-8"  enctype="application/x-www-form-urlencoded">
+	
+	<div class="form-block-simple">
+		<h5>Add Note</h5>
+
+		<div class="row">
+		 	<div class=" columns title-info">
+		 		<textarea class="u-full-width"  id="details" type="text" name="details"></textarea>
+		 		
+		 	</div>
+		</div>
+
+	</div>
+
+	<!-- submit button -->
+	<input class="button button-primary" type ="submit" value="Save">
+</form>
+
+
+
+  
+
+
+<link rel="stylesheet" href="/vendor/css/font-awesome.min.css">
+<script src="/vendor/js/tinymce/tinymce.min.js"></script>
+
+
+<script type="text/javascript">
+
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+			// var showToolbar = false
+			var showToolbar = [
+		    	"undo redo"
+			// "undo redo | bold italic | bullist numlist | removeformat"
+
+		  ]
+		  tinymce.init({
+		  		forced_root_block : "", 
+			    // force_br_newlines : false,
+			    // force_p_newlines : false,
+
+			    force_br_newlines : true,
+			    force_p_newlines : true,
+		    
+		    
+				selector: "#details",
+				plugins : "paste autolink lists charmap preview",
+				toolbar: showToolbar,
+				menubar: false,
+				statusbar: false,
+				content_css : "/app/css/style.css",
+				default_link_target: "_blank",
+				target_list: false,
+				link_title: false,
+				paste_as_text: true,
+				paste_text_sticky : true,
+				paste_text_sticky_default: true,
+				link_assume_external_targets: true,
+				extended_valid_elements: 'a[href|target=_blank]',
+				browser_spellcheck: true,
+
+				theme_advanced_resizing: false,
+				plugins: "autoresize",
+				resize: false,
+				remove_redundant_brs : true,
+				remove_trailing_brs : true,
+				height: "300"
+
+		    });
+		}else{
+			var showToolbar = [
+		    	"undo redo"
+			// "undo redo | bold italic | bullist numlist | removeformat"
+		  ]
+
+
+		  tinymce.init({
+			  	forced_root_block : "", 
+			 //    force_br_newlines : false,
+			 //    force_p_newlines : false,
+			 //    remove_redundant_brs : true,
+				// remove_trailing_brs : true,
+		    
+				selector: "#details",
+				plugins : "paste autolink lists charmap preview",
+				toolbar: showToolbar,
+				menubar: false,
+				statusbar: false,
+				content_css : "/app/css/style.css",
+				default_link_target: "_blank",
+				target_list: false,
+				link_title: false,
+				paste_as_text: true,
+				paste_text_sticky : true,
+				paste_text_sticky_default: true,
+				link_assume_external_targets: true,
+				// extended_valid_elements: 'a[href|target=_blank]',
+				browser_spellcheck: true,
+				charLimit: 20,
+				theme_advanced_resizing: false,
+				plugins: "autoresize",
+				resize: false,
+				
+				height: "300"
+		    });
+		}
+</script>
+  <!-- footer start -->
+
+
+<% include ../_partials/footer %>

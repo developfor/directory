@@ -11,6 +11,7 @@ var forEachAsync = require('forEachAsync').forEachAsync;
 
 var Contacts = require('../models/contact.js');
 var Group = require('../models/group.js');
+var Note = require('../models/note.js');
 var Hub = require('../models/hub.js');
 var User = require('../models/user.js');
 var ContactsGroupJoin = require('../models/contact_group_join.js');
@@ -58,7 +59,6 @@ var hubchecker = function(req, res, method){
 
 // Public Functions
 var contactController = function(contactService, app ){
-
 	var add_contact = function (req, res) {
 
 
@@ -71,8 +71,7 @@ var contactController = function(contactService, app ){
 		}
 
 		// running the hubchecker
-		return hubchecker(req, res, render)
-		
+		return hubchecker(req, res, render)		
 	}
 
 
@@ -314,7 +313,7 @@ var contactController = function(contactService, app ){
 				return Contacts.findOne({_id: req.params.contact_id, hub_id: hub.id}, function(err, contact){
 					if(err || contact === null){ 	
 						req.flash('info', "Contacts not found.")
-						res.redirect('/@/:id');
+						res.redirect('/@/' + req.user._id);
 						return console.log("err++: " + err) 	
 					}
 
@@ -361,7 +360,7 @@ var contactController = function(contactService, app ){
 				return Contacts.findOne({_id: req.params.contact_id, hub_id: hub.id}, function(err, contact){
 					if(err || contact === null){ 	
 						req.flash('info', "Contacts not found.")
-						res.redirect('/@/:id');
+						res.redirect('/404');
 						return console.log("err++: " + err) 	
 					}
 					console.log(contact);
@@ -424,7 +423,7 @@ var contactController = function(contactService, app ){
 
 
 
-	// Read Contacts
+	// Read Notes
 	var contactNotes = function (req, res) {
 		var readContacts = function(hub){
 			console.log("contact id")
@@ -436,7 +435,7 @@ var contactController = function(contactService, app ){
 
 			if(_.isEqual(userId, hubOwner)){
 
-				return Contacts.findOne({_id: req.params.contact_id, hub_id: hub.id}, function(err, contact){
+				return Contacts.findOne({_id: req.params.contact_id, hub_id: hub.id,}, function(err, contact){
 					if(err || contact === null){ 	
 						req.flash('info', "Contacts not found.")
 						res.redirect('/@/:id');
@@ -449,9 +448,13 @@ var contactController = function(contactService, app ){
 					
 
 					var title = contact.name;
-					// res.render('contact/contactNotes', {title: title, user: user, contact: contact, hub: hub, updateDate: updateDate, creationDate: creationDate   });
 
-					res.render('contact/notes', { user: user, contact: contact, hub: hub, updateDate: updateDate, creationDate: creationDate });
+
+					Note.find({contact_id: req.params.contact_id, hub_id: hub.id} , null,  {sort: {update_date: -1}}, function(err, notes){	
+					
+						res.render('contact/notes', { user: user, contact: contact, hub: hub, updateDate: updateDate, creationDate: creationDate, notes, notes});
+
+					})
 				})
 
 			} else {
@@ -462,17 +465,199 @@ var contactController = function(contactService, app ){
 		}
 		return hubchecker(req, res, readContacts)
 	}
+	// Create Note
+		// On creation of a Note
+		// Note should have hub_id
+		// Note should have parent_id
+		// Note should not have empty details 
+		// Note should have creation_date
+		// Note should have update_date
+
+	var addContactNote = function (req, res) {
+
+		var addNote = function(hub){
+
+			var hubOwner = hub.user_owner_id
+			var userId = req.user._id
+			var user = req.user
+
+
+			if(_.isEqual(userId, hubOwner)){
+
+				return Contacts.findOne({_id: req.params.contact_id, hub_id: hub.id}, function(err, contact){
+
+					if(err || contact === null){ 	
+						req.flash('info', "Contacts not found.")
+						res.redirect('/@/:id');
+						return console.log("err++: " + err) 	
+					}			
+
+					res.render('contact/add_note', { csrfToken: req.csrfToken(), user: user, contact: contact, hub: hub});
+				})
+
+			} else {
+				console.log("not equals");
+
+			 	res.send('404: Page not Found', 404);
+			}
+
+		}
+
+		return hubchecker(req, res, addNote)
+	}
+
+
+
+	var addContactNotePost = function (req, res) {
+
+		var postNote = function(hub){
+
+			var requestBody = req.body;
+
+			var hubOwner = hub.user_owner_id
+			var userId = req.user._id
+			var user = req.user;
+
+
+			if(_.isEqual(userId, hubOwner)){
+
+				return Contacts.findOne({_id: req.params.contact_id, hub_id: hub.id}, function(err, contact){
+					if(err || contact === null){ 	
+						req.flash('info', "Contacts not found.")
+						res.redirect('/@/:id');
+						return console.log("err++: " + err) 	
+					}	
+
+					var note = new Note();
+		
+					note.details = requestBody.details || "";
+					note.hub_id = hub._id;
+					note.contact_id = req.params.contact_id;
+
+					var save = function(){
+						note.save(function(err,note){
+							if(err){
+								console.log('Error while saving image: ' + err);
+							
+								req.flash('message','something went wrong');
+								return res.redirect("/@/"+req.params.id+"/contact/"+contact._id+"/add_note" );
+							} else {
+								console.log(note)
+								return res.redirect("/@/"+req.params.id+"/contact/"+contact._id+"/notes");
+							}	
+						});
+					}
+
+					return save();
+
+
+
+
+
+					res.render('contact/add_note', { csrfToken: req.csrfToken(), user: user, contact: contact, hub: hub});
+				})
+
+			} else {
+				console.log("not equals");
+
+			 	res.send('404: Page not Found', 404);
+			}
 
 
 
 
 
 
+			
+		}
+
+		return hubchecker(req, res, postNote);
+
+	}
 
 
 
 
+	// Edit Note
+	var editContactNote = function (req, res) {
 
+		var editNote = function(hub){
+
+			var hubOwner = hub.user_owner_id;
+			var userId = req.user._id;
+			var user = req.user;
+
+			if(_.isEqual(userId, hubOwner)){
+				return Contacts.findOne({_id: req.params.contact_id, hub_id: hub.id}, function(err, contact){
+
+					if(err || contact === null){ 	
+						req.flash('info', "Contacts not found.")
+						res.redirect('/@/:id');
+						return console.log("err++: " + err) 	
+					}	
+
+					return Note.findOne({_id: req.params.note_id, hub_id: hub.id}, function(err, note){
+
+						if(err || note === null){ 	
+							req.flash('info', "Note not found.")
+							res.redirect('/@/:id');
+							return console.log("err++: " + err) 	
+						}	
+
+						res.render('contact/edit_note', { csrfToken: req.csrfToken(), user: user, contact: contact, note: note, hub: hub});
+					});	
+				});
+			} else {
+				console.log("not equals");
+
+			 	res.send('404: Page not Found', 404);
+			}
+		}
+		return hubchecker(req, res, editNote);
+	}
+
+
+
+	// Delete Note
+	var deleteContactNote = function (req, res) {
+
+		var deleteNote = function(hub){
+
+			var hubOwner = hub.user_owner_id;
+			var userId = req.user._id;
+			var user = req.user;
+
+			if(_.isEqual(userId, hubOwner)){
+				return Contacts.findOne({_id: req.params.contact_id, hub_id: hub.id}, function(err, contact){
+
+					if(err || contact === null){ 	
+						req.flash('info', "Contacts not found.")
+						res.redirect('/@/:id');
+						return console.log("err++: " + err) 	
+					}	
+
+					return Note.remove({_id: req.params.note_id, hub_id: hub.id}, function(err, note){
+
+						if(!err) {
+				          console.log('Removed Note');
+				          // return res.redirect('/@/');
+				          return res.redirect("/@/"+req.params.id+"/contact/"+contact._id+"/notes");
+				        } else {
+				          res.statusCode = 500;
+				          console.log('Internal error(%d): %s',res.statusCode,err.message);
+				          return res.send({ error: 'Server error' });
+				        }
+
+					});	
+				});
+			} else {
+				console.log("not equals");
+
+			 	res.send('404: Page not Found', 404);
+			}
+		}
+		return hubchecker(req, res, deleteNote);
+	}
 
 
 
@@ -676,7 +861,6 @@ var contactController = function(contactService, app ){
 				res.render('contact/contact_update', {contact : contact, csrfToken: req.csrfToken(), user: user, hub: hub});
 			})
 
-
 		}
 		return hubchecker(req, res, readContacts)
 	}
@@ -712,20 +896,14 @@ var contactController = function(contactService, app ){
 					var requestBody = req.body;
 					requestBody.name = requestBody.name || ""
 					var intials = requestBody.name.replace(/\s+/g, '').charAt(0).toUpperCase()
-
-				
 					
 					contact.hub_id = hub.id;
 					contact.update_date = Date.now();
 
-			
-				    
-			
 					contact.defaultSmallThumb = canvasThumbnail(intials).smallTextThumb();
 					contact.defaultBigThumb = canvasThumbnail(intials).bigTextThumb();
 
 					contact.obj_type = sanitize(requestBody.obj_type).personEntity();
-
 
 					contact.name = sanitize(requestBody.name).cleanedHTMLCHAR();
 					contact.lowercase_name = sanitize(requestBody.name.toLowerCase()).cleanedHTMLCHAR();
@@ -803,8 +981,6 @@ var contactController = function(contactService, app ){
 			  	return res.redirect('/');
 			}
 
-
-
 		}
 
 		return hubchecker(req, res, postContacts);
@@ -874,33 +1050,26 @@ var contactController = function(contactService, app ){
 
 
 
-
-
-
-
-	
-
-
-
-
-
-
-
-
 	return{
 		add_contact: add_contact,
 		add_contact_post: add_contact_post,
 		contacts: contacts,
 		contact: contact,
 		contactInfo: contactInfo,
-		contactNotes: contactNotes,
+		
 		contactGroups: contactGroups,
 		addGroupsPost: addGroupsPost,
 		removeGroupPost: removeGroupPost,
 		addGroups: addGroups,
 		contactUpdate: contactUpdate,
 		contactUpdatePost: contactUpdatePost,
-		contactDelete: contactDelete
+		contactDelete: contactDelete,
+
+		contactNotes: contactNotes,
+		addContactNote: addContactNote,
+		addContactNotePost: addContactNotePost,
+		editContactNote: editContactNote,
+		deleteContactNote: deleteContactNote
 	}
 
 

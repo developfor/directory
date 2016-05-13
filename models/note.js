@@ -3,17 +3,18 @@ var mongoose = require('mongoose');
 var shortid = require('shortid');
 var Schema = mongoose.Schema;
 
-var Hub = new Schema({
+var Note = new Schema({
 	details: {
 		type: String,	
 		minlength: 0, 
 		maxlength: 500,
 	},
+
 	// the parent id relates to if the object is a child of a group or a contact
-	parent_id: {
+	contact_id: {
 		type: Schema.ObjectId,
 		require: true,
-		ref: "Parent"
+		ref: "Contact"
 	},
 
 	// core details
@@ -33,4 +34,4 @@ var Hub = new Schema({
 
 });
 
-module.exports = mongoose.model('Hub', Hub);
+module.exports = mongoose.model('Note', Note);

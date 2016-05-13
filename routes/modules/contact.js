@@ -68,10 +68,19 @@ module.exports = function(app) {
 	// READ INFO
 	app.get('/@/:id/contact/:contact_id/info', contactController.contactInfo);
 
+	// Create Note
+	app.get('/@/:id/contact/:contact_id/add_note', csrfProtection, contactController.addContactNote);
+	
+	// Post Create Note
+	app.post('/@/:id/contact/:contact_id/add_note', csrfProtection, contactController.addContactNotePost);
 
 	// READ Note
 	app.get('/@/:id/contact/:contact_id/notes', contactController.contactNotes);
 
+	// Post Edit Note
+	app.get('/@/:id/contact/:contact_id/note/:note_id/edit_note', csrfProtection, contactController.editContactNote);
+
+	app.get('/@/:id/contact/:contact_id/note/:note_id/delete', csrfProtection, contactController.deleteContactNote);
 
 	// READ GROUPS
 	app.get('/@/:id/contact/:contact_id/groups', contactController.contactGroups);
