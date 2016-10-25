@@ -43,8 +43,6 @@ module.exports = function(app) {
 	    extended: true
 	}));
 
-
-
 	app.all('/@', ensureAuthenticated, nocache);
 	app.all('/@/*', ensureAuthenticated, nocache);
 	app.all('/@/:id/add_contact', ensureAuthenticated, nocache);
